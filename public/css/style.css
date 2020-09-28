@@ -1,0 +1,22 @@
+* {
+    /*direction: rtl;*/
+    /*text-align: right;*/
+}
+
+.blog-item {
+
+}
+.post-item {
+
+}
+.post-item-body {
+    display: flex;
+    flex-direction: row;
+}
+.post-item-body.reverse {
+    flex-direction: row-reverse;
+}
+.post-item-body img {
+    height: 15rem;
+    width: auto;
+}

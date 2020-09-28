@@ -1,0 +1,35 @@
+<%- include('../layouts/header') %>
+<div class="container mt-5">
+    <% data.forEach((item, ind) => { %>
+    <!-- Card Narrower -->
+    <div class="card card-cascade narrower post-item my-3">
+        <!-- Card image -->
+        <div class="post-item-body <%= ind%2 === 0 ? '' : 'reverse' %>">
+            <div class="view view-cascade overlay">
+                <img class="card-img-top" src="https://mdbootstrap.com/img/Photos/Lightbox/Thumbnail/img%20(147).jpg"
+                     alt="Card image cap">
+                <a href="/posts/<%= item._id %>">
+                    <div class="mask rgba-white-slight"></div>
+                </a>
+            </div>
+
+            <!-- Card content -->
+            <div class="card-body card-body-cascade">
+
+                <!-- Label -->
+<!--                <h5 class="pink-text pb-2 pt-1"><i class="fas fa-utensils"></i> Culinary</h5>-->
+                <h5 class="pink-text pb-2 pt-1"><i class="fas fa-utensils"></i> <%= item.userId.firstName + ' ' + item.userId.lastName %></h5>
+                <!-- Title -->
+                <h4 class="font-weight-bold card-title"><a href="/posts/<%= item._id %>"><%= item.title %></a></h4>
+                <!-- Text -->
+                <p class="card-text"><%= item.content %></p>
+                <!-- Button -->
+                <a href="/posts/<%= item._id %>" class="btn btn-outline-info btn-rounded btn-sm waves-effect">More</a>
+
+            </div>
+        </div>
+    </div>
+    <% }) %>
+</div>
+
+<%- include('../layouts/footer') %>
