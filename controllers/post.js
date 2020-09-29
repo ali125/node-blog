@@ -1,6 +1,4 @@
 const Post = require('../models/post');
-const User = require('../models/user');
-const { ObjectId } = require('mongoose');
 
 exports.getPosts = async (req, res, next) => {
     try {

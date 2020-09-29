@@ -2,11 +2,21 @@ const express = require('express');
 const path = require('path');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
+const session = require('express-session');
+const MongoDBStore = require('connect-mongodb-session')(session);
+const flash = require('connect-flash');
+
 const IndexRouter = require('./routes/index');
 const PostRouter = require('./routes/post');
+const AdminRouter = require('./routes/admin/index');
 const User = require('./models/user');
 
 const app = express();
+
+const store = MongoDBStore({
+    uri: process.env.MONGODB_URI,
+    collection: 'session'
+});
 
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
@@ -14,9 +24,21 @@ app.set('views', path.join(__dirname, 'views'));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
 
+app.use(session({
+    secret: process.env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: false,
+    store
+}));
+
+app.use(flash());
+
 app.use(async (req, res, next) => {
     try {
-        const user = await User.findOne();
+        if (!req.session.user) {
+            return next();
+        }
+        const user = await User.findById(req.session.user._id);
         req.user = user;
         next();
     } catch(err) {
@@ -24,8 +46,16 @@ app.use(async (req, res, next) => {
     }
 });
 
+app.use((req, res, next) => {
+    res.locals.isAuthenticated = req.session.isLoggedIn;
+    res.locals.authUser = req.session.user;
+    next();
+});
+
+
 app.use('/', IndexRouter);
 app.use('/posts', PostRouter);
+app.use('/admin', AdminRouter);
 
 mongoose.connect(process.env.MONGODB_URI).then(() => {
     app.listen(3000, () => {

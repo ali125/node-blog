@@ -1,0 +1,24 @@
+<%- include('../layouts/header') %>
+
+<div class="col-12 grid-margin stretch-card">
+    <div class="card">
+        <div class="card-body">
+            <h4 class="card-title">Add New Post</h4>
+            <form method="post" class="forms-sample">
+                <div class="form-group">
+                    <label for="title">Title</label>
+                    <input type="text" class="form-control" id="title" name="title" placeholder="Title">
+                </div>
+
+                <div class="form-group">
+                    <label for="content">Textarea</label>
+                    <textarea class="form-control" id="content" name="content" rows="4"></textarea>
+                </div>
+                <button class="btn btn-primary mr-2">Submit</button>
+                <button class="btn btn-dark">Cancel</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<%- include('../layouts/footer') %>
