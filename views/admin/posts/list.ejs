@@ -11,8 +11,7 @@
                         <th> Title </th>
                         <th> Content </th>
                         <th> Progress </th>
-                        <th> Amount </th>
-                        <th> Deadline </th>
+                        <th></th>
                     </tr>
                     </thead>
                     <tbody>
@@ -29,8 +28,10 @@
                                         <div class="progress-bar bg-success" role="progressbar" style="width: 25%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
                                     </div>
                                 </td>
-                                <td> $ 77.99 </td>
-                                <td> May 15, 2015 </td>
+                                <td>
+                                    <a href="/admin/posts/<%= item._id %>/edit" class="btn btn-sm btn-warning btn-outline">Edit</a>
+                                    <a href="/admin/posts/<%= item._id %>/delete" class="btn btn-sm btn-danger btn-outline">Delete</a>
+                                </td>
                             </tr>
                         <% }) %>
                     <% } %>
