@@ -210,3 +210,10 @@
                         </ol>
                     </nav>
                 </div>
+                <% if(errorsMessage) { %>
+                    <div class="alert alert-danger" role="alert">
+                    <% errorsMessage.forEach(error => { %>
+                        <p class="error-p"><%= error.msg %></p>
+                    <% }) %>
+                    </div>
+                <% } %>

@@ -5,7 +5,7 @@ const mongoose = require('mongoose');
 const session = require('express-session');
 const MongoDBStore = require('connect-mongodb-session')(session);
 const flash = require('connect-flash');
-
+const auth = require('./middleware/auth');
 const IndexRouter = require('./routes/index');
 const PostRouter = require('./routes/post');
 const AdminRouter = require('./routes/admin/index');
@@ -47,15 +47,22 @@ app.use(async (req, res, next) => {
 });
 
 app.use((req, res, next) => {
+    const errorsMessage = req.session.errorsMessage;
+    const formData = req.session.formData;
+    req.session.errorsMessage = null;
+    req.session.formData = null;
     res.locals.isAuthenticated = req.session.isLoggedIn;
     res.locals.authUser = req.session.user;
+    res.locals.errorsMessage = errorsMessage;
+    res.locals.formData = formData;
     next();
 });
 
 
 app.use('/', IndexRouter);
 app.use('/posts', PostRouter);
-app.use('/admin', AdminRouter);
+app.use('/admin', auth, AdminRouter);
+
 
 mongoose.connect(process.env.MONGODB_URI).then(() => {
     app.listen(3000, () => {

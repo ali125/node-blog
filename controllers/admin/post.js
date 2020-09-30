@@ -1,3 +1,4 @@
+const { validationResult } = require('express-validator/check');
 const Post = require('../../models/post');
 
 exports.getPosts = async (req, res, next) => {
@@ -22,6 +23,15 @@ exports.savePost = async (req, res, next) => {
     try {
         const title = req.body.title;
         const content = req.body.content;
+        const errors = validationResult(req);
+        if(!errors.isEmpty()) {
+            req.session.errorsMessage = errors.array();
+            req.session.formData = {
+                title,
+                content
+            };
+            return res.redirect('/admin/posts/add');
+        }
         const post = new Post({
             title,
             content,
