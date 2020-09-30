@@ -58,11 +58,21 @@ app.use((req, res, next) => {
     next();
 });
 
+app.use('/500', (req, res, next) => {
+    res.status(500).render('errors/500');
+});
 
 app.use('/', IndexRouter);
 app.use('/posts', PostRouter);
 app.use('/admin', auth, AdminRouter);
 
+app.use((req, res, next) => {
+    res.status(404).render('errors/404');
+});
+
+app.use((errors, req, res, next) => {
+    res.render('errors/500');
+});
 
 mongoose.connect(process.env.MONGODB_URI).then(() => {
     app.listen(3000, () => {

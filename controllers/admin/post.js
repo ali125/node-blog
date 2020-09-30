@@ -1,3 +1,4 @@
+const mongoose = require('mongoose');
 const { validationResult } = require('express-validator/check');
 const Post = require('../../models/post');
 
@@ -9,14 +10,18 @@ exports.getPosts = async (req, res, next) => {
             data
         });
     } catch(err) {
-        console.log('err', err);
+        const errors = new Error(err);
+        errors.httpStatusCode = 500;
+        next(errors)
     }
 };
 exports.addPost = async (req, res, next) => {
     try {
         res.render('admin/posts/form');
     } catch(err) {
-        console.log('err', err);
+        const errors = new Error(err);
+        errors.httpStatusCode = 500;
+        next(errors)
     }
 };
 exports.savePost = async (req, res, next) => {
@@ -25,6 +30,7 @@ exports.savePost = async (req, res, next) => {
         const content = req.body.content;
         const errors = validationResult(req);
         const body = {
+            _id: new mongoose.Types.ObjectId("5f7195386b651a0ab7347a9c"),
             title,
             content,
             userId: req.user._id
@@ -41,7 +47,9 @@ exports.savePost = async (req, res, next) => {
         await post.save();
         res.redirect('/admin/posts')
     } catch(err) {
-        console.log('err', err);
+        const errors = new Error(err);
+        errors.httpStatusCode = 500;
+        next(errors)
     }
 };
 
@@ -54,7 +62,9 @@ exports.editPost = async (req, res, next) => {
             formData: data
         });
     } catch(err) {
-        console.log('err', err);
+        const errors = new Error(err);
+        errors.httpStatusCode = 500;
+        next(errors)
     }
 };
 exports.updatePost = async (req, res, next) => {
@@ -69,7 +79,9 @@ exports.updatePost = async (req, res, next) => {
         await Post.findOneAndUpdate(id, body);
         res.redirect('/admin/posts')
     } catch(err) {
-        console.log('err', err);
+        const errors = new Error(err);
+        errors.httpStatusCode = 500;
+        next(errors)
     }
 };
 
@@ -79,6 +91,8 @@ exports.deletePost = async (req, res, next) => {
         await Post.findByIdAndDelete(id);
         res.redirect('/admin/posts')
     } catch(err) {
-        console.log('err', err);
+        const errors = new Error(err);
+        errors.httpStatusCode = 500;
+        next(errors)
     }
 };
