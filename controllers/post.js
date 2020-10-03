@@ -31,7 +31,7 @@ exports.savePost = async (req, res, next) => {
         console.log('err', err);
     }
 };
-exports.getPosts = async (req, res, next) => {
+exports.getPost = async (req, res, next) => {
     try {
         const id = req.params.id;
         const data = await Post.findById(id).populate('userId').exec();

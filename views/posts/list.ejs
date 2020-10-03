@@ -4,9 +4,10 @@
     <!-- Card Narrower -->
     <div class="card card-cascade narrower post-item my-3">
         <!-- Card image -->
-        <div class="post-item-body <%= ind%2 === 0 ? '' : 'reverse' %>">
+<!--        <div class="post-item-body ind%2 === 0 ? '' : 'reverse' ">-->
+        <div class="post-item-body">
             <div class="view view-cascade overlay">
-                <img class="card-img-top" src="https://mdbootstrap.com/img/Photos/Lightbox/Thumbnail/img%20(147).jpg"
+                <img class="card-img-top" src="/<%= item.imageUrl %>"
                      alt="Card image cap">
                 <a href="/posts/<%= item._id %>">
                     <div class="mask rgba-white-slight"></div>

@@ -5,7 +5,10 @@ const mongoose = require('mongoose');
 const session = require('express-session');
 const MongoDBStore = require('connect-mongodb-session')(session);
 const flash = require('connect-flash');
+const stringHelper = require('./util/string');
+
 const auth = require('./middleware/auth');
+
 const IndexRouter = require('./routes/index');
 const PostRouter = require('./routes/post');
 const AdminRouter = require('./routes/admin/index');
@@ -56,6 +59,7 @@ app.use((req, res, next) => {
     res.locals.authUser = req.session.user;
     res.locals.errorsMessage = errorsMessage;
     res.locals.formData = formData;
+    res.locals.truncateText = stringHelper.truncateText;
     next();
 });
 
@@ -72,6 +76,7 @@ app.use((req, res, next) => {
 });
 
 app.use((errors, req, res, next) => {
+    console.log(errors);
     res.render('errors/500');
 });
 

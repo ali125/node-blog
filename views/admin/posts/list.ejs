@@ -22,13 +22,14 @@
                                     <img src="/<%= item.imageUrl %>" alt="image" />
                                 </td>
                                 <td> <%= item.title %> </td>
-                                <td> <%= item.content %> </td>
+                                <td> <%= item.short_content %> </td>
                                 <td>
                                     <div class="progress">
                                         <div class="progress-bar bg-success" role="progressbar" style="width: 25%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
                                     </div>
                                 </td>
                                 <td>
+                                    <a href="/posts/<%= item._id %>" class="btn btn-sm btn-info btn-outline">Watch</a>
                                     <a href="/admin/posts/<%= item._id %>/edit" class="btn btn-sm btn-warning btn-outline">Edit</a>
                                     <a href="/admin/posts/<%= item._id %>/delete" class="btn btn-sm btn-danger btn-outline">Delete</a>
                                 </td>
