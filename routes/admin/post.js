@@ -35,7 +35,9 @@ router.get('/', adminPostController.getPosts);
 router.get('/add', adminPostController.addPost);
 router.post('/add', upload, postValidation, adminPostController.savePost);
 router.get('/:id/edit', adminPostController.editPost);
-router.post('/:id/edit', postValidation, adminPostController.updatePost);
+router.post('/:id/edit', upload, postValidation, adminPostController.updatePost);
 router.get('/:id/delete', adminPostController.deletePost);
+
+router.get('/file/:id', adminPostController.createGetFile);
 
 module.exports = router;

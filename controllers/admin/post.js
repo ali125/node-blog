@@ -1,6 +1,10 @@
 const mongoose = require('mongoose');
+const fs = require('fs');
+const path = require('path');
+const PDFDocument = require('pdfkit');
 const { validationResult } = require('express-validator');
 const Post = require('../../models/post');
+const fileHelper = require('../../util/file');
 
 exports.getPosts = async (req, res, next) => {
     try {
@@ -38,7 +42,7 @@ exports.savePost = async (req, res, next) => {
             };
             return res.redirect('/admin/posts/add');
         }
-        const imageUrl = '/' + image.path;
+        const imageUrl = image.path;
         const errors = validationResult(req);
         const body = {
             title,
@@ -84,13 +88,27 @@ exports.updatePost = async (req, res, next) => {
         const id = req.params.id;
         const title = req.body.title;
         const content = req.body.content;
-        const body = {
-            title,
-            content
-        };
-        await Post.findOneAndUpdate(id, body);
+        const image = req.file;
+        const errors = validationResult(req);
+        if(!errors.isEmpty()) {
+            req.session.errorsMessage = errors.array();
+            req.session.formData = {
+                title,
+                content
+            };
+            return res.redirect(`/admin/posts/${id}/edit`);
+        }
+        const post = await Post.findById(id);
+        post.title = title;
+        post.content = content;
+        if(image) {
+            fileHelper.fileDelete(post.imageUrl);
+            post.imageUrl = image.path;
+        }
+        await post.save();
         res.redirect('/admin/posts')
     } catch(err) {
+        console.log(err);
         const errors = new Error(err);
         errors.httpStatusCode = 500;
         next(errors)
@@ -100,8 +118,62 @@ exports.updatePost = async (req, res, next) => {
 exports.deletePost = async (req, res, next) => {
     try {
         const id = req.params.id;
-        await Post.findByIdAndDelete(id);
+        const post = await Post.findById(id);
+        fileHelper.fileDelete(post.imageUrl);
+        await Post.deleteOne({ _id: id });
         res.redirect('/admin/posts')
+    } catch(err) {
+        const errors = new Error(err);
+        errors.httpStatusCode = 500;
+        next(errors)
+    }
+};
+
+
+exports.getFile = async (req, res, next) => {
+    try {
+        const id = req.params.id;
+        const fileName = 'pack.pdf';
+        const filePath = path.join('data', 'file', fileName);
+        // fs.readFile(filePath, (err, data) => {
+        //    if(err) {
+        //        return next(err);
+        //    }
+        //    res.setHeader('Content-Type', 'application/pdf');
+        //    res.setHeader('Content-Disposition', 'inline; filename="' + fileName + '"'); // Open in browser
+        //    // res.setHeader('Content-Disposition', 'attachment; filename="' + fileName + '"'); // Download
+        //    res.send(data);
+        // }); // Small file is fine - not for big files
+        const file = fs.createReadStream(filePath);
+        res.setHeader('Content-Type', 'application/pdf');
+        res.setHeader('Content-Disposition', 'inline; filename="' + fileName + '"'); // Open in browser
+        file.pipe(res);
+    } catch(err) {
+        const errors = new Error(err);
+        errors.httpStatusCode = 500;
+        next(errors)
+    }
+};
+
+exports.createGetFile = async (req, res, next) => {
+    try {
+        const id = req.params.id;
+        const fileName = `pack-${id}.pdf`;
+        const filePath = path.join('data', 'file', fileName);
+
+        const pdfDoc = new PDFDocument();
+        res.setHeader('Content-Type', 'application/pdf');
+        res.setHeader('Content-Disposition', 'inline; filename="' + fileName + '"'); // Open in browser
+        pdfDoc.pipe(fs.createWriteStream(filePath));
+        pdfDoc.pipe(res);
+
+        pdfDoc.fontSize(26).text('Invoice', {
+            underline: true
+        });
+
+        pdfDoc.fontSize(16).text('-----------------------------');
+
+        pdfDoc.end();
     } catch(err) {
         const errors = new Error(err);
         errors.httpStatusCode = 500;
