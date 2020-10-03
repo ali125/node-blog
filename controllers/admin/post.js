@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const { validationResult } = require('express-validator/check');
+const { validationResult } = require('express-validator');
 const Post = require('../../models/post');
 
 exports.getPosts = async (req, res, next) => {
@@ -19,20 +19,31 @@ exports.addPost = async (req, res, next) => {
     try {
         res.render('admin/posts/form');
     } catch(err) {
-        const errors = new Error(err);
-        errors.httpStatusCode = 500;
-        next(errors)
+        console.log(err)
+        // const errors = new Error(err);
+        // errors.httpStatusCode = 500;
+        // next(errors)
     }
 };
 exports.savePost = async (req, res, next) => {
     try {
         const title = req.body.title;
         const content = req.body.content;
+        const image = req.file;
+        if(!image) {
+            req.session.errorsMessage = 'Please add an image';
+            req.session.formData = {
+                title,
+                content
+            };
+            return res.redirect('/admin/posts/add');
+        }
+        const imageUrl = '/' + image.path;
         const errors = validationResult(req);
         const body = {
-            _id: new mongoose.Types.ObjectId("5f7195386b651a0ab7347a9c"),
             title,
             content,
+            imageUrl,
             userId: req.user._id
         };
         if(!errors.isEmpty()) {
@@ -47,6 +58,7 @@ exports.savePost = async (req, res, next) => {
         await post.save();
         res.redirect('/admin/posts')
     } catch(err) {
+        console.log('err', err);
         const errors = new Error(err);
         errors.httpStatusCode = 500;
         next(errors)

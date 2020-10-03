@@ -1,4 +1,4 @@
-const { body, check } = require('express-validator/check');
+const { body, check } = require('express-validator');
 const translate = require('./translate');
 
 exports.postValidation = [

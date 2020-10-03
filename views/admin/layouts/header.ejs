@@ -213,7 +213,7 @@
                 <% if(errorsMessage) { %>
                     <div class="alert alert-danger" role="alert">
                     <% errorsMessage.forEach(error => { %>
-                        <p class="error-p"><%= error.msg %></p>
+                        <p class="error-p"><%= error.msg ? error.msg : error.toString() %></p>
                     <% }) %>
                     </div>
                 <% } %>
