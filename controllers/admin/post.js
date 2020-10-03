@@ -23,10 +23,9 @@ exports.addPost = async (req, res, next) => {
     try {
         res.render('admin/posts/form');
     } catch(err) {
-        console.log(err)
-        // const errors = new Error(err);
-        // errors.httpStatusCode = 500;
-        // next(errors)
+        const errors = new Error(err);
+        errors.httpStatusCode = 500;
+        next(errors)
     }
 };
 exports.savePost = async (req, res, next) => {
@@ -43,13 +42,15 @@ exports.savePost = async (req, res, next) => {
             return res.redirect('/admin/posts/add');
         }
         const imageUrl = image.path;
-        const errors = validationResult(req);
         const body = {
             title,
             content,
             imageUrl,
-            userId: req.user._id
+            userId: req.user._id,
+            createdAt: new Date(),
+            updatedAt: new Date(),
         };
+        const errors = validationResult(req);
         if(!errors.isEmpty()) {
             req.session.errorsMessage = errors.array();
             req.session.formData = {
@@ -62,7 +63,6 @@ exports.savePost = async (req, res, next) => {
         await post.save();
         res.redirect('/admin/posts')
     } catch(err) {
-        console.log('err', err);
         const errors = new Error(err);
         errors.httpStatusCode = 500;
         next(errors)
@@ -101,6 +101,7 @@ exports.updatePost = async (req, res, next) => {
         const post = await Post.findById(id);
         post.title = title;
         post.content = content;
+        post.updatedAt = new Date();
         if(image) {
             fileHelper.fileDelete(post.imageUrl);
             post.imageUrl = image.path;
@@ -108,7 +109,6 @@ exports.updatePost = async (req, res, next) => {
         await post.save();
         res.redirect('/admin/posts')
     } catch(err) {
-        console.log(err);
         const errors = new Error(err);
         errors.httpStatusCode = 500;
         next(errors)
@@ -119,7 +119,7 @@ exports.deletePost = async (req, res, next) => {
     try {
         const id = req.params.id;
         const post = await Post.findById(id);
-        fileHelper.fileDelete(post.imageUrl);
+        if(post.imageUrl) fileHelper.fileDelete(post.imageUrl);
         await Post.deleteOne({ _id: id });
         res.redirect('/admin/posts')
     } catch(err) {

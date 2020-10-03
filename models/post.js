@@ -20,7 +20,35 @@ const postSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: 'User',
         required: true
-    }
+    },
+    createdAt: {
+        type: Date,
+        required: true
+    },
+    updatedAt: {
+        type: Date,
+        required: true
+    },
+    comments: [
+        {
+            name: {
+                type: String,
+                required: true
+            },
+            email: {
+                type: String,
+                required: true
+            },
+            content: {
+                type: String,
+                required: true
+            },
+            createdAt: {
+                type: Date,
+                required: true
+            }
+        },
+    ]
 });
 
 postSchema.set('toJSON', { virtuals: true });

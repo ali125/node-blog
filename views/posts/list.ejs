@@ -16,14 +16,13 @@
 
             <!-- Card content -->
             <div class="card-body card-body-cascade">
-
                 <!-- Label -->
 <!--                <h5 class="pink-text pb-2 pt-1"><i class="fas fa-utensils"></i> Culinary</h5>-->
                 <h5 class="pink-text pb-2 pt-1"><i class="fas fa-utensils"></i> <%= item.userId.firstName + ' ' + item.userId.lastName %></h5>
                 <!-- Title -->
                 <h4 class="font-weight-bold card-title"><a href="/posts/<%= item._id %>"><%= item.title %></a></h4>
                 <!-- Text -->
-                <p class="card-text"><%= item.content %></p>
+                <p class="card-text"><%= truncateText(item.content) %></p>
                 <!-- Button -->
                 <a href="/posts/<%= item._id %>" class="btn btn-outline-info btn-rounded btn-sm waves-effect">More</a>
 

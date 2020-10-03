@@ -2,26 +2,83 @@
 <div class="container mt-5">
     <div class="row">
         <div class="col-sm-12 col-md-9">
-            <img src="..." class="img-fluid" alt="Responsive image">
+            <img src="/<%= data.imageUrl %>" class="img-fluid" alt="Responsive image">
 
-            <h4>Add New Post</h4>
-            <!-- Form -->
-            <form method="post">
-                <!-- Title -->
-                <div class="md-form mt-3">
-                    <input type="text" id="title" name="title" class="form-control">
-                    <label for="title">Title</label>
+            <h1><%= data.title %></h1>
+
+            <div class="content" >
+                <%- data.content %>
+            </div>
+
+            <!-- Material form contact -->
+            <div class="comment-container mt-5">
+                <h5>Comments</h5>
+
+                <!--Card content-->
+                <div class="comment-form pt-0">
+
+                    <!-- Form -->
+                    <form method="post" action="/posts/<%= data.id %>/comment">
+
+                        <!-- Name -->
+                        <div class="md-form mt-3">
+                            <input type="text"
+                                   id="name"
+                                   name="name"
+                                   class="form-control"
+                                   value="<%= formData ? formData.name : '' %>">
+                            <label for="name">Name</label>
+                        </div>
+
+                        <!-- E-mail -->
+                        <div class="md-form">
+                            <input type="email"
+                                   id="email"
+                                   name="email"
+                                   class="form-control"
+                                   value="<%= formData ? formData.email : '' %>">
+                            <label for="email">E-mail</label>
+                        </div>
+
+                        <!--Message-->
+                        <div class="md-form">
+                            <textarea id="content"
+                                      name="content"
+                                      class="form-control md-textarea"
+                                      rows="3"><%= formData ? formData.content : '' %></textarea>
+                            <label for="content">Message</label>
+                        </div>
+
+                        <!-- Send button -->
+                        <button class="btn btn-outline-info btn-rounded btn-block z-depth-0 my-4 waves-effect" type="submit">Send</button>
+                    </form>
+                    <!-- Form -->
+
+                    <div class="chat-message">
+                        <ul class="list-unstyled chat">
+                            <% data.comments.forEach(comment => { %>
+                                <li class="d-flex mb-4">
+                                    <img src="https://mdbootstrap.com/img/Photos/Avatars/avatar-6.jpg"
+                                         alt="avatar"
+                                         class="avatar rounded-circle mr-2 ml-lg-3 ml-0 z-depth-1">
+                                    <div class="chat-body white p-3 ml-2 z-depth-1">
+                                        <div class="header">
+                                            <strong class="primary-font"><%= comment.name %></strong>
+                                            <small class="pull-right text-muted">
+                                                <i class="far fa-clock"></i>
+                                                <%= comment.createdAt.getFullYear() + "/" + (comment.createdAt.getMonth() + 1) + "/" + comment.createdAt.getDate()%>
+                                                <%= comment.createdAt.getHours() + ":" +comment.createdAt.getMinutes() %>
+                                            </small>
+                                        </div>
+                                        <hr class="w-100">
+                                        <p class="mb-0"><%= comment.content %></p>
+                                    </div>
+                                </li>
+                            <% }) %>
+                        </ul>
+                    </div>
                 </div>
-
-                <!--Message-->
-                <div class="md-form">
-                    <textarea id="content" name="content" class="form-control md-textarea" rows="4"></textarea>
-                    <label for="content">Content</label>
-                </div>
-                <!-- Send button -->
-                <button class="btn btn-outline-info btn-rounded z-depth-0 my-4 waves-effect" type="submit">Send</button>
-
-            </form>
+            </div>
         </div>
         <div class="col-sm-12 col-md-3">
             <ul class="list-group">
