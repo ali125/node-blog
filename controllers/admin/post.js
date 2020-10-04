@@ -6,12 +6,22 @@ const { validationResult } = require('express-validator');
 const Post = require('../../models/post');
 const fileHelper = require('../../util/file');
 
+const ITEMS_PER_PAGE = 5;
+
 exports.getPosts = async (req, res, next) => {
     try {
-        const data = await Post.find().populate('userId').exec();
+        const page = +req.query.page || 1;
+        const totalItems = await Post.find().countDocuments();
+        const data = await Post.find().skip((page - 1) * ITEMS_PER_PAGE).limit(ITEMS_PER_PAGE).populate('userId').exec();
         res.render('admin/posts/list', {
             headTitle: 'Posts List',
-            data
+            data,
+            currentPage: page,
+            prevPage: page > 1 ? page - 1 : null,
+            hasNextPage: ITEMS_PER_PAGE * page < totalItems ? page + 1 : null,
+            nextPage: ITEMS_PER_PAGE * page < totalItems ? page + 1 : null,
+            lastPage: Math.ceil(totalItems / ITEMS_PER_PAGE),
+            firstPage: 1
         });
     } catch(err) {
         const errors = new Error(err);
@@ -102,6 +112,7 @@ exports.updatePost = async (req, res, next) => {
         post.title = title;
         post.content = content;
         post.updatedAt = new Date();
+        // return res.send(post)
         if(image) {
             fileHelper.fileDelete(post.imageUrl);
             post.imageUrl = image.path;

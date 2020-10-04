@@ -1,6 +1,8 @@
 const express = require('express');
 const multer = require('multer');
-const crypto = require('crypto-js');
+// const crypto = require('crypto-js');
+const { v4: uuidv4 } = require('uuid');
+
 const {postValidation} = require('../../middleware/validations');
 const router = express.Router();
 const adminPostController = require('../../controllers/admin/post');
@@ -12,7 +14,8 @@ const storage = multer.diskStorage({
     filename: (req, file, cb) => {
         const ind = file.originalname.lastIndexOf('.');
         const extension = file.originalname.substr(ind);
-        const filename = crypto.SHA1(new Date().getTime()) + extension;
+        // const filename = crypto.sha1(new Date().getTime()) + extension;
+        const filename = uuidv4() + extension;
         cb(null, filename)
     }
 });

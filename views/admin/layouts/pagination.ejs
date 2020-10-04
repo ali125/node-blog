@@ -1,0 +1,28 @@
+<div class="text-center">
+    <div class="btn-group" role="group" aria-label="Basic example">
+        <% if(prevPage) { %>
+            <a href="?page=<%= prevPage %>" class="btn btn-outline-primary px-1">
+                <i class="mdi mdi-chevron-left"></i>
+            </a>
+        <% } %>
+        <% if(firstPage !== prevPage && firstPage !== currentPage) { %>
+            <a href="?page=<%= firstPage %>" class="btn btn-outline-primary"><%= firstPage %></a>
+        <% } %>
+        <% if(prevPage) { %>
+            <a href="?page=<%= prevPage %>" class="btn btn-outline-primary"><%= prevPage %></a>
+        <% } %>
+        <a href="?page=<%= currentPage %>" class="btn btn-primary"><%= currentPage %></a>
+        <% if(nextPage) { %>
+            <a href="?page=<%= nextPage %>" class="btn btn-outline-primary"><%= nextPage %></a>
+        <% } %>
+        <% if(lastPage !== currentPage && lastPage !== nextPage) { %>
+            <a href="?page=<%= lastPage %>" class="btn btn-outline-primary"><%= lastPage %></a>
+        <% } %>
+        <% if(nextPage) { %>
+            <a href="?page=<%= nextPage %>" class="btn btn-outline-primary px-1">
+                <i class="mdi mdi-chevron-right"></i>
+            </a>
+        <% } %>
+    </div>
+</div>
+
