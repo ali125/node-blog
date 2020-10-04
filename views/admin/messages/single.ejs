@@ -1,0 +1,54 @@
+<%- include('../layouts/header') %>
+<div class="row">
+    <div class="col-12 grid-margin stretch-card">
+        <div class="card">
+            <div class="card-body">
+                <h3><%= data.title %></h3>
+                <p>
+                    <strong>Name: </strong>
+                    <span><%= data.name %></span>
+                </p>
+                <p>
+                    <strong>Email: </strong>
+                    <span><%= data.email %></span>
+                </p>
+                <p class="content"><%= data.content %></p>
+                <p>
+                    <span><%= formatDate(data.createdAt) %></span>
+                </p>
+                <% if(data.replies.length > 0) { %>
+                    <h5>Replies</h5>
+                    <ul class="replies-message">
+                        <% data.replies.forEach(reply => { %>
+                        <li>
+                            <span class="reply-detail">
+                                <strong class="reply-user"><%= reply.userId.fullName %></strong>
+                                <span class="reply-date"><%= formatDate(reply.createdAt) %></span>
+                            </span>
+                            <span class="reply-content"><%= reply.content%></span>
+                        </li>
+                        <% })%>
+                    </ul>
+                <% } %>
+                <hr />
+                <h4 class="card-title">Reply</h4>
+                <form method="post" class="forms-sample" >
+                    <div class="form-group">
+                    <div class="form-group">
+                        <label for="content">Content</label>
+
+                        <textarea class="form-control"
+                                  id="content"
+                                  name="content"
+                                  rows="4"
+                                  placeholder="Content"><%= formData ? formData.content : '' %></textarea>
+                    </div>
+                    <button class="btn btn-primary mr-2">Submit</button>
+                    <button class="btn btn-dark">Cancel</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+</div>
+<%- include('../layouts/footer') %>

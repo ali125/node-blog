@@ -66,8 +66,7 @@
                                             <strong class="primary-font"><%= comment.name %></strong>
                                             <small class="pull-right text-muted">
                                                 <i class="far fa-clock"></i>
-                                                <%= comment.createdAt.getFullYear() + "/" + (comment.createdAt.getMonth() + 1) + "/" + comment.createdAt.getDate()%>
-                                                <%= comment.createdAt.getHours() + ":" +comment.createdAt.getMinutes() %>
+                                                <%= formatDate(comment.createdAt) %>
                                             </small>
                                         </div>
                                         <hr class="w-100">

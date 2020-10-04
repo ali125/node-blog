@@ -7,11 +7,7 @@ const MongoDBStore = require('connect-mongodb-session')(session);
 const flash = require('connect-flash');
 const stringHelper = require('./util/string');
 
-const auth = require('./middleware/auth');
-
 const IndexRouter = require('./routes/index');
-const PostRouter = require('./routes/post');
-const AdminRouter = require('./routes/admin/index');
 const User = require('./models/user');
 
 const app = express();
@@ -52,14 +48,22 @@ app.use(async (req, res, next) => {
 
 app.use((req, res, next) => {
     const errorsMessage = req.session.errorsMessage;
+    const successMessage = req.session.successMessage;
     const formData = req.session.formData;
     req.session.errorsMessage = null;
+    req.session.successMessage = null;
     req.session.formData = null;
     res.locals.isAuthenticated = req.session.isLoggedIn;
     res.locals.authUser = req.session.user;
     res.locals.errorsMessage = errorsMessage;
+    res.locals.successMessage = successMessage;
     res.locals.formData = formData;
     res.locals.truncateText = stringHelper.truncateText;
+
+    res.locals.formatDate = date => {
+        return `${date.getFullYear()}/${(date.getMonth() + 1)}/${date.getDate()} ${date.getHours()}:${date.getMinutes()}`
+    };
+
     next();
 });
 
@@ -68,8 +72,6 @@ app.use('/500', (req, res, next) => {
 });
 
 app.use('/', IndexRouter);
-app.use('/posts', PostRouter);
-app.use('/admin', auth, AdminRouter);
 
 app.use((req, res, next) => {
     res.status(404).render('errors/404');

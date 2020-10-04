@@ -1,3 +1,22 @@
 .error-p {
     margin-bottom: 0;
 }
+
+.replies-message {
+
+}
+.replies-message .reply-detail{
+    display: block;
+}
+.replies-message .reply-user {
+    font-size: 0.9rem;
+}
+.replies-message .reply-content {
+    font-size: 1rem;
+    display: block;
+    margin: 0.5rem 0;
+}
+.replies-message .reply-date {
+    font-size: 0.8rem;
+    color: #ddd;
+}

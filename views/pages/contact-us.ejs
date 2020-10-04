@@ -1,0 +1,51 @@
+<%- include('../layouts/header') %>
+<div class="container mt-5">
+    <h1>Contact Us</h1>
+
+    <%- include('../layouts/alert') %>
+    <form method="post">
+
+        <!-- Title -->
+        <div class="md-form mt-3">
+            <input type="text"
+                   id="title"
+                   name="title"
+                   class="form-control"
+                   value="<%= formData ? formData.title : '' %>">
+            <label for="title">Title</label>
+        </div>
+
+        <!-- Name -->
+        <div class="md-form mt-3">
+            <input type="text"
+                   id="name"
+                   name="name"
+                   class="form-control"
+                   value="<%= formData ? formData.name : '' %>">
+            <label for="name">Name</label>
+        </div>
+
+        <!-- E-mail -->
+        <div class="md-form">
+            <input type="email"
+                   id="email"
+                   name="email"
+                   class="form-control"
+                   value="<%= formData ? formData.email : '' %>">
+            <label for="email">E-mail</label>
+        </div>
+
+        <!--Message-->
+        <div class="md-form">
+                    <textarea id="content"
+                              name="content"
+                              class="form-control md-textarea"
+                              rows="3"><%= formData ? formData.content : '' %></textarea>
+            <label for="content">Message</label>
+        </div>
+
+        <!-- Send button -->
+        <button class="btn btn-outline-info btn-rounded btn-block z-depth-0 my-4 waves-effect" type="submit">Send</button>
+    </form>
+</div>
+<%- include('../layouts/footer') %>
