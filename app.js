@@ -60,9 +60,7 @@ app.use((req, res, next) => {
     res.locals.formData = formData;
     res.locals.truncateText = stringHelper.truncateText;
 
-    res.locals.formatDate = date => {
-        return `${date.getFullYear()}/${(date.getMonth() + 1)}/${date.getDate()} ${date.getHours()}:${date.getMinutes()}`
-    };
+    res.locals.formatDate = stringHelper.formatDate;
 
     next();
 });
