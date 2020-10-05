@@ -44,7 +44,7 @@ exports.savePost = async (req, res, next) => {
         const content = req.body.content;
         const image = req.file;
         if(!image) {
-            req.session.errorsMessage = 'Please add an image';
+            req.session.errorsMessage = ['Please add an image'];
             req.session.formData = {
                 title,
                 content

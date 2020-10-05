@@ -1,0 +1,60 @@
+<%- include('../layouts/header') %>
+<div class="row">
+    <div class="col-12 grid-margin stretch-card">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">User Profile</h4>
+                <form method="post" class="forms-sample" enctype="multipart/form-data">
+                    <div class="form-group">
+                        <label for="file">Avatar</label>
+                        <input type="file"
+                               class="form-control"
+                               id="file"
+                               name="file">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="firstName">First Name</label>
+                        <input type="text"
+                               class="form-control"
+                               id="firstName"
+                               name="firstName"
+                               value="<%= formData ? formData.firstName : user.firstName %>"
+                               placeholder="First Name">
+                    </div>
+                    <div class="form-group">
+                        <label for="lastName">Last Name</label>
+                        <input type="text"
+                               class="form-control"
+                               id="lastName"
+                               name="lastName"
+                               value="<%= formData ? formData.lastName : user.lastName %>"
+                               placeholder="Last Name">
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email"
+                               class="form-control"
+                               id="email"
+                               name="email"
+                               value="<%= formData ? formData.email : user.email %>"
+                               placeholder="Email">
+                    </div>
+                    <div class="form-group">
+                        <label for="mobile">Mobile</label>
+                        <input type="tel"
+                               class="form-control"
+                               id="mobile"
+                               name="mobile"
+                               value="<%= formData ? formData.mobile : user.mobile %>"
+                               placeholder="Mobile">
+                    </div>
+                    <button class="btn btn-primary mr-2">Submit</button>
+                    <button type="reset" class="btn btn-dark">Cancel</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+</div>
+<%- include('../layouts/footer') %>

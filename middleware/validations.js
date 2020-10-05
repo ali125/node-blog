@@ -1,5 +1,24 @@
-const { body, check } = require('express-validator');
+const { body } = require('express-validator');
 const translate = require('./translate');
+
+exports.userValidation = [
+    body('firstName', translate.FILL_FIELD_FIRST_NAME['en'])
+        .isString()
+        .trim()
+        .isLength({ min: 3 }),
+    body('lastName', translate.FILL_FIELD_LAST_NAME['en'])
+        .isString()
+        .trim()
+        .isLength({ min: 3 }),
+    body('email', translate.FILL_FIELD_EMAIL['en'])
+        .isString()
+        .trim()
+        .isLength({ min: 3 }),
+    body('mobile', translate.FILL_FIELD_MOBILE['en'])
+        .isString()
+        .trim()
+        .isLength({ min: 3 }),
+];
 
 exports.postValidation = [
     body('title', translate.FILL_FIELD_TITLE['en'])

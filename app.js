@@ -20,7 +20,16 @@ const store = MongoDBStore({
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded({ extended: false })); // x-www-form-urlencoded
+// app.use(bodyParser.json()); // application/json
+// res.json({ response });
+// app.use((req, res, next) => { // CORS ERROR
+//     // res.setHeader('Access-Control-Allow-Origin', 'codepen.io, url');
+//     res.setHeader('Access-Control-Allow-Origin', '*');
+//     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE');
+//     res.setHeader('Access-Control-Allow-Headers', 'Content-Types, Authorization');
+//     next();
+// });
 app.use(express.static(path.join(__dirname, 'public')));
 app.use('/images', express.static(path.join(__dirname, 'images')));
 
