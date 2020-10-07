@@ -1,4 +1,3 @@
-const mongoose = require('mongoose');
 const fs = require('fs');
 const path = require('path');
 const PDFDocument = require('pdfkit');
@@ -12,7 +11,7 @@ exports.getPosts = async (req, res, next) => {
     try {
         const page = +req.query.page || 1;
         const totalItems = await Post.find().countDocuments();
-        const data = await Post.find().skip((page - 1) * ITEMS_PER_PAGE).limit(ITEMS_PER_PAGE).populate('userId').exec();
+        const data = await Post.find().skip((page - 1) * ITEMS_PER_PAGE).limit(ITEMS_PER_PAGE).sort([['createdAt', -1]]).populate('userId').exec();
         res.render('admin/posts/list', {
             headTitle: 'Posts List',
             data,
@@ -140,7 +139,6 @@ exports.deletePost = async (req, res, next) => {
     }
 };
 
-
 exports.getFile = async (req, res, next) => {
     try {
         const id = req.params.id;
@@ -191,3 +189,5 @@ exports.createGetFile = async (req, res, next) => {
         next(errors)
     }
 };
+
+

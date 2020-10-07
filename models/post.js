@@ -21,6 +21,11 @@ const postSchema = new Schema({
         ref: 'User',
         required: true
     },
+    comments: [{
+        type: Schema.Types.ObjectId,
+        ref: 'Comment',
+        required: true
+    }],
     createdAt: {
         type: Date,
         required: true
@@ -28,32 +33,17 @@ const postSchema = new Schema({
     updatedAt: {
         type: Date,
         required: true
-    },
-    comments: [
-        {
-            name: {
-                type: String,
-                required: true
-            },
-            email: {
-                type: String,
-                required: true
-            },
-            content: {
-                type: String,
-                required: true
-            },
-            createdAt: {
-                type: Date,
-                required: true
-            }
-        },
-    ]
+    }
 });
 
 postSchema.set('toJSON', { virtuals: true });
 postSchema.virtual('short_content').get(function() {
     return stringHelper.truncateText(this.content);
 });
+
+postSchema.methods.addComment = function(comment) {
+    this.comments = [...this.comments, comment ];
+    return this.save();
+};
 
 module.exports = mongoose.model('Post', postSchema);

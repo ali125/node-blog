@@ -1,0 +1,39 @@
+<%- include('../layouts/header') %>
+<div class="col-lg-12 grid-margin stretch-card">
+    <div class="card">
+        <div class="card-body">
+            <h4 class="card-title">Comments</h4>
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th> User Name </th>
+                        <th> Content </th>
+                        <th> Replies </th>
+                        <th> Date </th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <% if(data.length > 0) { %>
+                        <% data.forEach(item => { %>
+                            <tr>
+                                <td> <%= item.name %> </td>
+                                <td> <%= item.short_content %> </td>
+                                <td><%= item.replies.length %></td>
+                                <td><%= formatDate(item.createdAt) %></td>
+                                <td>
+                                    <a href="/posts/<%= item.postId %>" target="_blank" class="btn btn-sm btn-info btn-outline">Watch Post</a>
+                                    <a href="/admin/comments/<%= item._id %>" class="btn btn-sm btn-info btn-outline">Watch</a>
+                                    <a href="/admin/comments/<%= item._id %>/delete" class="btn btn-sm btn-danger btn-outline">Delete</a>
+                                </td>
+                            </tr>
+                        <% }) %>
+                    <% } %>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<%- include('../layouts/footer') %>
