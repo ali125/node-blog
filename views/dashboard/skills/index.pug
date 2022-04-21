@@ -1,0 +1,34 @@
+extends ../layout
+
+block content
+  div.c-page
+    div.c-page__head
+      div
+        h1.c-page__title Skill List
+        p.c-page__description
+          | Lorem ipsum dolor sit amet consectetur adipisicing elit. Modi reprehenderit molestias cupiditate mollitia officiis in praesentium beatae veniam voluptatibus asperiores libero/p>
+
+      a.btn.btn-primary(href="/dashboard/skills/add") Add New Skill
+    div.c-page__body
+      table.c-table
+        thead.c-table__head
+          tr
+            th ID
+            th Title
+            th Rate
+            th Status
+            th User
+            th Created At
+            th Updated At
+            th Actions
+        tbody.c-table__body
+          tr.c-table__row.c-table__row--draft
+            td 1
+            td ReactJs
+            td 5/10
+            td Draft
+            td Morti Al
+            td 2022-01-24
+            td 2022-01-25
+            td 
+              a.btn.btn-sm.btn-dark(href="/") Manage

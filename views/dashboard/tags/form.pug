@@ -1,0 +1,26 @@
+extends ../layout
+
+block content
+    div.c-page
+        div.c-page__head
+            div
+                h1.c-page__title Add New Tag
+                p.c-page__description
+                    | Lorem ipsum dolor sit amet consectetur adipisicing elit. Modi reprehenderit molestias cupiditate mollitia officiis in praesentium beatae veniam voluptatibus asperiores libero
+
+        div.c-page__body
+            form.needs-validation(novalidate)
+                div.mb-3
+                    label.form-label(for="title") Tag Title
+                    input.form-control(type="text", id="title", placeholder="Tag Title", required)
+                    div.invalid-feedback
+                        | Please fill title field
+        
+
+                div.mb-3
+                    label.form-label(for="slug") Tag Slug
+                    input.form-control(type="text",id="slug", placeholder="Tag Slug", required)
+                    div.invalid-feedback
+                        | Please fill slug field
+
+                button.btn.btn-primary Add Tag

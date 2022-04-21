@@ -1,0 +1,10 @@
+.page {
+    @include e(header) {
+        width: 85%;
+        padding: 3rem;
+    }
+
+    @include e(article) {
+        padding: 0 3rem;
+    }
+}

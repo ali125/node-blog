@@ -1,0 +1,83 @@
+extends layout
+
+block content
+  article.article
+    h2.article__title
+      a.article__title-link(href="/posts/:slug")
+        | Beautiful Day With Friends In Paris
+
+    div.article__meta-list
+      span.article__meta
+        i.fa-solid.fa-calendar-day
+        | July, 03 2022
+      span.article__meta
+        i.fa-solid.fa-tags
+        a.article__meta-link(href="/posts/?category=:cateSlug") Three,
+        a.article__meta-link(href="/posts/?category=:cateSlug") Categories,
+        a.article__meta-link(href="/posts/?category=:cateSlug") assigned
+      
+
+      a.article__meta.article__meta--link(href="/posts/:slug/#comments")
+        i.fa-solid.fa-comments
+        | 3 Comments
+      
+
+      a.article__meta.article__meta--link(href="/posts/?author=:authorSlug")
+        i.fa-solid.fa-user-pen
+        | firstName lastName
+
+    a.article__image-link(href="/posts/:slug")
+      img.article__image(src="/web/images/article1.jpg")
+    
+    p.article__summary
+      | Lorem ipsum dolor sit amet consectetur adipisicing elit. Vel ducimus quibusdam voluptatibus quisquam dolorum doloremque quidem eligendi dignissimos soluta cum voluptates vitae mollitia, sapiente autem ex voluptas ab accusantium pariatur!
+
+  div.comments
+    h3.aside__section-title 3 Comments
+    form.comments__form(action="/posts/1/comment", method="POST")
+      label.form__label(for="comment") Add Comment
+      div.form__controller
+        textarea.form__input(id="comment", name="comment", placeholder="Enter your comment here")
+      button.button.button--primary--md Post
+
+    ul.comments__list
+      li.comments__item
+        span.comments__item-comment
+          img.comments__item-avatar(src="/web/images/man.png")
+          span.comments__item-body
+            span.comments__item-info
+              span.comments__item-name Tony Stark
+              span.comments__item-time 3 hrs ago
+
+            span.comments__item-content
+                | Lorem ipsum dolor sit amet consectetur adipisicing elit. Vel ducimus quibusdam voluptatibus quisquam dolorum doloremque quidem eligendi dignissimos soluta cum voluptates vitae mollitia, sapiente autem ex voluptas ab accusantium pariatur!
+
+            span.comments__item-actions
+              span.comments__item-action Like
+              span.comments__item-action Reply
+            form.form__search.form__controller.comments__reply-form(action="/posts/1/comment?reply=clientId",method="POST")
+              input.form__input(type="text", autocomplete="off", name="comment", placeholder="Reply to {Tony Stark}")
+              button.form__button.comments__reply-btn Post
+
+        ul.comments__item-replies
+          li.comments__item.comments__item--reply
+            span.comments__item-comment
+              img.comments__item-avatar(src="/web/images/man.png")
+              span.comments__item-body
+                span.comments__item-info
+                  span.comments__item-name Tony Stark
+                  span.comments__item-time 3 hrs ago
+                
+                span.comments__item-content
+                  | Lorem ipsum dolor sit amet consectetur adipisicing elit. Vel ducimus quibusdam voluptatibus quisquam dolorum doloremque quidem eligendi dignissimos soluta cum voluptates vitae mollitia, sapiente autem ex voluptas ab accusantium pariatur!
+                  
+                span.comments__item-actions
+                  span.comments__item-action Like
+                            
+                        
+                    
+                
+              
+          
+      
+  

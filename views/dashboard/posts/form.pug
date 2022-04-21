@@ -1,0 +1,51 @@
+extends ../layout
+
+block content
+    div.c-page
+        div.c-page__head
+            div
+                h1.c-page__title Add New Post
+                p.c-page__description
+                    | Lorem ipsum dolor sit amet consectetur adipisicing elit. Modi reprehenderit molestias cupiditate mollitia officiis in praesentium beatae veniam oluptatibus asperiores libero
+            
+        
+        div.c-page__body
+            form.needs-validation(novalidate=true)
+                div.mb-3
+                    label.form-label(for="image") Post Image
+                    input.form-control(type="file", id="image", placeholder="Post Image", required)
+                    div.invalid-feedback Please fill main image field
+                    
+                
+                div.mb-3
+                    label.form-label(for="title") Post Title
+                    input.form-control(type="text", id="title", placeholder="Post Title", required)
+                    div.invalid-feedback Please fill title field
+                    
+                
+                div.mb-3
+                    label.form-label(for="content") Post Content
+                    textarea.form-control(id="content", required, rows="3")
+                    div.invalid-feedback Please fill content field
+
+                hr
+
+                div.mb-3
+                    label.form-label(for="categories") Categories
+                    select.form-select(id="categories", multiple, size="3")
+                        option(value="1") One
+                        option(value="2") Two
+                        option(value="3") Three
+                
+                div.mb-3
+                    label.form-label(for="content") Tags
+                    select.form-select(multiple, size="5")
+                        option(value="1") One
+                        option(value="2") Two
+                        option(value="3") Three
+
+                hr
+
+                button.btn.btn-primary Add Post
+        
+    

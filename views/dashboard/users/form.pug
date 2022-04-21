@@ -1,0 +1,26 @@
+extends ../layout
+
+block content
+    div.c-page
+        div.c-page__head
+            div
+                h1.c-page__title Add New User
+                p.c-page__description
+                    | Lorem ipsum dolor sit amet consectetur adipisicing elit. Modi reprehenderit molestias cupiditate mollitia officiis in praesentium beatae veniam voluptatibus asperiores libero
+
+        div.c-page__body
+            form.needs-validation(novalidate)
+                div.mb-3
+                    label.form-label(for="title") User Title
+                    input.form-control(type="text", id="title", placeholder="User Title", required)
+                    div.invalid-feedback
+                        | Please fill title field
+        
+
+                div.mb-3
+                    label.form-label(for="slug") User Slug
+                    input.form-control(type="text",id="slug", placeholder="User Slug", required)
+                    div.invalid-feedback
+                        | Please fill slug field
+
+                button.btn.btn-primary Add User

@@ -1,0 +1,22 @@
+# Don't check auto-generated stuff into git
+coverage
+build
+node_modules
+stats.json
+/.next/
+
+# misc
+.DS_Store
+.env
+.env.dev
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+debug.log*
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+.idea

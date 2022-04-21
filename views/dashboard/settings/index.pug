@@ -1,0 +1,34 @@
+extends ../layout
+
+block content
+  div.c-page
+    div.c-page__head
+      div
+        h1.c-page__title Settings
+        p.c-page__description 
+          | Lorem ipsum dolor sit amet consectetur adipisicing elit. Modi reprehenderit molestias cupiditate mollitia officiis in praesentium beatae veniam voluptatibus asperiores libero
+      
+    
+    div.c-page__body
+      table.c-table
+        tbody.c-table__body
+          tr.c-table__row
+            th
+              span.c-setting__item
+                | User Profile
+              span.c-setting__item-desc
+                | Lorem ipsum dolor sit amet consectetur adipisicing elit. Vel sed aliquid aut ipsam magni doloribus.
+            
+            td.text-right
+              a.btn.btn-primary(href="/dashboard/settings/profile") Manage
+          tr.c-table__row
+            th
+              span.c-setting__item
+                | Change Password
+              span.c-setting__item-desc
+                | Lorem ipsum dolor sit amet consectetur adipisicing elit. Vel sed aliquid aut ipsam magni doloribus.
+            
+            td.text-right
+              a.btn.btn-primary(href="/dashboard/settings/profile") Manage
+    
+  

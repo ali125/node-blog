@@ -1,0 +1,10 @@
+.c-setting {
+    @include e(item) {
+        display: block;
+        @include s(desc) {
+            display: block;
+            font-size: 0.9rem;
+            color: #666;
+        }
+    }
+}

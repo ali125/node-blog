@@ -1,0 +1,24 @@
+.c-page {
+    @include e(head) {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        padding: 1rem 0 2rem;
+    }
+
+    @include e(title) {
+        font-weight: 600;
+        font-size: 1.6rem;
+        color: #333;
+        margin: 0;
+        padding: 0;
+    }
+
+    @include e(description) {
+        font-size: 0.9rem;
+        margin-top: 0.5rem;
+        color: #666;
+        margin-bottom: 0;
+        max-width: 85%;
+    }
+}
