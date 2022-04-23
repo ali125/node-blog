@@ -32,7 +32,7 @@ block content
                   td= post.slug
                   td= post.shortContent
                   td= post.status === 'draft' ? 'Draft' : 'Published' 
-                  td= post.userId
+                  td= post.user.fullName
                   td= dateTimeFormate(post.createdAt)
                   td= dateTimeFormate(post.updatedAt)
                   td 

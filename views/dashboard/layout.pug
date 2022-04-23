@@ -52,7 +52,7 @@ html
                     div.header-user(data-type="dropdown", data-toggle="userMenu")
                         img.header-user__avatar(src="/dashboard/images/man.png", alt="username")
                         span.header-user__info
-                            span.header-user__name Morti Al
+                            span.header-user__name= user.fullName
                             span.header-user__role Admin
                         i.fas.fa-angle-down
 
@@ -60,7 +60,7 @@ html
                         li
                             a.c-dropdown__item(href="#") Settings
                         li
-                            a.c-dropdown__item(href="#") Logout
+                            a.c-dropdown__item(href="/auth/logout") Logout
 
             div.grid__page
                 block content

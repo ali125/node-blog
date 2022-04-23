@@ -1,0 +1,30 @@
+
+extends layout
+
+block content
+    h4.text-center.pb-3 Register 
+    form.needs-validation(method="POST", novalidate)
+        div.mb-3 
+            label.form-label(for="first_name") First Name
+            input.form-control(type="first_name", id="first_name", name="first_name", placeholder="Enter your first name", required)
+            div.invalid-feedback 
+                | Please fill first name field
+        div.mb-3 
+            label.form-label(for="last_name") Last Name
+            input.form-control(type="last_name", id="last_name", name="last_name", placeholder="Enter your last name", required)
+            div.invalid-feedback 
+                | Please fill last name field
+        div.mb-3 
+            label.form-label(for="email") Email
+            input.form-control(type="email", id="email", name="email", placeholder="Enter your email", required)
+            div.invalid-feedback 
+                | Please fill email field
+        div.mb-3 
+            label.form-label(for="password") Password
+            input.form-control(type="password", id="password", name="password", placeholder="Enter your password", required)
+            div.invalid-feedback 
+                | Please fill password field
+        div.c-auth__link-container
+            a.c-auth__link(href="/auth/login") Have account? Login Now
+        div.text-center 
+            button.btn.btn-primary Register

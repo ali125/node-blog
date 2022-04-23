@@ -3,7 +3,26 @@ const { Model, DataTypes } = require('sequelize');
 
 const sequelize = require('../config/db');
 
-class User extends Model {}
+class User extends Model {
+    static async findByCredentials(email, password) {
+        try {
+            const user = await User.findOne({
+                where: { email }
+            });
+            if(!user) {
+                throw new Error('Unable to login');
+            }
+            const hashPassword = user.getDataValue('password');
+            const isMatch = bcrypt.compareSync(password, hashPassword);
+            if(!isMatch) {
+                throw new Error('Password wrong, Unable to login');
+            }
+            return user;
+        } catch (e) {
+            throw new Error(e);
+        }
+    }
+}
 
 User.init({
     firstName: {
