@@ -9,6 +9,6 @@ Post.belongsTo(User, {
     foreignKey: 'userId'
 });
 
-sequelize.sync({ force: true }).then(() => {
-    console.log('DB Synced');
-});
+// sequelize.sync({ force: true }).then(() => {
+//     console.log('DB Synced');
+// });

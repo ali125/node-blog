@@ -116,6 +116,7 @@ User.init({
     modelName: 'user',
     timestamps: true,
     paranoid: true,
+    logging: false
 });
 
 User.sync();

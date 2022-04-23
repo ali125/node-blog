@@ -1,20 +1,13 @@
-var express = require('express');
-var router = express.Router();
+const express = require('express');
+const router = express.Router();
+const postRouters = require('./posts');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
   res.render('dashboard', { title: 'News and Stories' });
 });
 
-router.get('/posts', function(req, res, next) {
-  res.render('dashboard/posts', { title: 'News and Stories' });
-});
-router.get('/posts/add', function(req, res, next) {
-  res.render('dashboard/posts/form', { title: 'News and Stories' });
-});
-router.get('/posts/:postId', function(req, res, next) {
-  res.render('dashboard/posts/form', { title: 'News and Stories' });
-});
+router.use('/posts', postRouters);
 
 router.get('/categories', function(req, res, next) {
   res.render('dashboard/categories', { title: 'News and Stories' });

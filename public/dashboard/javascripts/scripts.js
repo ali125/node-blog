@@ -1,3 +1,14 @@
+$('#deletePost').on('click', function () {
+    const dataId = $(this).attr("data-id");
+    fetch(`/dashboard/posts/${dataId}`, {
+        method: 'DELETE',
+    })
+    .then((res) => res.json())
+    .then((res) => {
+        window.location.href = '/dashboard/posts';
+    });
+});
+
 $('[data-type="dropdown"]').each((i, el) => {
     const id = $(el).data('toggle');
     if ($(`#${id}`)) {

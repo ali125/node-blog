@@ -1,8 +1,8 @@
-const stripHtml = require("string-strip-html");
+const { stripHtml } = require("string-strip-html");
 const { Op } = require("sequelize");
 
 const truncateText = (text = '', len = 10, dotted = '...') => {
-    const stripText = stripHtml(text);
+    const stripText = stripHtml(text).result;
     const trimText = stripText.trim();
     return text.length > len ? (trimText.substr(0, len) + dotted) : trimText;
 };
@@ -18,7 +18,7 @@ const slugify = (text) => {
 
 const getUniqueSlug = async (Model, title = null, slug_val = null, id = null) => {
     if(title || slug_val) {
-        const slug = slug_val ? slugify(slug_val) : slugify(title);
+        const slug = (slug_val ? slugify(slug_val) : slugify(title)).toLowerCase();
         const slug_result = await Model.findAll({
             where: {
                 id: {

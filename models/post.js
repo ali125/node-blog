@@ -17,9 +17,11 @@ Post.init({
         type: DataTypes.STRING,
         allowNull: false,
         unique: 'compositeIndex',
-        set(value) {
-            this.setDataValue('slug', getUniqueSlug('Post', this.title, value));
-        }
+        // async set(value = '') {
+        //     const slugValue = await getUniqueSlug(Post, this.title, value);
+        //     console.log('========================= slugValue', slugValue);
+        //     this.setDataValue('slug', slugValue);
+        // }
     },
     image: {
         type: DataTypes.STRING,
@@ -35,7 +37,7 @@ Post.init({
     shortContent: {
         type: DataTypes.VIRTUAL,
         get() {
-            return truncateText(this.content, 100);
+            return truncateText(this.content, 80);
         },
         set(value) {
             throw new Error('Do not try to set the `summary` value!');
@@ -78,6 +80,7 @@ Post.init({
     modelName: 'post',
     timestamps: true,
     paranoid: true,
+    logging: false
 });
 
 Post.sync();

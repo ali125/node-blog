@@ -9,6 +9,7 @@ require('./models/_sync');
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
 const dashboardRouter = require('./routes/dashboard/index');
+const { dateTimeFormate } = require('./utils/date');
 
 
 const app = express();
@@ -22,6 +23,11 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+
+app.use((req, res, next) => {
+  res.locals.dateTimeFormate = dateTimeFormate;
+  next();
+});
 
 app.use('/dashboard', dashboardRouter);
 app.use('/', indexRouter);
