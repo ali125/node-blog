@@ -27,8 +27,6 @@ Post.belongsTo(Category, {
 
 Category.belongsTo(Category, {
     as: 'parent',
-    foreignKey: 'parentId',
-    foreignKeyConstraint: true
 });
 
 // Category.sync({ force: true }).then(() => {
