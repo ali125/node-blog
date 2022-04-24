@@ -9,4 +9,11 @@ const sequelize = new Sequelize({
     password: process.env.DB_PASSWORD
 });
 
+sequelize.authenticate().then(() => {
+    console.log('===== Connection successful! =====');
+}).catch((err) => {
+    console.log('===== Error conneting to database! ===== ');
+    console.log(err);
+});
+
 module.exports = sequelize;
