@@ -5,7 +5,10 @@ const { getUniqueSlug } = require('../utils/string');
 
 exports.all = async (req, res, next) => {
     try {
-        const categories = await Category.findAll({ include: [{ model: User, attributes: ['id', 'firstName', 'lastName'] }, { model: Category, as: 'parent', attributes: ['id', 'title'] }] });
+        const categories = await Category.findAll({ include: [
+            { model: User, attributes: ['id', 'firstName', 'lastName'] },
+            { model: Category, as: 'parent', attributes: ['id', 'title'] }]
+        });
         res.render('dashboard/categories', { title: 'News and Stories', categories });
     } catch (e) {
         console.log(e);
