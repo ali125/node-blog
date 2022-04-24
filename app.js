@@ -14,7 +14,7 @@ const dashboardRouter = require('./routes/dashboard/index');
 const authRouters = require('./routes/auth');
 const sequelize = require('./config/db');
 
-const { dateTimeFormate } = require('./utils/date');
+const { dateTimeFormate, dateFormate } = require('./utils/date');
 const { isAuth } = require('./middleware/auth');
 const User = require('./models/user');
 
@@ -43,6 +43,8 @@ app.use(async (req, res, next) => {
   res.locals.user = req.session.user;
   res.locals.isLoggedIn = req.session.isLoggedIn;
   res.locals.dateTimeFormate = dateTimeFormate;
+  res.locals.dateFormate = dateFormate;
+  
   if (req.session.user) {
     const usr = await User.findByPk(req.session.user.id);
     req.user = usr;

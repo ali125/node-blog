@@ -47,6 +47,9 @@ Post.init({
         type: DataTypes.INTEGER,
         allowNull: false,
     },
+    categoryId: {
+        type: DataTypes.INTEGER,
+    },
     commentStatus: {
         type: DataTypes.STRING,
         allowNull: false,

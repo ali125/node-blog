@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const postRouters = require('./posts');
+const categoryRouters = require('./categories');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
@@ -8,16 +9,7 @@ router.get('/', function(req, res, next) {
 });
 
 router.use('/posts', postRouters);
-
-router.get('/categories', function(req, res, next) {
-  res.render('dashboard/categories', { title: 'News and Stories' });
-});
-router.get('/categories/add', function(req, res, next) {
-  res.render('dashboard/categories/form', { title: 'News and Stories' });
-});
-router.get('/categories/:postId', function(req, res, next) {
-  res.render('dashboard/categories/form', { title: 'News and Stories' });
-});
+router.use('/categories', categoryRouters);
 
 router.get('/tags', function(req, res, next) {
   res.render('dashboard/tags', { title: 'News and Stories' });

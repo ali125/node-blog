@@ -4,30 +4,46 @@ block content
     div.c-page
         div.c-page__head
             div
-                h1.c-page__title Add New Category
+                h1.c-page__title= category ? 'Edit Category' : 'Add New Category'
                 p.c-page__description
                     | Lorem ipsum dolor sit amet consectetur adipisicing elit. Modi reprehenderit molestias cupiditate mollitia officiis in praesentium beatae veniam voluptatibus asperiores libero
 
         div.c-page__body
-            form.needs-validation(novalidate)
+            form.needs-validation(method="POST", novalidate)
                 div.mb-3
                     label.form-label(for="title") Category Title
-                    input.form-control(type="text", id="title", placeholder="Category Title", required)
+                    input.form-control(type="text", id="title", name="title", placeholder="Category Title", value=category ? category.title: '', required)
                     div.invalid-feedback
                         | Please fill title field
         
 
                 div.mb-3
                     label.form-label(for="slug") Category Slug
-                    input.form-control(type="text",id="slug", placeholder="Category Slug", required)
-                    div.invalid-feedback
-                        | Please fill slug field
+                    input.form-control(type="text", id="slug", name="slug", value=category ? category.slug: '', placeholder="Category Slug")
 
                 div.mb-3
                     label.form-label(for="parent") Parent
-                    select.form-select(id="parent", multiple, size="3")
-                        option(value="1") One
-                        option(value="2") Two
-                        option(value="3") Three
+                    select.form-select(id="parent", name="parent")
+                        option(value="") Select parent
+                        each cat in categories
+                            option(value=cat.id, selected=category ? category.parentId === cat.id : false)= cat.title 
 
-                button.btn.btn-primary Add Category
+                hr
+
+                div.mb-3
+                    label.form-label(for="status") Status
+                    select.form-select(id="status", name="status")
+                        option(value='published', selected=category ? category.status === 'published' : false) Publish
+                        option(value='draft', selected=category ? category.status === 'draft' : false) Draft
+                
+                div.mb-3
+                    label.form-label(for="publishedAt") Publish At
+                    input.form-control(
+                        type="datetime-local",
+                        id="publishedAt",
+                        name="publishedAt",
+                        value=category ? dateFormate(category.publishedAt, true) : dateFormate(Date.now(), true),
+                        placeholder="Category published at"
+                    )
+
+                button.btn.btn-primary= category ? 'Update Category' : 'Add Category'

@@ -8,43 +8,32 @@ block content
         p.c-page__description
           | Lorem ipsum dolor sit amet consectetur adipisicing elit. Modi reprehenderit molestias cupiditate mollitia officiis in praesentium beatae veniam voluptatibus asperiores libero/p>
 
-      a.btn.btn-primary(href="/dashboard/categories/add") Add New Category
+      a.btn.btn-primary(href="/dashboard/categories/create") Add New Category
     div.c-page__body
       table.c-table
         thead.c-table__head
           tr
             th ID
-            th Subject
-            th Summary
+            th Title
+            th slug
             th Parent
             th Status
             th Author
+            th Published At
             th Created At
             th Updated At
             th Actions
         tbody.c-table__body
-          tr.c-table__row.c-table__row--draft
-            td 1
-            td Subject Title
-            td
-              small Lorem ipsum dolor sit amet consectetur adipisicing elit. Modi reprehenderit molestias cupiditate mollitia officiis
-            td Parent Category
-            td Draft
-            td Morti Al
-            td 2022-01-24
-            td 2022-01-25
-            td 
-              a.btn.btn-sm.btn-dark(href="/") Manage
-
-          tr.c-table__row.c-table__row--published
-            td 1
-            td Subject Title
-            td 
-              small Lorem ipsum dolor sit amet consectetur adipisicing elit. Modi reprehenderit molestias cupiditate mollitia officiis
-            td Parent Category
-            td Publish
-            td Morti Al
-            td 2022-01-24
-            td 2022-01-25
-            td 
-              a.btn.btn-sm.btn-dark(href="/") Manage
+          each category in categories
+            tr.c-table__row(class=`${category.isPublished ? 'c-table__row--published' : 'c-table__row--draft'}`)
+              td= category.id
+              td= category.title
+              td= category.slug
+              td= category.parent ? category.parent.title : '-'
+              td= category.isPublished ? 'Published' : 'Draft' 
+              td= category.user.firstName + ' ' + category.user.lastName
+              td= dateTimeFormate(category.publishedAt) || '-'
+              td= dateTimeFormate(category.createdAt)
+              td= dateTimeFormate(category.updatedAt)
+              td 
+                a.btn.btn-sm.btn-dark(href=`/dashboard/categories/${category.id}/edit`) Manage

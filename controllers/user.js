@@ -18,10 +18,10 @@ exports.login = async (req, res, next) => {
             req.session.user = user;
             res.redirect('/dashboard');
         } else {
-            res.json({ user: 'Failed' });
+            res.redirect('/auth/login');
         }
     } catch (e) {
-        console.log(e);
+        res.redirect('/auth/login');
     }
 }
 
@@ -49,7 +49,7 @@ exports.register = async (req, res, next) => {
         req.session.user = user;
         res.redirect('/dashboard');
     } catch (e) {
-        console.log(e);
+        res.redirect('/auth/register');
     }
 }
 
