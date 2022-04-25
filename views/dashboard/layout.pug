@@ -63,5 +63,9 @@ html
                             a.c-dropdown__item(href="/auth/logout") Logout
 
             div.grid__page
+                if errorMessages
+                    div.alert.alert-danger
+                        each err in errorMessages
+                            p.mb-0= err.msg || err
                 block content
     include includes/scripts

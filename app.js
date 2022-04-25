@@ -4,6 +4,7 @@ const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const session = require('express-session');
+const flash = require('connect-flash');
 require('dotenv').config();
 
 require('./models/_sync');
@@ -38,12 +39,17 @@ app.use(session({
   saveUninitialized: false,
   store
 }));
-
+app.use(flash());
 app.use(async (req, res, next) => {
   res.locals.user = req.session.user;
   res.locals.isLoggedIn = req.session.isLoggedIn;
   res.locals.dateTimeFormate = dateTimeFormate;
   res.locals.dateFormate = dateFormate;
+
+  const errorMessages = req.flash('error');
+  const successMessage = req.flash('success');
+  res.locals.successMessage = successMessage.length > 0 ? successMessage[0] : null;
+  res.locals.errorMessages = errorMessages.length > 0 ? errorMessages : null;
   
   if (req.session.user) {
     const usr = await User.findByPk(req.session.user.id);

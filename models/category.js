@@ -58,7 +58,7 @@ Category.init({
     hooks: {
         beforeCreate: (record, options) => {
             if (record.dataValues.status === 'published') {
-                record.dataValues.publishedAt = new Date();
+                record.dataValues.publishedAt = record.dataValues.publishedAt || new Date();
             }
         },
         beforeUpdate: (record, options) => {

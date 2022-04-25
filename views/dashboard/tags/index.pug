@@ -8,40 +8,33 @@ block content
         p.c-page__description
           | Lorem ipsum dolor sit amet consectetur adipisicing elit. Modi reprehenderit molestias cupiditate mollitia officiis in praesentium beatae veniam voluptatibus asperiores libero/p>
 
-      a.btn.btn-primary(href="/dashboard/tags/add") Add New Tag
+      a.btn.btn-primary(href="/dashboard/tags/create") Add New Tag
     div.c-page__body
-      table.c-table
-        thead.c-table__head
-          tr
-            th ID
-            th Subject
-            th Summary
-            th Status
-            th Author
-            th Created At
-            th Updated At
-            th Actions
-        tbody.c-table__body
-          tr.c-table__row.c-table__row--draft
-            td 1
-            td Subject Title
-            td
-              small Lorem ipsum dolor sit amet consectetur adipisicing elit. Modi reprehenderit molestias cupiditate mollitia officiis
-            td Draft
-            td Morti Al
-            td 2022-01-24
-            td 2022-01-25
-            td 
-              a.btn.btn-sm.btn-dark(href="/") Manage
-
-          tr.c-table__row.c-table__row--published
-            td 1
-            td Subject Title
-            td 
-              small Lorem ipsum dolor sit amet consectetur adipisicing elit. Modi reprehenderit molestias cupiditate mollitia officiis
-            td Publish
-            td Morti Al
-            td 2022-01-24
-            td 2022-01-25
-            td 
-              a.btn.btn-sm.btn-dark(href="/") Manage
+      if tags.length > 0
+        table.c-table
+          thead.c-table__head
+            tr
+              th ID
+              th Title
+              th slug
+              th Status
+              th Author
+              th Published At
+              th Created At
+              th Updated At
+              th Actions
+          tbody.c-table__body
+            each tag in tags
+              tr.c-table__row(class=`${tag.isPublished ? 'c-table__row--published' : 'c-table__row--draft'}`)
+                td= tag.id
+                td= tag.title
+                td= tag.slug
+                td= tag.isPublished ? 'Published' : 'Draft' 
+                td= tag.user.firstName + ' ' + tag.user.lastName
+                td= dateTimeFormate(tag.publishedAt) || '-'
+                td= dateTimeFormate(tag.createdAt)
+                td= dateTimeFormate(tag.updatedAt)
+                td 
+                  a.btn.btn-sm.btn-dark(href=`/dashboard/tags/${tag.id}/edit`) Manage
+      else 
+        h3 No tag has been created

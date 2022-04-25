@@ -17,11 +17,6 @@ Post.init({
         type: DataTypes.STRING,
         allowNull: false,
         unique: 'compositeIndex',
-        // async set(value = '') {
-        //     const slugValue = await getUniqueSlug(Post, this.title, value);
-        //     console.log('========================= slugValue', slugValue);
-        //     this.setDataValue('slug', slugValue);
-        // }
     },
     image: {
         type: DataTypes.STRING,
@@ -63,10 +58,16 @@ Post.init({
         allowNull: false,
         defaultValue: 0
     },
+    isPublished: {
+        type: DataTypes.VIRTUAL,
+        get() {
+            return this.status === 'published' && new Date(this.publishedAt).getTime() < new Date().getTime()
+        }
+    },
     status: {
         type: DataTypes.STRING,
         allowNull: false,
-        defaultValue: 'draft',
+        defaultValue: 'published',
         validate: {
             isIn: [['draft', 'published']]
         },
@@ -74,17 +75,28 @@ Post.init({
     },
     publishedAt: {
         type: DataTypes.DATE,
-        allowNull: true,
-        set(value = null) {
-            this.setDataValue('publishedAt', value || (this.status === 'published' ? new Date() : null))
-        },
+        allowNull: true
     },
 }, {
     sequelize,
     modelName: 'post',
     timestamps: true,
     paranoid: true,
-    logging: false
+    logging: false,
+    hooks: {
+        beforeCreate: (record, options) => {
+            if (record.dataValues.status === 'published') {
+                record.dataValues.publishedAt = record.dataValues.publishedAt || new Date();
+            }
+        },
+        beforeUpdate: (record, options) => {
+            if (record.dataValues.status === 'published') {
+                record.dataValues.publishedAt = record.dataValues.publishedAt || new Date();
+            } else {
+                record.dataValues.publishedAt = null;
+            }
+        },
+    },
 });
 
 Post.sync();

@@ -1,11 +1,12 @@
-$('#deletePost').on('click', function () {
+$('#deleteBtn').on('click', function () {
     const dataId = $(this).attr("data-id");
-    fetch(`/dashboard/posts/${dataId}`, {
+    const dataType = $(this).attr("data-type");
+    fetch(`/dashboard/${dataType}/${dataId}`, {
         method: 'DELETE',
     })
     .then((res) => res.json())
     .then((res) => {
-        window.location.href = '/dashboard/posts';
+        window.location.href = `/dashboard/${dataType}`;
     });
 });
 

@@ -18,21 +18,25 @@ block content
               th Title
               th Slug
               th Summary
+              th Category
               th Status
               th Author
+              th Published At
               th Created At
               th Updated At
               th Actions
 
           tbody.c-table__body
             each post in posts
-              tr.c-table__row(class=`${post.status === 'draft' ? 'c-table__row--draft' : 'c-table__row--published'}`)
+              tr.c-table__row(class=`${post.isPublished ? 'c-table__row--published' : 'c-table__row--draft'}`)
                   td= post.id
                   td= post.title
                   td= post.slug
                   td= post.shortContent
-                  td= post.status === 'draft' ? 'Draft' : 'Published' 
+                  td= post.category ? post.category.title : '-'
+                  td= post.isPublished ? 'Published' : 'Draft' 
                   td= post.user.fullName
+                  td= dateTimeFormate(post.publishedAt) || '-'
                   td= dateTimeFormate(post.createdAt)
                   td= dateTimeFormate(post.updatedAt)
                   td 

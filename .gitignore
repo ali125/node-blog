@@ -1,7 +1,7 @@
 # Don't check auto-generated stuff into git
 coverage
 build
-public/uplaods/media
+public/uploads/media
 node_modules
 stats.json
 /.next/

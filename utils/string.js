@@ -25,11 +25,13 @@ const getUniqueSlug = async (Model, title = null, slug_val = null, id = null) =>
                     [Op.not]: id,
                 },
                 slug: {
-                    [Op.like]: `%${slug}%`
+                    [Op.like]: `${slug}`
                 }
-            }
+            },
+            paranoid: false
         });
-        return slug_result.length > 0 ? slug + slug_result.length : slug;
+        console.log('slug_result', slug_result);
+        return slug_result.length > 0 ? await getUniqueSlug(Model, title, slug + Date.now().toString().substr(0, 3), id) : slug;
     }
     return '';
 };

@@ -21,6 +21,11 @@ block content
                     label.form-label(for="title") Post Title
                     input.form-control(type="text", id="title", name="title", placeholder="Post Title", value=post ? post.title : '', required)
                     div.invalid-feedback Please fill title field
+
+                div.mb-3
+                    label.form-label(for="slug") Post Slug
+                    input.form-control(type="text", id="slug", name="slug", placeholder="Post Slug", value=post ? post.slug : '')
+                    div.invalid-feedback Please fill slug field
                     
                 
                 div.mb-3
@@ -31,11 +36,11 @@ block content
                 hr
 
                 div.mb-3
-                    label.form-label(for="categories") Categories
-                    select.form-select(id="categories", name="categories", multiple, size="3")
-                        option(value="1") One
-                        option(value="2") Two
-                        option(value="3") Three
+                    label.form-label(for="categoryId") Category
+                    select.form-select(id="categoryId", name="categoryId")
+                        option(value="") Select Category
+                        each cat in categories
+                            option(value=cat.id, selected=post ? post.categoryId === cat.id : false)= cat.title
                 
                 div.mb-3
                     label.form-label(for="tags") Tags
@@ -44,10 +49,26 @@ block content
                         option(value="2") Two
                         option(value="3") Three
 
+                div.mb-3
+                    label.form-label(for="status") Status
+                    select.form-select(id="status", name="status")
+                        option(value='published', selected=post ? post.status === 'published' : false) Publish
+                        option(value='draft', selected=post ? post.status === 'draft' : false) Draft
+                
+                div.mb-3
+                    label.form-label(for="publishedAt") Publish At
+                    input.form-control(
+                        type="datetime-local",
+                        id="publishedAt",
+                        name="publishedAt",
+                        value=post ? dateFormate(post.publishedAt, true) : dateFormate(Date.now(), true),
+                        placeholder="Post published at"
+                    )
+
                 hr
 
                 button.btn.btn-primary= post ? 'Edit Post' : 'Add Post'
                 if post 
-                    button.btn.btn-danger.mx-2(type="button", id="deletePost", data-id=post.id) Delete Post
+                    button.btn.btn-danger.mx-2(type="button", id="deleteBtn", data-id=post.id, data-type="posts") Delete Post
         
     
