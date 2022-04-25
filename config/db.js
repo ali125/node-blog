@@ -10,9 +10,9 @@ const sequelize = new Sequelize({
 });
 
 sequelize.authenticate().then(() => {
-    console.log('===== Connection successful! =====');
+    console.log('=== Connection successful! ===');
 }).catch((err) => {
-    console.log('===== Error conneting to database! ===== ');
+    console.log('=== Error conneting to database! === ');
     console.log(err);
 });
 
