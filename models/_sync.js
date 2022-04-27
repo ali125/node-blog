@@ -47,6 +47,6 @@ Tag.belongsToMany(Post, {
 // Post.sync({ force: true }).then(() => {
 //     console.log('DB Synced');
 // });
-// Tag.sync({ force: true }).then(() => {
+// sequelize.sync({ force: true }).then(() => {
 //     console.log('DB Synced');
 // });

@@ -50,7 +50,7 @@ html
             div.header
                 div.c-dropdown.header-user__container
                     div.header-user(data-type="dropdown", data-toggle="userMenu")
-                        img.header-user__avatar(src="/dashboard/images/man.png", alt="username")
+                        img.header-user__avatar(src=user.avatar || "/dashboard/images/man.png", alt="username")
                         span.header-user__info
                             span.header-user__name= user.fullName
                             span.header-user__role Admin
@@ -67,5 +67,8 @@ html
                     div.alert.alert-danger
                         each err in errorMessages
                             p.mb-0= err.msg || err
+                if successMessage
+                    div.alert.alert-success
+                        p.mb-0= successMessage
                 block content
     include includes/scripts

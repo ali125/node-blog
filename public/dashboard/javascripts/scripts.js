@@ -21,6 +21,27 @@ $('[data-type="dropdown"]').each((i, el) => {
     }
 });
 
+$("#modalDelInput").on('keyup', function() {
+    const inputVal = $(this).val();
+    const button = $(this).parent().parent().find('#modalDelBtn');
+    console.log('button', $(button));
+    if (inputVal === 'delete-account') {
+        $(button).attr('disabled', false);
+    } else {
+        $(button).attr('disabled', true);
+    }
+});
+
+$('#modalDelBtn').on('click', function() {
+    fetch(`/dashboard/settings/delete-account`, {
+        method: 'DELETE',
+    })
+    .then((res) => res.json())
+    .then((res) => {
+        window.location.href = `/auth/login`;
+    });
+});
+
 (() => {
   
     // Fetch all the forms we want to apply custom Bootstrap validation styles to

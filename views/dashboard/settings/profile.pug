@@ -8,37 +8,39 @@ block content
                 p.c-page__description
                     | Lorem ipsum dolor sit amet consectetur adipisicing elit. Modi reprehenderit molestias cupiditate mollitia officiis in praesentium beatae veniam voluptatibus asperiores libero
         div.c-page__body
-            form.needs-validation(novalidate)
+            form.needs-validation(method="POST", enctype="multipart/form-data", novalidate)
                 div.mb-3
                     label.form-label(for="image") User Image
-                    input.form-control(type="file", id="image", placeholder="User Image", required)
+                    input.form-control(type="file", id="image", name="avatar", placeholder="User Image")
                     div.invalid-feedback
                         | Please fill main image field
 
                 div.mb-3.row
                     div.col-6
                         label.form-label(for="first_name") Firstname
-                        input.form-control(type="text", id="first_name", placeholder="Firstname", required)
+                        input.form-control(type="text", id="first_name", name="firstName", placeholder="Firstname", value=user.firstName, required)
                         div.invalid-feedback
                             | Please fill first name field
 
                     div.col-6
                         label.form-label(for="last_name") Lastname
-                        input.form-control(type="text", id="last_name", placeholder="Firstname", required)
+                        input.form-control(type="text", id="last_name", name="lastName", placeholder="Firstname", value=user.lastName, required)
                         div.invalid-feedback
                             | Please fill last name field
 
-                div.mb-3
-                    label.form-label(for="about") About
-                    textarea.form-control(id="about", required, rows="3")
-                    div.invalid-feedback
-                        | Please fill about field
+                div.mb-3.row
+                    div.col-6
+                        label.form-label(for="email") Email
+                        input.form-control(type="email", id="email", name="email", placeholder="Email", value=user.email, required)
+                        div.invalid-feedback
+                            | Please fill email field
+
+                    div.col-6
+                        label.form-label(for="phoneNumber") Phone Number
+                        input.form-control(type="tel", id="phoneNumber", name="phoneNumber", placeholder="Phone Number", value=user.phoneNumber)
 
                 div.mb-3
-                    label.form-label(for="content") Tags
-                    select.form-select(multiple, size="5")
-                        option(value="1") One
-                        option(value="2") Two
-                        option(value="3") Three
+                    label.form-label(for="about") About
+                    textarea.form-control(id="about", name="about", value=user.about, rows="3")
 
                 button.btn.btn-primary Update Info

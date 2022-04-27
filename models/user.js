@@ -10,12 +10,30 @@ class User extends Model {
                 where: { email }
             });
             if(!user) {
-                throw new Error('Unable to login');
+                throw 'Email or password is wrong';
             }
             const hashPassword = user.getDataValue('password');
             const isMatch = bcrypt.compareSync(password, hashPassword);
             if(!isMatch) {
-                throw new Error('Password wrong, Unable to login');
+                throw 'Email or password is wrong';
+            }
+            return user;
+        } catch (e) {
+            throw new Error(e);
+        }
+    };
+    static async checkPassword(userId, currentPassowrd) {
+        try {
+            const user = await User.findOne({
+                where: { id: userId }
+            });
+            if(!user) {
+                throw 'Unable to check authentication';
+            }
+            const hashPassword = user.getDataValue('password');
+            const isMatch = bcrypt.compareSync(currentPassowrd, hashPassword);
+            if(!isMatch) {
+                throw 'Current password wrong';
             }
             return user;
         } catch (e) {
@@ -60,9 +78,6 @@ User.init({
     phoneNumber: {
         type: DataTypes.STRING,
         allowNull: true,
-        validate: {
-            isAlpha: false
-        }
     },
     password: {
         type: DataTypes.STRING,
@@ -93,6 +108,9 @@ User.init({
         validate: {
             isIn: [['male', 'female']],
         }
+    },
+    about: {
+        type: DataTypes.TEXT,
     },
     verifiedEmail: {
         type: DataTypes.SMALLINT,

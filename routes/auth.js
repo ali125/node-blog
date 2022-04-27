@@ -1,18 +1,17 @@
 const express = require('express');
-const multer = require('multer');
 const router = express.Router();
 
-const userController = require('../controllers/user');
+const authController = require('../controllers/auth');
 
 // const { imageDirectory } = require('../../config');
 // const upload = multer({ dest: imageDirectory })
 
-router.get('/login', userController.loginView);
-router.post('/login', userController.login);
+router.get('/login', authController.loginView);
+router.post('/login', authController.login);
 
-router.get('/register', userController.registerView);
-router.post('/register', userController.register);
+router.get('/register', authController.registerView);
+router.post('/register', authController.register);
 
-router.get('/logout', userController.logout);
+router.get('/logout', authController.logout);
 
 module.exports = router;

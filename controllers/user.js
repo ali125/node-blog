@@ -43,6 +43,7 @@ exports.profileSave = async (req, res, next) => {
             plain: true
         });
         req.session.user = user[1];
+        req.flash('success', 'User information successfully changed!')
         res.redirect('/dashboard/settings/profile');
     } catch (e) {
         next(e);
@@ -76,7 +77,7 @@ exports.changePasswordSave = async (req, res, next) => {
                         id: req.user.id
                     }
                 });
-                req.flash('success', 'Password successfully changed!')
+                req.flash('success', 'Password successfully changed!');
                 res.redirect('/dashboard/settings/change-password');
             }
         } catch (er) {
@@ -88,3 +89,17 @@ exports.changePasswordSave = async (req, res, next) => {
         next(e);
     }
 }
+
+
+exports.deleteAccount = async (req, res, next) => {
+    try {
+        await User.destroy({ where: { id: req.user.id }});
+        req.flash('success','User deleted successfully!');
+        req.session.isLoggedIn = false;
+        req.session.user = null;
+        req.user = null
+        res.json({ message: 'Deleting category succeed!', status: 204 });
+    } catch (e) {
+        next(e);
+    }
+};

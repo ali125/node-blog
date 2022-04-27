@@ -24,4 +24,6 @@ router.get('/change-password', userController.changePasswordView);
 
 router.post('/change-password', changePasswordValidation, userController.changePasswordSave);
 
+router.delete('/delete-account', userController.deleteAccount);
+
 module.exports = router;
