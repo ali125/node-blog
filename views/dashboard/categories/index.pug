@@ -32,7 +32,7 @@ block content
                 td= category.slug
                 td= category.parent ? category.parent.title : '-'
                 td= category.isPublished ? 'Published' : 'Draft' 
-                td= category.user.firstName + ' ' + category.user.lastName
+                td= category.user.fullName
                 td= dateTimeFormate(category.publishedAt) || '-'
                 td= dateTimeFormate(category.createdAt)
                 td= dateTimeFormate(category.updatedAt)

@@ -7,7 +7,7 @@ const { getUniqueSlug } = require('../utils/string');
 exports.all = async (req, res, next) => {
     try {
         const categories = await Category.findAll({ include: [
-            { model: User, attributes: ['id', 'firstName', 'lastName'] },
+            { model: User, attributes: ['id', 'fullName', 'firstName', 'lastName']},
             { model: Category, as: 'parent', attributes: ['id', 'title'] }]
         });
         res.render('dashboard/categories', { title: 'News and Stories', categories });
@@ -59,6 +59,7 @@ exports.save = async (req, res, next) => {
             status,
             publishedAt
         });
+        req.flash('success','New category created successfully!');
         res.redirect('/dashboard/categories');
     } catch (e) {
         next(e);
@@ -122,7 +123,7 @@ exports.update = async (req, res, next) => {
                     id: categoryId
                 }
             });
-    
+            req.flash('success','Category updated successfully!');
             res.redirect('/dashboard/categories');
         } else {
             next(new Error('Category not found!'));
@@ -139,6 +140,7 @@ exports.destroy = async (req, res, next) => {
 
         if (category && category.userId === req.user.id) {
             await Category.destroy({ where: { id: categoryId }});
+            req.flash('success','Category deleted successfully!');
             res.json({ message: 'Deleting category succeed!', status: 204 });
         } else {
             res.status(404).json({ message: 'Category not found!', status: 404 });
