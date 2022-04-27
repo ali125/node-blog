@@ -30,7 +30,7 @@ block content
                 td= tag.title
                 td= tag.slug
                 td= tag.isPublished ? 'Published' : 'Draft' 
-                td= tag.user.firstName + ' ' + tag.user.lastName
+                td= tag.user.fullName
                 td= dateTimeFormate(tag.publishedAt) || '-'
                 td= dateTimeFormate(tag.createdAt)
                 td= dateTimeFormate(tag.updatedAt)

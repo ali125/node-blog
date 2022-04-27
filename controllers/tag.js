@@ -6,7 +6,7 @@ const { getUniqueSlug } = require('../utils/string');
 
 exports.all = async (req, res, next) => {
     try {
-        const tags = await Tag.findAll({ include: { model: User, attributes: ['id', 'firstName', 'lastName'] } });
+        const tags = await Tag.findAll({ include: { model: User, attributes: ['id', 'fullName', 'firstName', 'lastName']} });
         res.render('dashboard/tags', { title: 'News and Stories', tags });
     } catch (e) {
         next(e);
@@ -29,11 +29,6 @@ exports.save = async (req, res, next) => {
         const status = req.body.status;
         const publishedAt = req.body.publishedAt || null;
 
-        console.log({
-            // body: req.body,
-            slug
-        })
-
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
             const inputValues = {
@@ -45,12 +40,13 @@ exports.save = async (req, res, next) => {
             return res.status(400).render('dashboard/tags/form', { title: 'News and Stories', inputValues, errorMessages: errors.array() });
         }
 
-        const tag = await req.user.createTag({
+        await req.user.createTag({
             title,
             slug,
             status,
             publishedAt
         });
+        req.flash('success','New tag created successfully!');
         res.redirect('/dashboard/tags');
     } catch (e) {
         // console.log(e);
@@ -105,7 +101,7 @@ exports.update = async (req, res, next) => {
                     id: tagId
                 }
             });
-    
+            req.flash('success','Tag updated successfully!');
             res.redirect('/dashboard/tags');
         } else {
             next(new Error('Tag not found!'));
@@ -122,6 +118,7 @@ exports.destroy = async (req, res, next) => {
 
         if (tag && tag.userId === req.user.id) {
             await Tag.destroy({ where: { id: tagId }, individualHooks: true });
+            req.flash('success','Tag deleted successfully!');
             res.json({ message: 'Deleting tag succeed!', status: 204 });
         } else {
             res.status(404).json({ message: 'Tag not found!', status: 404 });
