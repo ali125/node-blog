@@ -19,18 +19,18 @@ block content
                 
                 div.mb-3
                     label.form-label(for="title") Post Title
-                    input.form-control(type="text", id="title", name="title", placeholder="Post Title", value=post ? post.title : '', required)
+                    input.form-control(type="text", id="title", name="title", placeholder="Post Title", value=inputValues ? inputValues.title : post ? post.title : '', required)
                     div.invalid-feedback Please fill title field
 
                 div.mb-3
                     label.form-label(for="slug") Post Slug
-                    input.form-control(type="text", id="slug", name="slug", placeholder="Post Slug", value=post ? post.slug : '')
+                    input.form-control(type="text", id="slug", name="slug", placeholder="Post Slug", value=inputValues ? inputValues.slug : post ? post.slug : '')
                     div.invalid-feedback Please fill slug field
                     
                 
                 div.mb-3
                     label.form-label(for="content") Post Content
-                    textarea.form-control(id="content", name="content", required, rows="3")= post ? post.content : ''
+                    textarea.form-control(id="content", name="content", required, rows="3")= inputValues ? inputValues.content : post ? post.content : ''
                     div.invalid-feedback Please fill content field
 
                 hr
@@ -40,20 +40,19 @@ block content
                     select.form-select(id="categoryId", name="categoryId")
                         option(value="") Select Category
                         each cat in categories
-                            option(value=cat.id, selected=post ? post.categoryId === cat.id : false)= cat.title
+                            option(value=cat.id, selected=inputValues ? inputValues.categoryId === cat.id : post ? post.categoryId === cat.id : false)= cat.title
                 
                 div.mb-3
                     label.form-label(for="tags") Tags
                     select.form-select(id="tags", multiple, name="tags", size="5")
-                        option(value="1") One
-                        option(value="2") Two
-                        option(value="3") Three
+                        each tag in tags
+                            option(value=tag.id, selected=inputValues ? inputValues.tags.indexOf(tag.id) > -1 : post ? post.tags.indexOf(tag.id) > -1 : false)= tag.title
 
                 div.mb-3
                     label.form-label(for="status") Status
                     select.form-select(id="status", name="status")
-                        option(value='published', selected=post ? post.status === 'published' : false) Publish
-                        option(value='draft', selected=post ? post.status === 'draft' : false) Draft
+                        option(value='published', selected=inputValues ? inputValues.status === 'published' : post ? post.status === 'published' : false) Publish
+                        option(value='draft', selected=inputValues ? inputValues.status === 'draft' : post ? post.status === 'draft' : false) Draft
                 
                 div.mb-3
                     label.form-label(for="publishedAt") Publish At
@@ -61,7 +60,7 @@ block content
                         type="datetime-local",
                         id="publishedAt",
                         name="publishedAt",
-                        value=post ? dateFormate(post.publishedAt, true) : dateFormate(Date.now(), true),
+                        value=inputValues ? dateFormate(inputValues.publishedAt, true) : post ? dateFormate(post.publishedAt, true) : dateFormate(Date.now(), true),
                         placeholder="Post published at"
                     )
 

@@ -2,6 +2,7 @@ const express = require('express');
 const multer = require('multer');
 const router = express.Router();
 
+const { postValidation } = require('../../middleware/validations');
 const postController = require('../../controllers/post');
 const { imageDirectory } = require('../../config');
 
@@ -11,11 +12,11 @@ router.get('/', postController.all);
 
 router.get('/create', postController.create);
 
-router.post('/create', upload.single('image'), postController.save);
+router.post('/create', upload.single('image'), postValidation, postController.save);
 
 router.get('/:postId/edit', postController.edit);
 
-router.post('/:postId/edit', upload.single('image'), postController.update);
+router.post('/:postId/edit', upload.single('image'), postValidation, postController.update);
 
 router.delete('/:postId', postController.destroy);
 

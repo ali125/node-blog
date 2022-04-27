@@ -1,10 +1,26 @@
 const { body } = require('express-validator');
 
+exports.postValidation = [
+    body('title', 'Please fill the title field')
+        .isString()
+        .trim()
+        .isLength({ min: 3 })
+        .withMessage('Title length should have at lease 3 charachters'),
+    body('content', 'Please fill the content field')
+        .isString()
+        .trim()
+        .isLength({ min: 5 })
+        .withMessage('Content length should have at lease 5 charachters'),
+    body('status', 'Please select valid status choice')
+        .isIn(['draft', 'published'])
+];
+
 exports.categoryValidation = [
     body('title', 'Please fill the title field')
         .isString()
         .trim()
-        .isLength({ min: 3 }),
+        .isLength({ min: 3 })
+        .withMessage('Title length should have at lease 3 charachters'),
     body('status', 'Please select valid status choice')
         .isIn(['draft', 'published'])
 ];
@@ -13,7 +29,8 @@ exports.tagValidation = [
     body('title', 'Please fill the title field')
         .isString()
         .trim()
-        .isLength({ min: 3 }),
+        .isLength({ min: 3 })
+        .withMessage('Title length should have at lease 3 charachters'),
     body('status', 'Please select valid status choice')
         .isIn(['draft', 'published'])
 ];
