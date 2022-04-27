@@ -3,6 +3,7 @@ const router = express.Router();
 const postRouters = require('./posts');
 const categoryRouters = require('./categories');
 const tagRouters = require('./tags');
+const settingRouters = require('./settings');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
@@ -12,6 +13,7 @@ router.get('/', function(req, res, next) {
 router.use('/posts', postRouters);
 router.use('/categories', categoryRouters);
 router.use('/tags', tagRouters);
+router.use('/settings', settingRouters);
 
 router.get('/users', function(req, res, next) {
   res.render('dashboard/users', { title: 'News and Stories' });
@@ -35,14 +37,6 @@ router.get('/skills/:postId', function(req, res, next) {
 
 router.get('/comments', function(req, res, next) {
   res.render('dashboard/comments', { title: 'News and Stories' });
-});
-
-router.get('/settings', function(req, res, next) {
-  res.render('dashboard/settings', { title: 'News and Stories' });
-});
-
-router.get('/settings/profile', function(req, res, next) {
-  res.render('dashboard/settings/profile', { title: 'News and Stories' });
 });
 
 module.exports = router;

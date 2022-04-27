@@ -1,64 +1,90 @@
+const { validationResult } = require('express-validator');
 const User = require('../models/user');
 
-exports.loginView = async (req, res, next) => {
+exports.profileView = async (req, res, next) => {
     try {
-        res.render('auth/login', { title: 'News and Stories' });
+        const user = req.user;
+        res.render('dashboard/settings/profile', { title: 'News and Stories', user });
     } catch (e) {
-        console.log(e);
+        next(e);
     }
 }
-exports.login = async (req, res, next) => {
+exports.profileSave = async (req, res, next) => {
     try {
+        const firstName = req.body.firstName;
+        const lastName = req.body.lastName;
         const email = req.body.email;
-        const password = req.body.password;
-        console.log(email, password);
-        const user = await User.findByCredentials(email, password);
-        if (user) {
-            req.session.isLoggedIn = true;
-            req.session.user = user;
-            res.redirect('/dashboard');
-        } else {
-            res.redirect('/auth/login');
+        const phoneNumber = req.body.phoneNumber;
+        const about = req.body.about;
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            const inputValues = {
+                firstName,
+                lastName,
+                email,
+                phoneNumber,
+                about
+            }
+            return res.status(400).render('dashboard/settings/profile', { title: 'News and Stories', inputValues, errorMessages: errors.array() });
         }
-    } catch (e) {
-        res.redirect('/auth/login');
-    }
-}
-
-exports.registerView = async (req, res, next) => {
-    try {
-        res.render('auth/register', { title: 'News and Stories' });
-    } catch (e) {
-        console.log(e);
-    }
-}
-exports.register = async (req, res, next) => {
-    try {
-        const firstName = req.body.first_name;
-        const lastName = req.body.last_name;
-        const email = req.body.email;
-        const password = req.body.password;
-
-        const user = await User.create({
+        const image = req.file;
+        const user = await User.update({
             firstName,
             lastName,
             email,
-            password
+            phoneNumber,
+            about,
+            avatar: image ? image.path.replace('public', '') : undefined,
+        }, {
+            where: {
+                id: req.user.id
+            },
+            returning: true,
+            plain: true
         });
-        req.session.isLoggedIn = true;
-        req.session.user = user;
-        res.redirect('/dashboard');
+        req.session.user = user[1];
+        res.redirect('/dashboard/settings/profile');
     } catch (e) {
-        res.redirect('/auth/register');
+        next(e);
     }
 }
 
-exports.logout = async (req, res, next) => {
+
+exports.changePasswordView = async (req, res, next) => {
     try {
-        req.session.isLoggedIn = false;
-        req.session.user = null;
-        res.redirect('/auth/login');
+        res.render('dashboard/settings/change-password', { title: 'News and Stories' });
     } catch (e) {
-        console.log(e);
+        next(e);
+    }
+}
+exports.changePasswordSave = async (req, res, next) => {
+    try {
+        const currentPassword = req.body.currentPassword;
+        const newPassword = req.body.newPassword;
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(400).render('dashboard/settings/change-password', { title: 'News and Stories', errorMessages: errors.array() });
+        }
+
+        try {
+            const validPassword = await User.checkPassword(req.user.id, currentPassword);
+            if (validPassword) {
+                await User.update({
+                    password: newPassword
+                }, {
+                    where: {
+                        id: req.user.id
+                    }
+                });
+                req.flash('success', 'Password successfully changed!')
+                res.redirect('/dashboard/settings/change-password');
+            }
+        } catch (er) {
+            req.flash('error', er.toString());
+            res.redirect('/dashboard/settings/change-password');
+        }
+        
+    } catch (e) {
+        next(e);
     }
 }
