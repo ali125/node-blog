@@ -50,9 +50,9 @@ html
             div.header
                 div.c-dropdown.header-user__container
                     div.header-user(data-type="dropdown", data-toggle="userMenu")
-                        img.header-user__avatar(src=user.avatar || "/dashboard/images/man.png", alt="username")
+                        img.header-user__avatar(src=currentUser.avatar || "/dashboard/images/man.png", alt="username")
                         span.header-user__info
-                            span.header-user__name= user.fullName
+                            span.header-user__name= currentUser.fullName
                             span.header-user__role Admin
                         i.fas.fa-angle-down
 

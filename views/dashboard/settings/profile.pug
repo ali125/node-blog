@@ -18,26 +18,53 @@ block content
                 div.mb-3.row
                     div.col-6
                         label.form-label(for="first_name") Firstname
-                        input.form-control(type="text", id="first_name", name="firstName", placeholder="Firstname", value=user.firstName, required)
+                        input.form-control(
+                            type="text",
+                            id="first_name",
+                            name="firstName",
+                            placeholder="Firstname",
+                            value=inputValues ? inputValues.firstName : user.firstName,
+                            required
+                        )
                         div.invalid-feedback
                             | Please fill first name field
 
                     div.col-6
                         label.form-label(for="last_name") Lastname
-                        input.form-control(type="text", id="last_name", name="lastName", placeholder="Firstname", value=user.lastName, required)
+                        input.form-control(
+                            type="text",
+                            id="last_name",
+                            name="lastName",
+                            placeholder="Firstname",
+                            value=inputValues ? inputValues.firstName : user.lastName,
+                            required
+                        )
                         div.invalid-feedback
                             | Please fill last name field
 
                 div.mb-3.row
                     div.col-6
                         label.form-label(for="email") Email
-                        input.form-control(type="email", id="email", name="email", placeholder="Email", value=user.email, required)
+                        input.form-control(
+                            type="email",
+                            id="email",
+                            name="email",
+                            placeholder="Email",
+                            value=inputValues ? inputValues.firstName : user.email,
+                            required
+                        )
                         div.invalid-feedback
                             | Please fill email field
 
                     div.col-6
                         label.form-label(for="phoneNumber") Phone Number
-                        input.form-control(type="tel", id="phoneNumber", name="phoneNumber", placeholder="Phone Number", value=user.phoneNumber)
+                        input.form-control(
+                            type="tel",
+                            id="phoneNumber",
+                            name="phoneNumber",
+                            placeholder="Phone Number",
+                            value=inputValues ? inputValues.firstName : user.phoneNumber
+                        )
 
                 div.mb-3
                     label.form-label(for="about") About

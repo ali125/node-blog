@@ -1,9 +1,18 @@
 const { body } = require('express-validator');
 
+const User = require('../models/user');
+
 exports.registerValidation = [
     body('email', 'Please fill the email field correctly')
         .isEmail()
-        .trim(),
+        .trim()
+        .custom((value) => {
+            return User.findOne({ where: { email: value }}).then((user) => {
+                if (user) {
+                    return Promise.reject('Email exists already, Please pick a different one.')
+                }
+            });
+        }),
     body('password', 'Please fill the password field')
         .isLength({ min: 5 })
         .withMessage('Password length should have at lease 5 charachters')
@@ -84,6 +93,49 @@ exports.tagValidation = [
         .isIn(['draft', 'published'])
 ];
 
+exports.userValidation = [
+    body('email', 'Please fill the email field correctly')
+        .isEmail()
+        .trim()
+        .custom((value) => {
+            return User.findOne({ where: { email: value }}).then((user) => {
+                if (user) {
+                    return Promise.reject('Email exists already, Please pick a different one.')
+                }
+            });
+        }),
+    body('firstName', 'Please fill the first name field')
+        .isString()
+        .trim()
+        .isLength({ min: 2 })
+        .withMessage('First name length should have at lease 2 charachters'),
+    body('lastName', 'Please fill the last name field')
+        .isString()
+        .trim()
+        .isLength({ min: 2 })
+        .withMessage('Last name length should have at lease 2 charachters'),
+    body('password', 'Please fill the password field')
+        .trim()
+        .isLength({ min: 5 })
+        .withMessage('Password length should have at lease 5 charachters'),
+];
+
+exports.updateUserValidation = [
+    body('email', 'Please fill the email field correctly')
+        .isEmail()
+        .trim(),
+    body('firstName', 'Please fill the first name field')
+        .isString()
+        .trim()
+        .isLength({ min: 2 })
+        .withMessage('First name length should have at lease 2 charachters'),
+    body('lastName', 'Please fill the last name field')
+        .isString()
+        .trim()
+        .isLength({ min: 2 })
+        .withMessage('Last name length should have at lease 2 charachters'),
+];
+
 exports.profileValidation = [
     body('email', 'Please fill the email field correctly')
         .isEmail()
@@ -106,7 +158,7 @@ exports.changePasswordValidation = [
     body('newPassword', 'Please fill the new password field')
         .trim()
         .isLength({ min: 5 })
-        .withMessage('Password length should have at lease 5 charachters'),
+        .withMessage('New password length should have at lease 5 charachters'),
     body('confirmPassword', 'Please fill the last name field')
         .trim()
         .custom((value, { req }) => {

@@ -41,7 +41,7 @@ app.use(session({
 }));
 app.use(flash());
 app.use(async (req, res, next) => {
-  res.locals.user = req.session.user;
+  res.locals.currentUser = req.session.user;
   res.locals.isLoggedIn = req.session.isLoggedIn;
   res.locals.dateTimeFormate = dateTimeFormate;
   res.locals.dateFormate = dateFormate;

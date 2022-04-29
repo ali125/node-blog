@@ -2,6 +2,7 @@ const bcrypt = require('bcryptjs');
 const { Model, DataTypes } = require('sequelize');
 
 const sequelize = require('../config/db');
+const { truncateText } = require('../utils/string');
 
 class User extends Model {
     static async findByCredentials(email, password) {
@@ -71,6 +72,7 @@ User.init({
     email : {
         type: DataTypes.STRING,
         allowNull: false,
+        unique: 'compositeIndex',
         validate: {
             isEmail: true,
         },
@@ -111,6 +113,15 @@ User.init({
     },
     about: {
         type: DataTypes.TEXT,
+    },
+    shortAbout: {
+        type: DataTypes.VIRTUAL,
+        get() {
+            return truncateText(this.about || '', 80);
+        },
+        set(value) {
+            throw new Error('Do not try to set the `shortAbout` value!');
+        }
     },
     verifiedEmail: {
         type: DataTypes.SMALLINT,

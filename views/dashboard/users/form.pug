@@ -4,23 +4,60 @@ block content
     div.c-page
         div.c-page__head
             div
-                h1.c-page__title Add New User
+                h1.c-page__title= user ? 'Update User' : 'Add New User'
                 p.c-page__description
                     | Lorem ipsum dolor sit amet consectetur adipisicing elit. Modi reprehenderit molestias cupiditate mollitia officiis in praesentium beatae veniam voluptatibus asperiores libero
 
         div.c-page__body
-            form.needs-validation(novalidate)
+            form.needs-validation(method="POST", novalidate)
                 div.mb-3
-                    label.form-label(for="title") User Title
-                    input.form-control(type="text", id="title", placeholder="User Title", required)
+                    label.form-label(for="firstName") First Name
+                    input.form-control(
+                        type="text",
+                        id="firstName",
+                        name="firstName",
+                        placeholder="Enter first name",
+                        value=inputValues ? inputValues.firstName : user ? user.firstName : ''
+                        required
+                    )
                     div.invalid-feedback
-                        | Please fill title field
-        
+                        | Please fill first name field
 
                 div.mb-3
-                    label.form-label(for="slug") User Slug
-                    input.form-control(type="text",id="slug", placeholder="User Slug", required)
+                    label.form-label(for="lastName") Last Name
+                    input.form-control(
+                        type="text",
+                        id="lastName",
+                        name="lastName",
+                        placeholder="Enter last name",
+                        value=inputValues ? inputValues.lastName : user ? user.lastName : ''
+                        required
+                    )
                     div.invalid-feedback
-                        | Please fill slug field
+                        | Please fill last name field
+                
+                div.mb-3
+                    label.form-label(for="email") Email
+                    input.form-control(
+                        type="email",
+                        id="email",
+                        name="email",
+                        placeholder="Enter email",
+                        value=inputValues ? inputValues.email : user ? user.email : ''
+                        required
+                    )
+                    div.invalid-feedback
+                        | Please fill email field
+    
+                if !user
+                    div.mb-3
+                        label.form-label(for="password") Password
+                        input.form-control(type="password", id="password", name="password", placeholder="Enter password", required)
+                        div.invalid-feedback
+                            | Please fill password field
 
-                button.btn.btn-primary Add User
+                if !user || user.id !== currentUser.id
+                    button.btn.btn-primary= user ? 'Update User' : 'Add User'
+
+                if user && user.id !== currentUser.id
+                    button.btn.btn-danger.mx-2(type="button", id="deleteBtn", data-id=user.id, data-type="users") Delete User

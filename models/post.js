@@ -1,6 +1,6 @@
 const sequelize = require('../config/db');
 const { DataTypes, Model } = require('sequelize');
-const { truncateText, getUniqueSlug } = require('../utils/string');
+const { truncateText } = require('../utils/string');
 
 class Post extends Model {}
 
