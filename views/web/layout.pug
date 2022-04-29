@@ -29,6 +29,13 @@ html
             a.sidebar__link(href="/") Contact
         div.sidebar__copyright 2022 &copy; WebName
       div.grid__content
+        if errorMessages
+          div.alert.alert-danger
+              each err in errorMessages
+                  p.mb-0= err.msg || err
+        if successMessage
+            div.alert.alert-success
+                p.mb-0= successMessage
         include includes/header
         main.grid__container
           article.grid__article.page__article

@@ -5,18 +5,39 @@ block content
     h4.text-center.pb-3 Register 
     form.needs-validation(method="POST", novalidate)
         div.mb-3 
-            label.form-label(for="first_name") First Name
-            input.form-control(type="first_name", id="first_name", name="first_name", placeholder="Enter your first name", required)
+            label.form-label(for="firstName") First Name
+            input.form-control(
+                type="firstName",
+                id="firstName",
+                name="firstName",
+                placeholder="Enter your first name",
+                value=inputValues ? inputValues.firstName : '',
+                required
+            )
             div.invalid-feedback 
                 | Please fill first name field
         div.mb-3 
-            label.form-label(for="last_name") Last Name
-            input.form-control(type="last_name", id="last_name", name="last_name", placeholder="Enter your last name", required)
+            label.form-label(for="lastName") Last Name
+            input.form-control(
+                type="lastName",
+                id="lastName",
+                name="lastName",
+                placeholder="Enter your last name",
+                value=inputValues ? inputValues.lastName : '',
+                required
+            )
             div.invalid-feedback 
                 | Please fill last name field
         div.mb-3 
             label.form-label(for="email") Email
-            input.form-control(type="email", id="email", name="email", placeholder="Enter your email", required)
+            input.form-control(
+                type="email",
+                id="email",
+                name="email",
+                placeholder="Enter your email",
+                value=inputValues ? inputValues.email : '',
+                required
+            )
             div.invalid-feedback 
                 | Please fill email field
         div.mb-3 
