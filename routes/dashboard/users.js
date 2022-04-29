@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 
-const userController = require('../../controllers/user');
+const userController = require('../../controllers/dashboard/user');
 const { userValidation, updateUserValidation } = require('../../middleware/validations');
 
 router.get('/', userController.all);

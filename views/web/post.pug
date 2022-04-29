@@ -2,38 +2,38 @@ extends layout
 
 block content
   article.article
-    h2.article__title
-      a.article__title-link(href="/posts/:slug")
-        | Beautiful Day With Friends In Paris
+    h2.article__title= post.title
 
     div.article__meta-list
       span.article__meta
         i.fa-solid.fa-calendar-day
-        | July, 03 2022
+        | #{dateTimeFormate(post.createdAt, false)}
       span.article__meta
         i.fa-solid.fa-tags
-        a.article__meta-link(href="/posts/?category=:cateSlug") Three,
-        a.article__meta-link(href="/posts/?category=:cateSlug") Categories,
-        a.article__meta-link(href="/posts/?category=:cateSlug") assigned
+        a.article__meta-link(target="_blank", href=`/posts/?category=${post.category.slug}`)= post.category.title
+        //- a.article__meta-link(href="/posts/?category=:cateSlug") Three,
+        //- a.article__meta-link(href="/posts/?category=:cateSlug") Categories,
+        //- a.article__meta-link(href="/posts/?category=:cateSlug") assigned
       
 
-      a.article__meta.article__meta--link(href="/posts/:slug/#comments")
+      a.article__meta.article__meta--link(href="#comments")
         i.fa-solid.fa-comments
-        | 3 Comments
+        | #{`${post.commentCount} Comments`}
       
 
-      a.article__meta.article__meta--link(href="/posts/?author=:authorSlug")
+      a.article__meta.article__meta--link(target="_blank", href=`/posts/?author=${post.user.id}`)
         i.fa-solid.fa-user-pen
-        | firstName lastName
+        | #{post.user.fullName}
 
-    a.article__image-link(href="/posts/:slug")
-      img.article__image(src="/web/images/article1.jpg")
+    div.article__image-link
+      img.article__image(src=post.image)
     
     p.article__summary
-      | Lorem ipsum dolor sit amet consectetur adipisicing elit. Vel ducimus quibusdam voluptatibus quisquam dolorum doloremque quidem eligendi dignissimos soluta cum voluptates vitae mollitia, sapiente autem ex voluptas ab accusantium pariatur!
+      | #{post.content}
 
   div.comments
-    h3.aside__section-title 3 Comments
+    h3.aside__section-title
+    | #{`${post.commentCount} Comments`}
     form.comments__form(action="/posts/1/comment", method="POST")
       label.form__label(for="comment") Add Comment
       div.form__controller

@@ -1,4 +1,4 @@
-exports.dateTimeFormate = (date = null) => {
+exports.dateTimeFormate = (date = null, withTime = true) => {
     if (date === null) return '';
     let hr = date.getHours()
     hr = hr < 10 ? `0${hr}` : hr;
@@ -6,7 +6,7 @@ exports.dateTimeFormate = (date = null) => {
     min = min < 10 ? `0${min}` : min;
     let sec = date.getSeconds()
     sec = sec < 10 ? `0${sec}` : sec;
-    return `${date.toDateString()} ${hr}:${min}:${sec}`;
+    return `${date.toDateString()}${withTime ? `${hr}:${min}:${sec}` : ''}`;
 };
 
 exports.dateFormate = (date = null, withTime = false) => {

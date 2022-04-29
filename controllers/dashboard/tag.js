@@ -1,8 +1,8 @@
 const { Op } = require('sequelize');
 const { validationResult } = require('express-validator');
-const Tag = require('../models/tag');
-const User = require('../models/user');
-const { getUniqueSlug } = require('../utils/string');
+const Tag = require('../../models/tag');
+const User = require('../../models/user');
+const { getUniqueSlug } = require('../../utils/string');
 
 exports.all = async (req, res, next) => {
     try {

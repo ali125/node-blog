@@ -2,7 +2,7 @@ const express = require('express');
 const multer = require('multer');
 const router = express.Router();
 
-const categoryController = require('../../controllers/category');
+const categoryController = require('../../controllers/dashboard/category');
 const { imageDirectory } = require('../../config');
 const { categoryValidation } = require('../../middleware/validations');
 

@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 
-const tagController = require('../../controllers/tag');
+const tagController = require('../../controllers/dashboard/tag');
 const { tagValidation } = require('../../middleware/validations');
 
 router.get('/', tagController.all);

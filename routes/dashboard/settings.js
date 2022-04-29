@@ -2,7 +2,7 @@ const express = require('express');
 const multer = require('multer');
 const router = express.Router();
 
-const userController = require('../../controllers/user');
+const userController = require('../../controllers/dashboard/user');
 const { profileValidation, changePasswordValidation } = require('../../middleware/validations');
 const { imageDirectory } = require('../../config');
 

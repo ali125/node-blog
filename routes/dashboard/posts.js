@@ -3,7 +3,7 @@ const multer = require('multer');
 const router = express.Router();
 
 const { postValidation } = require('../../middleware/validations');
-const postController = require('../../controllers/post');
+const postController = require('../../controllers/dashboard/post');
 const { imageDirectory } = require('../../config');
 
 const upload = multer({ dest: imageDirectory })
