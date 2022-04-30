@@ -13,6 +13,7 @@ exports.all = async (req, res, next) => {
                 { model: Category, attributes: ['id', 'title'] },
             ],
             order: [
+                ['createdAt', 'DESC'],
                 [Category, 'createdAt', 'DESC']  
             ],
         });

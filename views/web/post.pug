@@ -34,11 +34,13 @@ block content
   div.comments
     h3.aside__section-title
     | #{`${post.commentCount} Comments`}
-    form.comments__form(action="/posts/1/comment", method="POST")
-      label.form__label(for="comment") Add Comment
-      div.form__controller
-        textarea.form__input(id="comment", name="comment", placeholder="Enter your comment here")
-      button.button.button--primary--md Post
+
+    if isLoggedIn
+      form.comments__form.commentForm(data-post=post.id, method="POST")
+        label.form__label(for="comment") Add Comment
+        div.form__controller
+          textarea.form__input(id="comment", name="comment", placeholder="Enter your comment here")
+        button.button.button--primary--md Post
 
     ul.comments__list
       li.comments__item
@@ -55,7 +57,7 @@ block content
             span.comments__item-actions
               span.comments__item-action Like
               span.comments__item-action Reply
-            form.form__search.form__controller.comments__reply-form(action="/posts/1/comment?reply=clientId",method="POST")
+            form.form__search.form__controller.comments__reply-form(data-form="comment", data-post=post.slug, data-comment='1', method="POST")
               input.form__input(type="text", autocomplete="off", name="comment", placeholder="Reply to {Tony Stark}")
               button.form__button.comments__reply-btn Post
 

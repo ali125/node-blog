@@ -3,6 +3,7 @@ const User = require('./user');
 const Post = require('./post');
 const Category = require('./category');
 const Tag = require('./tag');
+const Comment = require('./comment');
 
 User.hasMany(Post, { 
     foreignKey: 'userId'
@@ -44,9 +45,26 @@ Tag.belongsToMany(Post, {
     through: 'post_tag'
 });
 
+
+User.hasMany(Comment, {
+    foreignKey: 'userId',
+});
+Comment.belongsTo(User, {
+    foreignKey: 'userId',
+});
+Comment.belongsTo(Post, {
+    foreignKey: 'postId',
+});
+Comment.hasMany(Comment, {
+    foreignKey: 'parentId',
+});
+Comment.belongsTo(Comment, {
+    foreignKey: 'parentId'
+});
+
 // Post.sync({ force: true }).then(() => {
 //     console.log('DB Synced');
 // });
-// sequelize.sync({ force: true }).then(() => {
+// sequelize.sync({ alter: true }).then(() => {
 //     console.log('DB Synced');
 // });

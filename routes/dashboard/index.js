@@ -5,6 +5,7 @@ const categoryRouters = require('./categories');
 const tagRouters = require('./tags');
 const settingRouters = require('./settings');
 const userRouters = require('./users');
+const commentRouters = require('./comments');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
@@ -15,6 +16,7 @@ router.use('/posts', postRouters);
 router.use('/categories', categoryRouters);
 router.use('/tags', tagRouters);
 router.use('/users', userRouters);
+router.use('/comments', commentRouters);
 router.use('/settings', settingRouters);
 
 router.get('/skills', function(req, res, next) {
@@ -25,10 +27,6 @@ router.get('/skills/add', function(req, res, next) {
 });
 router.get('/skills/:postId', function(req, res, next) {
   res.render('dashboard/skills/form', { title: 'News and Stories' });
-});
-
-router.get('/comments', function(req, res, next) {
-  res.render('dashboard/comments', { title: 'News and Stories' });
 });
 
 module.exports = router;

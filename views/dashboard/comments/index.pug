@@ -20,7 +20,7 @@ block content
               small Post Title
             
             th
-              small Username
+              small User
             
             th
               small Summary
@@ -32,7 +32,7 @@ block content
               small Created At
             
             th
-              small Replied At
+              small Replied To
             
             th
               small Actions
@@ -40,48 +40,48 @@ block content
           
         
         tbody.c-table__body
-          tr.c-table__row.c-table__row--draft
-            td 1
-            
-            td
-              a(href="/") ReactJS
-            
-            td
-              a(href="/") username
-            
-            td
-              small Lorem ipsum dolor sit amet consectetur adipisicing elit. Modi reprehenderit molestias cupiditate mollitia officiis in praesentium
-            
-            td Draft
-            
-            td
-              small 2022-01-24
-            
-            td
-              small 2022-01-24
-            
-            td
-              button.btn.btn-sm.btn-primary(data-bs-toggle="modal", data-bs-target="#staticBackdrop") View
+          each comment in comments
+            tr.c-table__row(class=`${comment.status === 'active' ? 'c-table__row--published' : 'c-table__row--draft'}`)
+              td= comment.id
+              
+              td
+                a(href=`/posts/${comment.post.slug}`, target="blank")= comment.post.title
+              
+              td
+                a(href=`/dashboard/users/${comment.user.id}/edit`, target="blank")= comment.user.fullName
+              
+              td
+                small= comment.shortContent
+              
+              td= comment.status
+              
+              td= dateTimeFormate(comment.createdAt)
+              td= comment.parentId || '-'
+              
+              td
+                button.btn.btn-sm.btn-primary.commentModalBtn(data-id=comment.id, data-bs-toggle="modal", data-bs-target="#staticBackdrop") View
     
 
     div.modal.fade(id="staticBackdrop", data-bs-backdrop="static", data-bs-keyboard="false", tabindex="-1", aria-labelledby="staticBackdropLabel", aria-hidden="true")
       div.modal-dialog
         div.modal-content
           div.modal-header
-            h5.modal-title(id="staticBackdropLabel") Modal title
+            h5.modal-title(id="staticBackdropLabel") Comment View
             button.btn-close(type="button", data-bs-dismiss="modal", aria-label="Close")
           
           div.modal-body
-            p Lorem ipsum dolor sit amet consectetur adipisicing elit. Modi reprehenderit molestias cupiditate mollitia officiis in praesentium
-            form.needs-validation(novalidate)
+            p(id='modalCommentPost')
+            p(id='modalCommentUser')
+            p(id='modalCommentContent')
+            form.needs-validation(id="modalCommentForm", method="POST", novalidate)
               div.mb-3
                   label.form-label(for="content") Reply
-                  textarea.form-control(id="content", required, rows="3")
+                  textarea.form-control(id="content", name="content", required, rows="3")
                   div.invalid-feedback
                     | Please fill reply field
                   
               
-              button.btn.btn-primary(type="button") Reply
+              button.btn.btn-primary Reply
           
           div.modal-footer
             button.btn.btn-secondary(data-bs-dismiss="modal", type="button") Close

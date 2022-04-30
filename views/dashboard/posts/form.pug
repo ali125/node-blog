@@ -13,7 +13,7 @@ block content
             form.needs-validation(method="POST", enctype="multipart/form-data", novalidate)
                 div.mb-3
                     label.form-label(for="image") Post Image
-                    input.form-control(type="file", id="image", name="image", placeholder="Post Image", required=!post)
+                    input.form-control(type="file", accept="image/png, image/jpeg, image/jpg" id="image", name="image", placeholder="Post Image", required=!post)
                     div.invalid-feedback Please fill main image field
                     
                 
