@@ -118,7 +118,8 @@ exports.destroy = async (req, res, next) => {
     try {
         const tag = await Tag.findByPk(tagId);
 
-        if (tag && tag.userId === req.user.id) {
+        // if (tag && tag.userId === req.user.id) {
+        if (tag) {
             await Tag.destroy({ where: { id: tagId }, individualHooks: true });
             req.flash('success','Tag deleted successfully!');
             res.json({ message: 'Deleting tag succeed!', status: 204 });

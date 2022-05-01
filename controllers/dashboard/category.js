@@ -50,7 +50,7 @@ exports.save = async (req, res, next) => {
         }
 
         const image = req.file;
-        const category = await req.user.createCategory({
+        await req.user.createCategory({
             title,
             slug,
             image: image ? `/${image.path}` : null,
@@ -71,7 +71,8 @@ exports.edit = async (req, res, next) => {
         const categoryId = req.params.categoryId;
         const category = await Category.findByPk(categoryId);
         const categories = await Category.findAll({ where: { [Op.not]: { id: categoryId } }});
-        if (category && category.userId === req.user.id) {
+        // if (category && category.userId === req.user.id) {
+        if (category) {
             res.render('dashboard/categories/form', { title: 'News and Stories', category, categories });
         } else {
             next(new Error('Category not found!'));
@@ -86,7 +87,8 @@ exports.update = async (req, res, next) => {
         const categoryId = req.params.categoryId;
         const category = await Category.findByPk(categoryId);
 
-        if (category && category.userId === req.user.id) {
+        // if (category && category.userId === req.user.id) {
+        if (category) {
             const title = req.body.title;
             const updateSlug = req.body.slug;
             const slug = updateSlug ? await getUniqueSlug(Category, title, updateSlug, category.id) : updateSlug;
@@ -138,7 +140,8 @@ exports.destroy = async (req, res, next) => {
     try {
         const category = await Category.findByPk(categoryId);
 
-        if (category && category.userId === req.user.id) {
+        // if (category && category.userId === req.user.id) {
+        if (category) {
             await Category.destroy({ where: { id: categoryId }, individualHooks: true });
             req.flash('success','Category deleted successfully!');
             res.json({ message: 'Deleting category succeed!', status: 204 });
