@@ -85,7 +85,6 @@ exports.active = async (req, res, next) => {
             status: 'active'
         }, {
             individualHooks: true,
-            plain: true,
             where: {
                 id: commentId
             }

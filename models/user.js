@@ -164,7 +164,12 @@ User.init({
     modelName: 'user',
     timestamps: true,
     paranoid: true,
-    logging: false
+    logging: false,
+    hooks: {
+        beforeDestroy: async (instance) => {
+            await instance.update({ email: new Date().getTime() + '_del_' + instance.email })
+        }
+    }
 });
 
 User.sync();

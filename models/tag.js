@@ -62,7 +62,6 @@ Tag.init({
             }
         },
         beforeDestroy: async (instance) => {
-            console.log('instance', instance);
             await instance.update({ slug: instance.slug + '_del_' + new Date().getTime() })
         }        
     },

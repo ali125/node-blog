@@ -156,7 +156,7 @@ exports.destroy = async (req, res, next) => {
         const post = await Post.findByPk(postId);
 
         if (post && post.userId === req.user.id) {
-            await Post.destroy({ where: { id: postId }});
+            await Post.destroy({ where: { id: postId }, individualHooks: true});
             req.flash('success','Post deleted successfully!');
             res.json({ message: 'Deleting post succeed!', status: 204 });
         } else {

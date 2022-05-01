@@ -139,7 +139,7 @@ exports.destroy = async (req, res, next) => {
         const category = await Category.findByPk(categoryId);
 
         if (category && category.userId === req.user.id) {
-            await Category.destroy({ where: { id: categoryId }});
+            await Category.destroy({ where: { id: categoryId }, individualHooks: true });
             req.flash('success','Category deleted successfully!');
             res.json({ message: 'Deleting category succeed!', status: 204 });
         } else {

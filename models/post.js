@@ -96,6 +96,9 @@ Post.init({
                 record.dataValues.publishedAt = null;
             }
         },
+        beforeDestroy: async (instance) => {
+            await instance.update({ slug: instance.slug + '_del_' + new Date().getTime() })
+        }
     },
 });
 

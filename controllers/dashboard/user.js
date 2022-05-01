@@ -220,7 +220,7 @@ exports.changePasswordSave = async (req, res, next) => {
 
 exports.deleteAccount = async (req, res, next) => {
     try {
-        await User.destroy({ where: { id: req.user.id }});
+        await User.destroy({ where: { id: req.user.id }, individualHooks: true});
         req.flash('success','User deleted successfully!');
         req.session.isLoggedIn = false;
         req.session.user = null;

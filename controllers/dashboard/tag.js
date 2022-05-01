@@ -58,7 +58,8 @@ exports.edit = async (req, res, next) => {
     try {
         const tagId = req.params.tagId;
         const tag = await Tag.findByPk(tagId);
-        if (tag && tag.userId === req.user.id) {
+        // if (tag && tag.userId === req.user.id) {
+        if (tag) {
             res.render('dashboard/tags/form', { title: 'News and Stories', tag });
         } else {
             next(new Error('Tag not found!'));
@@ -73,7 +74,8 @@ exports.update = async (req, res, next) => {
         const tagId = req.params.tagId;
         const tag = await Tag.findByPk(tagId);
 
-        if (tag && tag.userId === req.user.id) {
+        // if (tag && tag.userId === req.user.id) {
+        if (tag) {
             const title = req.body.title;
             const updateSlug = req.body.slug;
             const slug = updateSlug ? await getUniqueSlug(Tag, title, updateSlug, tag.id) : updateSlug;
