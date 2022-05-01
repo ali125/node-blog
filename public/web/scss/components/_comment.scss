@@ -41,6 +41,7 @@
             border-radius: 50%;
         }
         @include s(body) {
+            width: 100%;
             padding: 0 1rem;
         }
         @include s(info) {
@@ -95,7 +96,12 @@
 
     @include e(reply) {
         @include s(form) {
+            display: none;
             margin-top: 1rem;
+
+            @include m(show) {
+                display: flex;
+            }
         }
         @include s(btn) {
             padding: 0 1rem;

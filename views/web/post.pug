@@ -25,8 +25,7 @@ block content
         i.fa-solid.fa-user-pen
         | #{post.user.fullName}
 
-    div.article__image-link
-      img.article__image(src=post.image)
+    img.article__image(src=post.image)
     
     p.article__summary
       | #{post.content}
@@ -42,40 +41,41 @@ block content
           textarea.form__input(id="comment", name="comment", placeholder="Enter your comment here")
         button.button.button--primary--md Post
 
-    ul.comments__list
-      li.comments__item
-        span.comments__item-comment
-          img.comments__item-avatar(src="/web/images/man.png")
-          span.comments__item-body
-            span.comments__item-info
-              span.comments__item-name Tony Stark
-              span.comments__item-time 3 hrs ago
+    ul.comments__list(id="comments")
+      each comment in post.comments
+        li.comments__item
+          span.comments__item-comment
+            img.comments__item-avatar(src=comment.user.avatar || "/web/images/man.png")
+            span.comments__item-body
+              span.comments__item-info
+                span.comments__item-name= comment.user.fullName
+                span.comments__item-time= comment.dateSince
 
-            span.comments__item-content
-                | Lorem ipsum dolor sit amet consectetur adipisicing elit. Vel ducimus quibusdam voluptatibus quisquam dolorum doloremque quidem eligendi dignissimos soluta cum voluptates vitae mollitia, sapiente autem ex voluptas ab accusantium pariatur!
+              span.comments__item-content= comment.content 
 
-            span.comments__item-actions
-              span.comments__item-action Like
-              span.comments__item-action Reply
-            form.form__search.form__controller.comments__reply-form(data-form="comment", data-post=post.slug, data-comment='1', method="POST")
-              input.form__input(type="text", autocomplete="off", name="comment", placeholder="Reply to {Tony Stark}")
-              button.form__button.comments__reply-btn Post
-
-        ul.comments__item-replies
-          li.comments__item.comments__item--reply
-            span.comments__item-comment
-              img.comments__item-avatar(src="/web/images/man.png")
-              span.comments__item-body
-                span.comments__item-info
-                  span.comments__item-name Tony Stark
-                  span.comments__item-time 3 hrs ago
-                
-                span.comments__item-content
-                  | Lorem ipsum dolor sit amet consectetur adipisicing elit. Vel ducimus quibusdam voluptatibus quisquam dolorum doloremque quidem eligendi dignissimos soluta cum voluptates vitae mollitia, sapiente autem ex voluptas ab accusantium pariatur!
-                  
+              if isLoggedIn
                 span.comments__item-actions
-                  span.comments__item-action Like
-                            
+                  //- span.comments__item-action Like
+                  span.comments__item-action.replyBtn Reply
+                form.form__search.commentForm.form__controller.comments__reply-form(data-post=post.id, data-comment=comment.id, method="POST")
+                  input.form__input(type="text", autocomplete="off", name="comment", placeholder=`Reply to ${comment.user.fullName}`)
+                  button.form__button.comments__reply-btn Post
+          if comment.replies.length > 0
+            ul.comments__item-replies
+              each reply in comment.replies
+                li.comments__item.comments__item--reply
+                  span.comments__item-comment
+                    img.comments__item-avatar(src=reply.user.avatar || "/web/images/man.png")
+                    span.comments__item-body
+                      span.comments__item-info
+                        span.comments__item-name= reply.user.fullName
+                        span.comments__item-time= reply.dateSince
+                      
+                      span.comments__item-content= reply.content 
+                      
+                      //- span.comments__item-actions
+                      //-   span.comments__item-action Like
+                              
                         
                     
                 

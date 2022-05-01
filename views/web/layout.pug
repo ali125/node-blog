@@ -28,7 +28,7 @@ html
           li
             a.sidebar__link(href="/") Contact
         div.sidebar__copyright 2022 &copy; WebName
-      div.grid__content
+      div.grid__content(id="page")
         if errorMessages
           div.alert.alert-danger
               each err in errorMessages

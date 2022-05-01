@@ -45,24 +45,36 @@ Comment.init({
         allowNull: false,
         defaultValue: 'active',
         validate: {
-            isIn: ['active', 'blocked', 'reported'],
-        }
+            isIn: [['active', 'blocked', 'reported']],
+        },
     },
     blockedAt: {
         type: DataTypes.DATE,
         allowNull: true,
-        set(value = null) {
-            this.setDataValue('blockedAt', value || (this.status === 'blocked' ? new Date() : null))
-        },
     },
 }, {
     sequelize,
     modelName: 'comment',
+    sequelize,
     timestamps: true,
     paranoid: true,
     logging: false,
+    hooks: {
+        beforeCreate: (record, options) => {
+            if (record.dataValues.status === 'blocked') {
+                record.dataValues.blockedAt = record.dataValues.blockedAt || new Date();
+            }
+        },
+        beforeUpdate: (record, options) => {
+            if (record.dataValues.status === 'blocked') {
+                record.dataValues.blockedAt = record.dataValues.blockedAt || new Date();
+            } else {
+                record.dataValues.blockedAt = null;
+            }
+        },
+    },
 });
 
-Comment.sync();
+Comment.sync({ alert: true });
 
 module.exports = Comment;

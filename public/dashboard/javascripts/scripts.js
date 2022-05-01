@@ -23,16 +23,18 @@ $('[data-type="dropdown"]').each((i, el) => {
 
 $('.commentModalBtn').on('click', function() {
     const commentId = $(this).data('id');
-    console.log('commentId', commentId);
     fetch(`/dashboard/comments/${commentId}/view`, {
         method: 'GET',
     })
     .then((res) => res.json())
     .then((res) => {
         console.log(res.data);
+        const isActive = res.data.status === 'active';
         $('#modalCommentPost').html(`<a href="/posts/${res.data.post.slug}" target="_blank">${res.data.post.title}</a>`);
         $('#modalCommentUser').html(`${res.data.user.fullName} (${res.data.user.email})`);
         $('#modalCommentForm').attr('action', `/dashboard/comments/${res.data.id}/reply`);
+        $('#modalCommentJunk').attr('action', `/dashboard/comments/${res.data.id}/${isActive ? 'junk' : 'active'}`);
+        $('#junkBtn').html(isActive ? 'Junk' : 'Active')
         $('#modalCommentContent').html(res.data.content);
     });
 });

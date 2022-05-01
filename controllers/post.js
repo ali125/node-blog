@@ -1,7 +1,9 @@
+const { Op } = require('sequelize');
 const Post = require('../models/post');
 const Category = require('../models/category');
 const Tag = require('../models/tag');
 const User = require('../models/user');
+const Comment = require('../models/comment');
 
 exports.index = async (req, res, next) => {
     try {
@@ -28,12 +30,12 @@ exports.search = async (req, res, next) => {
             include: [
                 { model: User, attributes: ['id', 'fullName', 'firstName', 'lastName']},
                 { model: Category, attributes: ['id', 'slug', 'title'] },
-                { model: Tag, attributes: ['id', 'slug', 'title'] },
+                { model: Tag, attributes: ['id', 'slug', 'title'], through: { attributes: []}},
             ],
             order: [
                 ['createdAt', 'DESC'],
                 [Category, 'createdAt', 'DESC']
-            ],
+            ]
         });
         res.render('web/search', { title: 'News and Stories', posts });
     } catch (e) {
@@ -51,10 +53,26 @@ exports.get = async (req, res, next) => {
             include: [
                 { model: User, attributes: ['id', 'fullName', 'firstName', 'lastName']},
                 { model: Category, attributes: ['id', 'slug', 'title'] },
-                { model: Tag, attributes: ['id', 'slug', 'title'] },
+                { model: Tag, attributes: ['id', 'slug', 'title'], through: { attributes: []}},
+                {
+                    model: Comment,
+                    where: { parentId: { [Op.is]: null }, status: 'active' },
+                    attributes: ['id', 'content', 'dateSince', 'createdAt'],
+                    include: [
+                        {
+                            model: Comment,
+                            as: 'replies',
+                            include: { model: User, attributes: ['id', 'avatar', 'fullName', 'firstName', 'lastName'] },
+                            attributes: ['id', 'content', 'dateSince', 'createdAt']
+                        },
+                        { model: User, attributes: ['id', 'avatar', 'fullName', 'firstName', 'lastName'] }
+                    ],
+                    limit: 10,
+                    order: [['createdAt', 'DESC'], [Comment, 'createdAt', 'DESC']]
+                },
             ],
             order: [
-                [Category, 'createdAt', 'DESC']
+                [Category, 'createdAt', 'DESC'],
             ],
         });
         if (!post) {

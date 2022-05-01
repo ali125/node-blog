@@ -49,6 +49,9 @@ Tag.belongsToMany(Post, {
 User.hasMany(Comment, {
     foreignKey: 'userId',
 });
+Post.hasMany(Comment, {
+    foreignKey: 'postId',
+});
 Comment.belongsTo(User, {
     foreignKey: 'userId',
 });
@@ -57,6 +60,7 @@ Comment.belongsTo(Post, {
 });
 Comment.hasMany(Comment, {
     foreignKey: 'parentId',
+    as: 'replies'
 });
 Comment.belongsTo(Comment, {
     foreignKey: 'parentId'
