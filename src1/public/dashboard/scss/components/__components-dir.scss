@@ -1,0 +1,8 @@
+// # Import all components .scss files
+// The Components partial contains styles for all components that are to be created for one website,
+// including buttons, carousels, tabs, modals, and the like.
+
+@import "./table";
+@import "./dropdown";
+@import "./calendar";
+@import "./panel";

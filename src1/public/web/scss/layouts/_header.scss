@@ -1,0 +1,12 @@
+// # Header Styles
+
+.header {
+    @include e(title) {
+
+    }
+
+    @include e(desc) {
+        color: #546E7A;
+        line-height: 1.8rem;
+    }
+}

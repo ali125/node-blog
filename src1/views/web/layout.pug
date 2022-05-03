@@ -1,0 +1,45 @@
+doctype html
+html
+  head
+    title= title
+    link(rel='stylesheet', href='/web/css/style.css')
+    link(rel='preconnect', href="https://fonts.googleapis.com")
+    link(rel='preconnect', href="https://fonts.gstatic.com", crossorigin)
+    link(rel="stylesheet", href="https://fonts.googleapis.com/css2?family=Roboto:wght@500&display=swap")
+  body
+    div.grid__container
+      nav.grid__sidebar-nav.sidebar
+        a.sidebar__logo(href='/')
+          img.sidebar__logo-img(src='/web/images/logo.png')
+        p.sidebar__desc Summary About Lorem ipsum dolor sit amet consectetur adipisicing elit. Minima ad nemo quisquam,  libero quia animi? 2022
+        ul
+          li
+            a.sidebar__link(href="/") Home
+          li
+            a.sidebar__link(href="/") Feature
+          li
+            a.sidebar__link(href="/") LifeStyle
+          li
+            a.sidebar__link(href="/") Travel
+          li
+            a.sidebar__link(href="/") Music
+          li
+            a.sidebar__link(href="/") About
+          li
+            a.sidebar__link(href="/") Contact
+        div.sidebar__copyright 2022 &copy; WebName
+      div.grid__content(id="page")
+        if errorMessages
+          div.alert.alert-danger
+              each err in errorMessages
+                  p.mb-0= err.msg || err
+        if successMessage
+            div.alert.alert-success
+                p.mb-0= successMessage
+        include includes/header
+        main.grid__container
+          article.grid__article.page__article
+            block content
+          include includes/aside
+
+      include includes/scripts

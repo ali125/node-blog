@@ -1,0 +1,51 @@
+// # Sidebar Styles
+.sidebar {
+    position: fixed;
+    left: 0;
+    top: 0;
+    background-color: #f0f4f7;
+    height: 100%;
+    overflow: auto;
+    z-index: 1;
+    
+    @include e(logo) {
+        display: block;
+        width: 100%;
+        padding: 0 2rem;
+        margin-top: 1rem;
+        @include s(img) {
+            width: 100%;
+        }
+    }
+
+    @include e(desc) {
+        font-size: 0.9rem;
+        line-height: 1.4rem;
+        color: #607D8B;
+        padding: 1rem 2rem;
+        margin-bottom: 2rem;
+    }
+
+    @include e(link) {
+        display: block;
+        font-size: 1rem;
+        font-weight: 500;
+        text-decoration: none;
+        color: #546E7A !important;
+        padding: 1.1rem 2rem;
+        @include transition(all 200ms ease-in-out);
+
+        &:hover {
+            background-color: #CFD8DC;
+            color: #37474F;
+        }
+    }
+
+    @include e(copyright) {
+        font-size: 1rem;
+        padding: 2rem;
+        margin-top: 3rem;
+        text-align: center;
+        color: #90A4AE;
+    }
+}

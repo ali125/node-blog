@@ -1,0 +1,69 @@
+.aside {
+    position: sticky;
+    top: 2rem;
+    padding-left: 1rem;
+    padding-right: 3rem;
+
+    @include e(section) {
+        padding: 1rem 0;
+        
+        @include s(title) {
+            font-size: 1.2rem;
+            position: relative;
+            padding: 1rem 0;
+            margin-bottom: 1rem;
+            &::after {
+                content: " ";
+                display: block;
+                position: absolute;
+                bottom: 0;
+                left: 0;
+                width: 50px;
+                max-width: 100%;
+                height: 2px;
+                background-color: #00BCD4;
+                border-radius: 3px;
+            }
+        }
+    }
+
+    @include e(author) {
+        @include s(img) {
+            display: block;
+            width: 10rem;
+            height: 10rem;
+            border-radius: 50%;
+            margin: 1rem auto;
+        }
+
+        @include s(about) {
+            line-height: 1.8rem;
+            color: #546E7A;
+            text-align: center;
+        }
+    }
+
+    @include e(list) {
+        $this: &;
+        @include s(item) {
+            display: flex;
+            padding: 1rem 0;
+            text-decoration: none;
+            color: #37474F;
+            @include transition(color 300ms ease-in-out);
+
+            &:hover {
+                color: #000;
+                #{$this}-badge {
+                    color: #000; 
+                }
+            }
+        }
+        @include s(badge) {
+            font-size: 0.9rem;
+            margin-left: 0.5rem;
+            color: #666;
+            @include transition(color 300ms ease-in-out);
+        }
+    }
+}

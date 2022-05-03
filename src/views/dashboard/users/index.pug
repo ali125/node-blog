@@ -1,0 +1,36 @@
+extends ../layout
+
+block content
+  div.c-page
+    div.c-page__head
+      div
+        h1.c-page__title User List
+        p.c-page__description
+          | Lorem ipsum dolor sit amet consectetur adipisicing elit. Modi reprehenderit molestias cupiditate mollitia officiis in praesentium beatae veniam voluptatibus asperiores libero/p>
+
+      a.btn.btn-primary(href="/dashboard/users/create") Add New User
+    div.c-page__body
+      table.c-table
+        thead.c-table__head
+          tr
+            th ID
+            th Name
+            th Email
+            th About
+            th Status
+            th Created At
+            th Updated At
+            th Actions
+        tbody.c-table__body
+          each user in users
+            tr.c-table__row.c-table__row--draft
+              td= user.id
+              td= user.fullName + (user.id === currentUser.id ? ' (You)' : '')
+              td= user.email
+              td
+                small= user.shortAbout
+              td= user.status
+              td= dateTimeFormate(user.createdAt)
+              td= dateTimeFormate(user.updatedAt)
+              td 
+                a.btn.btn-sm.btn-dark(href=`/dashboard/users/${user.id}/edit`) Manage

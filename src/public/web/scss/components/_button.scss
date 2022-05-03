@@ -1,0 +1,82 @@
+//  # Button Styles
+
+// ----
+// Sass (v3.4.9)
+// Compass (v1.0.1)
+// ----
+
+//determine rem value for functions
+$rem-base: 16;
+
+//Button Map
+$btn-size-map: (
+  sm : 12,
+  md : 16,
+  lg : 24
+);
+
+//rem Function
+@function rem($px: 16) {
+    @return calc($px / $rem-base)+rem;
+}
+
+//rem Line Height
+@function rem-lh($px: $rem-base, $scale: 1.5) {
+    @return ( calc($px / $rem-base) * $scale ) + rem;
+}
+
+$primary-color : #37474F;
+$secondary-color : #00838F;
+$light-text-color : #e6f4ee;
+$font-size :  16;
+
+@mixin btn ($class, $color, $display: null, $hover-text: #fff, $text-decoration: none, $text-transform: null, $radius: null) {
+  .button {
+    // border: 1px solid;
+    all: unset;
+    border-radius: $radius + px;
+    border-radius: rem($radius);
+  	box-sizing: $display;
+    display: inline-block;
+    text-decoration: $text-decoration;
+    text-transform: $text-transform;
+    cursor: pointer;
+    @include transition(all 300ms ease-in-out);
+    @include box-shadow(0 1px 3px 1px rgba(0, 0, 0, 0.2));
+    
+    &:hover, &:active {
+        text-decoration: $text-decoration;
+  	}
+
+    & > i {
+      margin-left: 0.5rem;
+  }
+  }
+  
+  .button--#{$class} {
+    //   border-color: $color;
+      color: $color;
+      &:hover {
+        //   border-color: darken( $color , 10% );
+          background-color: $color;
+          color: $hover-text;
+      }
+      &:active {
+        //   border-color: darken( $color , 15% );
+      }
+  }
+  
+  @each $btn-size, $btn-font-size in $btn-size-map {
+    .button--#{$btn-size} {
+        @extend .button;
+        font-size: rem($btn-font-size);
+        padding: rem(($btn-font-size * .7)) rem(($btn-font-size * 1.3));
+    }
+    .button--#{$class}--#{$btn-size} {
+        @extend .button--#{$btn-size}, .button--#{$class};
+    }
+  }
+}
+
+@include btn(primary, $primary-color, $radius: 4);
+// @include btn(secondary, #45fe00, $radius: 5);

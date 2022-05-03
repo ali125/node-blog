@@ -1,0 +1,58 @@
+// # Header Styles
+
+.header {
+    padding: 1rem 2rem;
+    @include s(user) {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: fit-content;
+        padding: 0.8rem;
+        color: #0D47A1;
+        border-radius: 0.5rem;
+        cursor: pointer;
+        @include transition(all 200ms ease-in-out);
+
+        $this: &;
+
+        &:hover {
+            // background-color: #CFD8DC;
+            color: #fff;
+            background-color: #607D8B;
+
+            #{$this}__role {
+                color: #ddd;
+            }
+            #{$this}__name {
+                color: #fff;
+            }
+        }
+
+        @include e(container) {
+            width: fit-content;
+            margin-left: auto;
+        }
+
+        @include e(avatar) {
+            display: block;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+        }
+        @include e(info) {
+            display: block;
+            padding: 0 0.8rem;
+            min-width: 120px;
+        }
+        @include e(name) {
+            font-weight: 500;
+            display: block;
+            color: #0D47A1;
+        }
+        @include e(role) {
+            display: block;
+            font-size: 0.9rem;
+            color: #666;
+        }
+    }
+}

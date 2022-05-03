@@ -1,0 +1,42 @@
+extends ../layout
+
+block content
+  div.c-page
+    div.c-page__head
+      div
+        h1.c-page__title Category List
+        p.c-page__description
+          | Lorem ipsum dolor sit amet consectetur adipisicing elit. Modi reprehenderit molestias cupiditate mollitia officiis in praesentium beatae veniam voluptatibus asperiores libero/p>
+
+      a.btn.btn-primary(href="/dashboard/categories/create") Add New Category
+    div.c-page__body
+      if categories.length > 0
+        table.c-table
+          thead.c-table__head
+            tr
+              th ID
+              th Title
+              th slug
+              th Parent
+              th Status
+              th Author
+              th Published At
+              th Created At
+              th Updated At
+              th Actions
+          tbody.c-table__body
+            each category in categories
+              tr.c-table__row(class=`${category.isPublished ? 'c-table__row--published' : 'c-table__row--draft'}`)
+                td= category.id
+                td= category.title
+                td= category.slug
+                td= category.parent ? category.parent.title : '-'
+                td= category.isPublished ? 'Published' : 'Draft' 
+                td= category.user.fullName
+                td= dateTimeFormate(category.publishedAt) || '-'
+                td= dateTimeFormate(category.createdAt)
+                td= dateTimeFormate(category.updatedAt)
+                td 
+                  a.btn.btn-sm.btn-dark(href=`/dashboard/categories/${category.id}/edit`) Manage
+      else 
+        h3 No category has been created

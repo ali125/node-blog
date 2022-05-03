@@ -1,0 +1,51 @@
+// # Sidebar Styles
+.sidebar {
+    position: fixed;
+    left: 0;
+    top: 0;
+    background-color: #ffffff;
+    height: 100%;
+    overflow: auto;
+    z-index: 1;
+    
+    @include e(logo) {
+        display: block;
+        width: 100%;
+        padding: 1.5rem;
+        margin-top: 1rem;
+        @include s(img) {
+            width: 100%;
+        }
+    }
+
+    @include e(link) {
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        font-size: 1rem;
+        font-weight: 500;
+        text-decoration: none;
+        color: #546E7A;
+        padding: 1rem;
+        border-radius: 0.5rem;
+        @include transition(all 200ms ease-in-out);
+
+        &:hover {
+            // background-color: #CFD8DC;
+            background: rgb(69,90,100);
+            background: linear-gradient(90deg, rgba(69,90,100,1) 0%, rgba(120,144,156,1) 100%);
+            color: #fff;
+            // color: #37474F;
+        }
+
+        & > i {
+            font-size: 1.4rem;
+            width: 50px;
+        }
+
+        @include s(list) {
+            list-style: none;
+            padding: 1rem 1.5rem;
+        }
+    }
+}

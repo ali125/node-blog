@@ -1,0 +1,27 @@
+.c-dropdown {
+    position: relative;
+    @include e(menu) {
+        display: none;
+        position: absolute;
+        width: 100%;
+        top: 100%;
+        left: 0;
+        background-color: #fff;
+        padding: 0.5rem;
+        margin: 0.3rem 0 0;
+        border-radius: 0.5rem;
+        list-style: none;
+        @include box-shadow(0 1px 3px 1px rgba(0, 0, 0, 0.1));
+    }
+
+    @include e(item) {
+        display: block;
+        color: #222;
+        text-decoration: none;
+        padding: 0.5rem;
+        
+        &:hover {
+            color: #666;
+        }
+    }
+}

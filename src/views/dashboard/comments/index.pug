@@ -1,0 +1,103 @@
+extends ../layout
+
+block content
+  div.c-page
+    div.c-page__head
+      div
+        h1.c-page__title Comment List
+        p.c-page__description
+          | Lorem ipsum dolor sit amet consectetur adipisicing elit. Modi reprehenderit molestias cupiditate mollitia officiis in praesentium beatae veniam voluptatibus asperiores libero/p>
+      
+    
+    div.c-page__body
+      if comments.length > 0
+        table.c-table
+          thead.c-table__head
+            tr
+              th
+                small ID
+              
+              th
+                small Post Title
+              
+              th
+                small User
+              
+              th
+                small Summary
+              
+              th
+                small Status
+              
+              th
+                small Created At
+              
+              th
+                small Updated At
+              
+              th
+                small Blocked At
+              
+              th
+                small Replied To
+              
+              th
+                small Actions
+              
+            
+          
+          tbody.c-table__body
+            each comment in comments
+              tr.c-table__row(class=`${comment.status === 'active' ? 'c-table__row--published' : 'c-table__row--draft'}`)
+                td= comment.id
+                
+                td
+                  a(href=`/posts/${comment.post.slug}`, target="blank")= comment.post.title
+                
+                td
+                  a(href=`/dashboard/users/${comment.user.id}/edit`, target="blank")= comment.user.fullName
+                
+                td
+                  small= comment.shortContent
+                
+                td= comment.status
+                td= dateTimeFormate(comment.createdAt)
+                td= dateTimeFormate(comment.updatedAt)
+                td= dateTimeFormate(comment.blockedAt)
+                td= comment.parentId || '-'
+                
+                td
+                  button.btn.btn-sm.btn-primary.commentModalBtn(data-id=comment.id, data-bs-toggle="modal", data-bs-target="#staticBackdrop") View
+      else 
+        h3 No comment has been created
+
+    div.modal.fade(id="staticBackdrop", data-bs-backdrop="static", data-bs-keyboard="false", tabindex="-1", aria-labelledby="staticBackdropLabel", aria-hidden="true")
+      div.modal-dialog
+        div.modal-content
+          div.modal-header
+            h5.modal-title(id="staticBackdropLabel") Comment View
+            button.btn-close(type="button", data-bs-dismiss="modal", aria-label="Close")
+          
+          div.modal-body
+            p(id='modalCommentPost')
+            p(id='modalCommentUser')
+            p(id='modalCommentContent')
+            form.needs-validation(id="modalCommentForm", method="POST", novalidate)
+              div.mb-3
+                  label.form-label(for="content") Reply
+                  textarea.form-control(id="content", name="content", required, rows="3")
+                  div.invalid-feedback
+                    | Please fill reply field
+                  
+              
+              button.btn.btn-primary Reply
+          
+          div.modal-footer
+            button.btn.btn-secondary(data-bs-dismiss="modal", type="button") Close
+            form.needs-validation(id="modalCommentJunk", method="POST", novalidate)
+              button.btn.btn-warning#junkBtn Junk
+          
+        
+      
+    
+  

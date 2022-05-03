@@ -1,0 +1,27 @@
+// # Grid Styles
+.grid {
+    @include e(container) {
+        width: 100%;
+        display: flex;
+        align-items: flex-start;
+    }
+
+    @include e(sidebar-nav) {
+        width: 20rem;
+    }
+
+
+    @include e(content) {
+        margin-left: 20rem;
+        width: calc(100% - 20rem);
+    }
+
+    @include e(article) {
+        width: calc(100% - 30rem);
+    }
+
+
+    @include e(sidebar) {
+        width: 30rem;
+    }
+}

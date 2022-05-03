@@ -1,0 +1,60 @@
+extends ../layout
+
+block content
+  div.c-page
+    div.c-page__head
+      div
+        h1.c-page__title Settings
+        p.c-page__description 
+          | Lorem ipsum dolor sit amet consectetur adipisicing elit. Modi reprehenderit molestias cupiditate mollitia officiis in praesentium beatae veniam voluptatibus asperiores libero
+      
+    
+    div.c-page__body
+      table.c-table
+        tbody.c-table__body
+          tr.c-table__row
+            th
+              span.c-setting__item
+                | User Profile
+              span.c-setting__item-desc
+                | Lorem ipsum dolor sit amet consectetur adipisicing elit. Vel sed aliquid aut ipsam magni doloribus.
+            
+            td.text-right
+              a.btn.btn-primary(href="/dashboard/settings/profile") Manage
+          tr.c-table__row
+            th
+              span.c-setting__item
+                | Change Password
+              span.c-setting__item-desc
+                | Lorem ipsum dolor sit amet consectetur adipisicing elit. Vel sed aliquid aut ipsam magni doloribus.
+            
+            td.text-right
+              a.btn.btn-primary(href="/dashboard/settings/change-password") Manage
+
+          tr.c-table__row
+            th
+              span.c-setting__item
+                | Delete Account
+              span.c-setting__item-desc
+                | Lorem ipsum dolor sit amet consectetur adipisicing elit. Vel sed aliquid aut ipsam magni doloribus.
+            
+            td.text-right
+              button.btn.btn-danger(type="button", data-bs-toggle="modal", data-bs-target="#deleteModal") DELETE
+
+  div.modal.fade(id="deleteModal", tabindex="-1", aria-labelledby="deleteModalLabel", aria-hidden="true")
+    div.modal-dialog
+      div.modal-content
+        div.modal-header
+          h5.modal-title(id="deleteModalLabel") Modal title
+          button.btn-close(type="button", data-bs-dismiss="modal", aria-label="Close")
+        div.modal-body
+          h3 Are you sure to delete your account?
+          p 
+           | To Delete you account write 
+           strong.text-danger delete-account 
+           | to the input text
+          input(type="text", id="modalDelInput")
+        div.modal-footer
+          button.btn.btn-secondary(type="button", data-bs-dismiss="modal") Close
+          button.btn.btn-danger(type="button", id="modalDelBtn", disabled) DELETE NOW
+  

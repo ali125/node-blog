@@ -1,0 +1,68 @@
+extends ../layout
+
+block content
+    div.c-page
+        div.c-page__head
+            div
+                h1.c-page__title= category ? 'Edit Category' : 'Add New Category'
+                p.c-page__description
+                    | Lorem ipsum dolor sit amet consectetur adipisicing elit. Modi reprehenderit molestias cupiditate mollitia officiis in praesentium beatae veniam voluptatibus asperiores libero
+
+        div.c-page__body
+            form(method="POST", novalidate)
+                div.mb-3
+                    label.form-label(for="title") Category Title
+                    input.form-control(
+                        type="text",
+                        id="title",
+                        name="title",
+                        placeholder="Category Title",
+                        value=inputValues && inputValues.title ? inputValues.title : category ? category.title: '',
+                        required
+                    )
+                    div.invalid-feedback
+                        | Please fill title field
+        
+
+                div.mb-3
+                    label.form-label(for="slug") Category Slug
+                    input.form-control(
+                        type="text",
+                        id="slug",
+                        name="slug",
+                        value=inputValues && inputValues.slug ? inputValues.slug : category ? category.slug: '',
+                        placeholder="Category Slug"
+                    )
+
+                div.mb-3
+                    label.form-label(for="parent") Parent
+                    select.form-select(id="parent", name="parent", data-val=category ? category.parentId : 0)
+                        option(value="") Select parent
+                        each cat in categories
+                            option(
+                                value=cat.id,
+                                selected=inputValues && inputValues.parentId ? inputValues.parentId === cat.id : category ? category.parentId === cat.id : false
+                            )= cat.title 
+
+                hr
+
+                div.mb-3
+                    label.form-label(for="status") Status
+                    select.form-select(id="status", name="status")
+                        option(value='published', selected=category ? category.status === 'published' : false) Publish
+                        option(value='draft', selected=category ? category.status === 'draft' : false) Draft
+                
+                div.mb-3
+                    label.form-label(for="publishedAt") Publish At
+                    input.form-control(
+                        type="datetime-local",
+                        id="publishedAt",
+                        name="publishedAt",
+                        value=category ? dateFormate(category.publishedAt, true) : dateFormate(Date.now(), true),
+                        placeholder="Category published at"
+                    )
+
+                button.btn.btn-primary= category ? 'Update Category' : 'Add Category'
+
+                if category
+                    button.btn.btn-danger.mx-2(type="button", id="deleteBtn", data-id=category.id, data-type="categories") Delete Category
