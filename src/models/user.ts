@@ -1,19 +1,12 @@
 import bcrypt from 'bcryptjs';
-import { CreatedAt, DeletedAt, Table, UpdatedAt, PrimaryKey, Column, AllowNull, Default, AutoIncrement, HasMany } from 'sequelize-typescript';
+import { CreatedAt, DeletedAt, Table, UpdatedAt, PrimaryKey, Column, AllowNull, Default, AutoIncrement, HasMany, BeforeDestroy } from 'sequelize-typescript';
 import { Model, DataTypes, CreationOptional } from 'sequelize';
-
 import { truncateText } from '../utils/string';
-import Tag from './tag';
 
 @Table({
     timestamps: true,
     modelName: 'user',
-    paranoid: true,
-    hooks: {
-        beforeDestroy: async (instance: User) => {
-            await instance.update({ email: new Date().getTime() + '_del_' + instance.email })
-        }
-    }
+    paranoid: true
 })
 class User extends Model<User> {
     @PrimaryKey
@@ -37,7 +30,7 @@ class User extends Model<User> {
         }
         
     })
-    fullName?: string;
+    readonly fullName?: string;
 
     @Column
     email?: string;
@@ -74,11 +67,6 @@ class User extends Model<User> {
     @AllowNull
     about?: string | null;
     
-    @Column
-    @AllowNull
-    shortAbout?: string | null;
-
-    @Default(0)
     @Column({
         type: DataTypes.VIRTUAL,
         get(this: User) {
@@ -88,6 +76,11 @@ class User extends Model<User> {
             throw new Error('Do not try to set the `shortAbout` value!');
         }
     })
+    @AllowNull
+    shortAbout?: string | null;
+
+    @Default(0)
+    @Column
     verifiedEmail?: number;
 
     @Default(0)
@@ -145,6 +138,7 @@ class User extends Model<User> {
             throw new Error(e);
         }
     };
+
     static async checkPassword(userId:  number, currentPassowrd: string) {
         try {
             const user = await User.findOne({
@@ -162,6 +156,11 @@ class User extends Model<User> {
         } catch (e: any) {
             throw new Error(e);
         }
+    }
+
+    @BeforeDestroy
+    static async controlDestroy(instance: User) {
+        await instance.update({ email: new Date().getTime() + '_del_' + instance.email })
     }
 }
 

@@ -1,107 +1,101 @@
-const sequelize from '../config/db';
-const { DataTypes, Model } from 'sequelize';
-const { truncateText } from '../utils/string';
+import { CreationOptional, DataTypes, Model } from 'sequelize';
+import { AllowNull, BeforeCreate, BeforeDestroy, BeforeUpdate, Column, CreatedAt, Default, DeletedAt, Table, UpdatedAt } from 'sequelize-typescript';
 
-class Post extends Model {}
+import { truncateText } from '../utils/string';
 
-Post.init({
-    title: {
-        type: DataTypes.STRING,
-        allowNull: false,
-        validate: {
-            notNull: true,
-            notEmpty: true,
-        }
-    },
-    slug: {
-        type: DataTypes.STRING,
-        allowNull: false,
-        unique: 'compositeIndex',
-    },
-    image: {
-        type: DataTypes.STRING,
-        allowNull: false,
-        validate: {
-            notNull: true,
-            notEmpty: true,
-        }
-    },
-    content: {
-        type: DataTypes.TEXT,
-    },
-    shortContent: {
-        type: DataTypes.VIRTUAL,
-        get() {
-            return truncateText(this.content, 80);
-        },
-        set(value) {
-            throw new Error('Do not try to set the `summary` value!';
-        }
-    },
-    userId: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-    },
-    categoryId: {
-        type: DataTypes.INTEGER,
-    },
-    commentStatus: {
-        type: DataTypes.STRING,
-        allowNull: false,
-        defaultValue: 'open',
-        validate: {
-            isIn: [['open', 'close']]
-        },
-    },
-    commentCount: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-        defaultValue: 0
-    },
-    isPublished: {
-        type: DataTypes.VIRTUAL,
-        get() {
-            return this.status === 'published' && new Date(this.publishedAt).getTime() < new Date().getTime()
-        }
-    },
-    status: {
-        type: DataTypes.STRING,
-        allowNull: false,
-        defaultValue: 'published',
-        validate: {
-            isIn: [['draft', 'published']]
-        },
-        
-    },
-    publishedAt: {
-        type: DataTypes.DATE,
-        allowNull: true
-    },
-}, {
-    sequelize,
-    modelName: 'post',
+@Table({
     timestamps: true,
-    paranoid: true,
-    logging: false,
-    hooks: {
-        beforeCreate: (record, options) => {
-            if (record.dataValues.status === 'published') {
-                record.dataValues.publishedAt = record.dataValues.publishedAt || new Date();
-            }
-        },
-        beforeUpdate: (record, options) => {
-            if (record.dataValues.status === 'published') {
-                record.dataValues.publishedAt = record.dataValues.publishedAt || new Date();
-            } else {
-                record.dataValues.publishedAt = null;
-            }
-        },
-        beforeDestroy: async (instance) => {
-            await instance.update({ slug: instance.slug + '_del_' + new Date().getTime() })
-        }
-    },
-});
+    modelName: 'post',
+    paranoid: true
+})
+class Post extends Model {
+    @Column
+    title?: string;
 
-Post.sync();
+    @Column({
+        unique: 'compositeIndex'
+    })
+    slug?: string;
+
+    @AllowNull
+    @Column
+    image?: string;
+
+    @Column
+    content?: string;
+
+    @Column({
+        type: DataTypes.VIRTUAL,
+        get(this: Post) {
+            return truncateText(this.content || '', 100);
+        },
+        set(this: Post, value) {
+            throw new Error('Do not try to set the `shortContent` value!');
+        }
+    })
+    shortContent?: string;
+
+    // @ForeignKey(() => User)
+    @Column
+    userId?: number;
+    
+    @Default('published')
+    @Column
+    status?: 'draft' | 'published';
+    
+    @Column({
+        type: DataTypes.DATE,
+    })
+    publishedAt?: Date;
+
+    @Column
+    categoryId?: number;
+
+    @Default('open')
+    @Column
+    commentStatus?: 'open' | 'close';
+
+    @Default(0)
+    @Column
+    commentCount?: number;
+
+    @Column({
+        type: DataTypes.VIRTUAL,
+        get(this: Post) {
+            return this.status === 'published' && this.publishedAt && new Date(this.publishedAt).getTime() < new Date().getTime();
+        }
+    })
+    isPublished?: string;
+
+    // timestamps!
+    // createdAt can be undefined during creation
+    @CreatedAt
+    @Column
+    createdAt?: CreationOptional<Date>;
+    // updatedAt can be undefined during creation
+    @UpdatedAt
+    @Column
+    updatedAt?: CreationOptional<Date>;
+    // deletedAt can be undefined during creation
+    @DeletedAt
+    @Column
+    deletedAt?: CreationOptional<Date>;
+
+    @BeforeCreate
+    @BeforeUpdate
+    static controlPublishedDate(instance: Post) {
+        if (instance.getDataValue('status') === 'published') {
+            const val = instance.getDataValue('publishedAt') || new Date();
+            instance.setDataValue('publishedAt', val);
+        } else {
+            instance.setDataValue('publishedAt', null);
+        }
+    }
+
+    @BeforeDestroy
+    static async controlDestroy(instance: Post) {
+        await instance.update({ slug: instance.slug + '_del_' + new Date().getTime() })
+    }
+}
 
 export default Post;

@@ -1,80 +1,82 @@
-const { Model, DataTypes } from 'sequelize';
-const sequelize from '../config/db';
-const { timeSince } from '../utils/date';
-const { truncateText } from '../utils/string';
+import { Model, DataTypes, CreationOptional } from 'sequelize';
+import { BeforeCreate, BeforeUpdate, Column, CreatedAt, Default, DeletedAt, Table, UpdatedAt } from 'sequelize-typescript';
+import { timeSince } from '../utils/date';
+import { truncateText } from '../utils/string';
 
-class Comment extends Model {};
+@Table({
+    timestamps: true,
+    modelName: 'comment',
+    paranoid: true
+})
+class Comment extends Model {
+    @Column
+    userId?: number;
+    
+    @Column
+    postId?: number;
 
-Comment.init({
-    userId: {
-        type: DataTypes.INTEGER,
-        allowNull: false
-    },
-    postId: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-    },
-    parentId: {
-        type: DataTypes.INTEGER,
-        allowNull: true,
-    },
-    content: {
-        type: DataTypes.TEXT,
-        allowNull: false,
-    },
-    shortContent: {
+    @Column
+    parentId?: number;
+
+    @Column
+    content?: string;
+
+    @Column({
         type: DataTypes.VIRTUAL,
-        get() {
-            return truncateText(this.content, 80);
+        get(this: Comment) {
+            return truncateText(this.content || '', 100);
         },
-        set() {
-            throw new Error('Do not try to set the `shortContent` value!';
+        set(this: Comment, value) {
+            throw new Error('Do not try to set the `shortContent` value!');
         }
-    },
-    dateSince: {
+    })
+    shortContent?: string;
+
+    @Column({
         type: DataTypes.VIRTUAL,
-        get() {
+        get(this: Comment) {
             return timeSince(this.createdAt);
         },
-        set() {
-            throw new Error('Do not try to set the `dateSince` value!';
+        set(this: Comment) {
+            throw new Error('Do not try to set the `dateSince` value!');
         }
-    },
-    status: {
-        type: DataTypes.STRING,
-        allowNull: false,
-        defaultValue: 'active',
-        validate: {
-            isIn: [['active', 'blocked', 'reported']],
-        },
-    },
-    blockedAt: {
+    })
+    dateSince?: Storage;
+    
+    @Default('active')
+    @Column
+    status?: 'active' | 'blocked' | 'reported';
+    
+    @Column({
         type: DataTypes.DATE,
-        allowNull: true,
-    },
-}, {
-    sequelize,
-    modelName: 'comment',
-    sequelize,
-    timestamps: true,
-    paranoid: true,
-    logging: false,
-    hooks: {
-        beforeCreate: (record, options) => {
-            if (record.dataValues.status === 'blocked') {
-                record.dataValues.blockedAt = record.dataValues.blockedAt || new Date();
-            }
-        },
-        beforeUpdate: (record, options) => {
-            if (record.dataValues.status === 'blocked') {
-                record.dataValues.blockedAt = record.dataValues.blockedAt || new Date();
-            } else {
-                record.dataValues.blockedAt = null;
-            }
-        },
-    },
-});
+    })
+    blockedAt?: Date;
 
-Comment.sync({ alert: true });
+    // timestamps!
+    // createdAt can be undefined during creation
+    @CreatedAt
+    @Column
+    createdAt?: CreationOptional<Date>;
+    // updatedAt can be undefined during creation
+    @UpdatedAt
+    @Column
+    updatedAt?: CreationOptional<Date>;
+    // deletedAt can be undefined during creation
+    @DeletedAt
+    @Column
+    deletedAt?: CreationOptional<Date>;
+
+
+    @BeforeCreate
+    @BeforeUpdate
+    static controlPublishedDate(instance: Comment) {
+        if (instance.getDataValue('status') === 'blocked') {
+            const val = instance.getDataValue('blockedAt') || new Date();
+            instance.setDataValue('blockedAt', val);
+        } else {
+            instance.setDataValue('blockedAt', null);
+        }
+    }
+};
 
 export default Comment;

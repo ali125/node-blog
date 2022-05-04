@@ -36,7 +36,7 @@ export const dateFormate = (date = null, withTime = false) => {
     return `${year}-${month}-${day}`;
 };
 
-export const timeSince = (createdAt: Date | null) => {
+export const timeSince = (createdAt: Date | null | any) => {
   const date = createdAt || new Date();
   const seconds = Math.floor((new Date().valueOf() - date.valueOf()) / 1000);
 

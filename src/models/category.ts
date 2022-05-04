@@ -1,79 +1,65 @@
-const { Model, DataTypes } from 'sequelize';
-const sequelize from '../config/db';
+import { Model, DataTypes, CreationOptional } from 'sequelize';
+import { BeforeCreate, BeforeDestroy, BeforeUpdate, Column, CreatedAt, Default, DeletedAt, Table, UpdatedAt } from 'sequelize-typescript';
 
-class Category extends Model {};
-
-Category.init({
-    title: {
-        type: DataTypes.STRING,
-        allowNull: false,
-        validate: {
-            notNull: true,
-            notEmpty: true,
-        }
-    },
-    slug: {
-        type: DataTypes.STRING,
-        allowNull: false,
-        unique: 'compositeIndex',
-    },
-    image: {
-        type: DataTypes.STRING,
-    },
-    parentId: {
-        type: DataTypes.INTEGER,
-        allowNull: true,
-    },
-    userId: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-    },
-    isPublished: {
-        type: DataTypes.VIRTUAL,
-        get() {
-            return this.status === 'published' && new Date(this.publishedAt).getTime() < new Date().getTime()
-        }
-    },
-    status: {
-        type: DataTypes.STRING,
-        allowNull: false,
-        defaultValue: 'published',
-        validate: {
-            isIn: [['draft', 'published']]
-        },
-    },
-    publishedAt: {
-        type: DataTypes.DATE,
-        allowNull: true,
-        set(value) {
-            this.setDataValue('publishedAt', this.status === 'published' ? value || new Date() : null);
-        }
-    },
-}, {
-    sequelize,
-    modelName: 'category',
+@Table({
     timestamps: true,
-    paranoid: true,
-    logging: false,
-    hooks: {
-        beforeCreate: (record, options) => {
-            if (record.dataValues.status === 'published') {
-                record.dataValues.publishedAt = record.dataValues.publishedAt || new Date();
-            }
-        },
-        beforeUpdate: (record, options) => {
-            if (record.dataValues.status === 'published') {
-                record.dataValues.publishedAt = record.dataValues.publishedAt || new Date();
-            } else {
-                record.dataValues.publishedAt = null;
-            }
-        },
-        beforeDestroy: async (instance) => {
-            await instance.update({ slug: instance.slug + '_del_' + new Date().getTime() })
-        }     
-    },
-});
+    modelName: 'category',
+    paranoid: true
+})
+class Category extends Model {
+    @Column
+    title?: string;
 
-Category.sync();
+    @Column({
+        unique: 'compositeIndex'
+    })
+    slug?: string;
+    
+    // @ForeignKey(() => User)
+    @Column
+    userId?: number;
+    
+    @Column
+    parentId?: number;
+
+    @Default('published')
+    @Column
+    status?: 'draft' | 'published';
+    
+    @Column({
+        type: DataTypes.DATE,
+    })
+    publishedAt?: Date;
+
+    // timestamps!
+    // createdAt can be undefined during creation
+    @CreatedAt
+    @Column
+    createdAt?: CreationOptional<Date>;
+    // updatedAt can be undefined during creation
+    @UpdatedAt
+    @Column
+    updatedAt?: CreationOptional<Date>;
+    // deletedAt can be undefined during creation
+    @DeletedAt
+    @Column
+    deletedAt?: CreationOptional<Date>;
+
+    @BeforeCreate
+    @BeforeUpdate
+    static controlPublishedDate(instance: Category) {
+        if (instance.getDataValue('status') === 'published') {
+            const val = instance.getDataValue('publishedAt') || new Date();
+            instance.setDataValue('publishedAt', val);
+        } else {
+            instance.setDataValue('publishedAt', null);
+        }
+    }
+
+    @BeforeDestroy
+    static async controlDestroy(instance: Category) {
+        await instance.update({ slug: instance.slug + '_del_' + new Date().getTime() })
+    }
+};
 
 export default Category;
