@@ -1,6 +1,6 @@
 import { Router } from 'express';
 
-import tagController from '../../controllers/dashboard/tag';
+import * as tagController from '../../controllers/dashboard/tag';
 import { tagValidation } from '../../middleware/validations';
 
 const router = Router();

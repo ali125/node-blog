@@ -38,7 +38,7 @@ export const dateFormate = (date = null, withTime = false) => {
 
 export const timeSince = (createdAt: Date | null) => {
   const date = createdAt || new Date();
-  const seconds = Math.floor((new Date() - date) / 1000);
+  const seconds = Math.floor((new Date().valueOf() - date.valueOf()) / 1000);
 
   let interval = seconds / 31536000;
 

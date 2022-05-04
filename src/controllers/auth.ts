@@ -3,11 +3,12 @@ import crypto from 'crypto';
 import { Op } from 'sequelize';
 import { validationResult } from 'express-validator';
 import User from '../models/user';
+import { sendMail } from "../utils/mail";
 
 export const resetView: RequestHandler = async (req, res, next) => {
     try {
         res.render('auth/reset', { title: 'News and Stories' });
-    } catch (e) {
+    } catch (e: any) {
         next(e);
     }
 }
@@ -23,19 +24,19 @@ export const reset: RequestHandler = async (req, res, next) => {
         }
         const user = await User.findOne({ where: { email } });
         if (!user) {
-            req.flash('error', 'No account with that email found.';
-            res.redirect('/auth/reset';
+            req.flash('error', 'No account with that email found.');
+            res.redirect('/auth/reset');
         } else {
             crypto.randomBytes(32, async (err, buffer) => {
                 if (err) {
                   console.log(err);
-                  return res.redirect('auth/reset';
+                  return res.redirect('auth/reset');
                 }
-                const resetToken = buffer.toString('hex';
+                const resetToken = buffer.toString('hex');
                 const resetTokenExpiration = Date.now() + 3600000;
                 await User.update({ resetToken, resetTokenExpiration }, { where: { id: user.id } });
-                req.flash('success', 'Reset password email has sent. Check your inbox';
-                res.redirect('/';
+                req.flash('success', 'Reset password email has sent. Check your inbox');
+                res.redirect('/');
                 const msg = {
                     to: email,
                     subject: 'Password reset',
@@ -53,10 +54,10 @@ export const reset: RequestHandler = async (req, res, next) => {
                 });
             });
         }
-    } catch (e) {
+    } catch (e: any) {
         console.log(e);
         req.flash('error', e.toString());
-        res.redirect('/auth/reset';
+        res.redirect('/auth/reset');
     }
 }
 
@@ -65,10 +66,10 @@ export const resetPasswordView: RequestHandler = async (req, res, next) => {
         const resetToken = req.params.resetToken;
         const user = await User.findOne({ where: { resetToken, resetTokenExpiration: { [Op.gt]: Date.now() } } });
         if (!user) {
-            throw new Error('Reset token is invalid or expired!';
+            throw new Error('Reset token is invalid or expired!');
         }
         res.render('auth/resetPassword', { title: 'News and Stories' });
-    } catch (e) {
+    } catch (e: any) {
         next(e);
     }
 }
@@ -79,16 +80,16 @@ export const resetPassword: RequestHandler = async (req, res, next) => {
         const password = req.body.newPassword;
         const user = await User.findOne({ where: { resetToken, resetTokenExpiration: { [Op.gt]: Date.now() } } });
         if (!user) {
-            throw new Error('Reset token is invalid or expired!';
+            throw new Error('Reset token is invalid or expired!');
         }
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
             return res.status(400).render('auth/resetPassword', { title: 'News and Stories', errorMessages: errors.array() });
         }
         await User.update({ resetToken: null, resetTokenExpiration: null, password }, { where: { id: user.id } });
-        req.flash('success', 'Password changed successfully!';
+        req.flash('success', 'Password changed successfully!');
         res.redirect(`/auth/login`);
-    } catch (e) {
+    } catch (e: any) {
         console.log(e);
         req.flash('error', e.toString());
         res.redirect(`/auth/reset/${resetToken}`);
@@ -98,7 +99,7 @@ export const resetPassword: RequestHandler = async (req, res, next) => {
 export const loginView: RequestHandler = async (req, res, next) => {
     try {
         res.render('auth/login', { title: 'News and Stories' });
-    } catch (e) {
+    } catch (e: any) {
         next(e);
     }
 }
@@ -117,15 +118,15 @@ export const login: RequestHandler = async (req, res, next) => {
         if (user) {
             req.session.isLoggedIn = true;
             req.session.user = user;
-            res.redirect('/dashboard';
+            res.redirect('/dashboard');
         } else {
-            req.flash('error', 'email or password is incorrect!';
-            res.redirect('/auth/login';
+            req.flash('error', 'email or password is incorrect!');
+            res.redirect('/auth/login');
         }
-    } catch (e) {
+    } catch (e: any) {
         console.log(e);
         req.flash('error', e.toString());
-        res.redirect('/auth/login';
+        res.redirect('/auth/login');
     }
 }
 
@@ -159,9 +160,9 @@ export const register: RequestHandler = async (req, res, next) => {
         });
         req.session.isLoggedIn = true;
         req.session.user = user;
-        res.redirect('/dashboard';
-    } catch (e) {
-        res.redirect('/auth/register';
+        res.redirect('/dashboard');
+    } catch (e: any) {
+        res.redirect('/auth/register');
     }
 }
 
@@ -169,8 +170,8 @@ export const logout: RequestHandler = async (req, res, next) => {
     try {
         req.session.isLoggedIn = false;
         req.session.user = null;
-        res.redirect('/auth/login';
-    } catch (e) {
+        res.redirect('/auth/login');
+    } catch (e: any) {
         next(e);
     }
 }

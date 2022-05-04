@@ -2,7 +2,7 @@ import { Router } from 'express';
 import multer from 'multer';
 
 import { postValidation } from '../../middleware/validations';
-import postController from '../../controllers/dashboard/post';
+import * as postController from '../../controllers/dashboard/post';
 import { imageDirectory } from '../../config';
 
 const router = Router();

@@ -1,13 +1,13 @@
 import { Router } from 'express';
 import multer from 'multer';
 
-import categoryController from '../../controllers/dashboard/category';
+import * as categoryController from '../../controllers/dashboard/category';
 import { imageDirectory } from '../../config';
 import { categoryValidation } from '../../middleware/validations';
 
-import router = Router();
+const router = Router();
 
-import upload = multer({ dest: imageDirectory })
+const upload = multer({ dest: imageDirectory })
 
 router.get('/', categoryController.all);
 

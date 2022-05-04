@@ -1,4 +1,4 @@
-import { Sequelize } from 'sequelize';
+import { Sequelize, Options } from 'sequelize';
 
 const sequelize = new Sequelize({
     dialect: process.env.DB_DIALECT,
@@ -6,8 +6,9 @@ const sequelize = new Sequelize({
     port: process.env.DB_PORT ? Number(process.env.DB_PORT) : 3306,
     database: process.env.DB_DATABASE,
     username: process.env.DB_USER,
-    password: process.env.DB_PASSWORD
-});
+    password: process.env.DB_PASSWORD,
+    models: [__dirname + '/**/*.model.ts']
+} as Options);
 
 sequelize.authenticate().then(() => {
     console.log('=== Connection successful! ===');

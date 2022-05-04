@@ -1,5 +1,4 @@
-import nodemailer, { SentMessageInfo } from 'nodemailer';
-import sgTransport from 'nodemailer-sendgrid-transport';
+import sgMail, { ClientResponse } from '@sendgrid/mail';
 
 const accountSid = process.env.TWILIO_ACCOUNT_SID; // Your Account SID from www.twilio.com/console
 const authToken = process.env.TWILIO_AUTH_TOKEN;   // Your Auth Token from www.twilio.com/console
@@ -18,27 +17,37 @@ type MailOptions = {
     html: string;
 };
 
-type SendMail = (data: MailOptions, cb: (err: Error | null, info: SentMessageInfo) => void) => void;
+type SendMail = (data: MailOptions, cb: (error: ClientResponse | null, response?: ClientResponse) => void) => void;
 
 export const sendMail: SendMail = (data, cb) => {
+    sgMail.setApiKey(process.env.SENDGRID_API_KEY as string)
+
     const { to, subject, text, html } = data;
     const options = {
         auth: {
-            api_key: process.env.SEND_GRID_TOKEN
+            api_key: process.env.SENDGRID_API_KEY
         }
     };
-    const mailer = nodemailer.createTransport(sgTransport(options));
     let dest = [];
     if (typeof to === 'string') dest.push(to);
     else dest = to;
-    const email = {
+    const msg = {
         to: dest,
-        from: 'ali.mortazavi121@gmail.com',
+        from: process.env.SENDGRID_EMAIL_FROM as string,
         subject,
         text,
         html,
     };
-    return mailer.sendMail(email, cb);
+    sgMail
+        .send(msg)
+        .then((response) => {
+            cb(null, response[0]);
+        })
+        .catch((error) => {
+            console.error(error)
+            cb(error[0]);
+        });
+
 };
 
 type SmsOptions = {

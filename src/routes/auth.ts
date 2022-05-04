@@ -1,6 +1,6 @@
 import { Router, Request, Response, NextFunction } from 'express';
 
-import authController from '../controllers/auth';
+import * as authController from '../controllers/auth';
 import { loginValidation, registerValidation, resetValidation, resetPasswordValidation } from '../middleware/validations';
 
 const router = Router();

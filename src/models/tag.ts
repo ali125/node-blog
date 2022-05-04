@@ -1,7 +1,36 @@
-const { Model, DataTypes } from 'sequelize';
-const sequelize from '../config/db';
+import { Model, DataTypes } from 'sequelize';
+import { BelongsTo, Column, Default, ForeignKey, Table } from 'sequelize-typescript';
+import sequelize from '../config/db';
+import User from './user';
 
-class Tag extends Model {};
+@Table({
+    timestamps: true,
+    modelName: 'tag',
+    paranoid: true
+})
+class Tag extends Model {
+    @Column
+    title?: string;
+
+    @Column({
+        unique: 'compositeIndex'
+    })
+    slug?: string;
+    
+    // @ForeignKey(() => User)
+    @Column
+    userId?: number;
+    
+    @Default('published')
+    @Column
+    status?: 'draft' | 'published';
+    
+    @Column({
+        type: DataTypes.DATE,
+    })
+    publishedAt?: Date;
+    
+};
 
 Tag.init({
     title: {

@@ -1,8 +1,9 @@
-const express from 'express';
-const router = express.Router();
+import { Router } from 'express';
 
-const userController from '../../controllers/dashboard/user';
-const { userValidation, updateUserValidation } from '../../middleware/validations';
+import * as userController from '../../controllers/dashboard/user';
+import { userValidation, updateUserValidation } from '../../middleware/validations';
+
+const router = Router();
 
 router.get('/', userController.all);
 

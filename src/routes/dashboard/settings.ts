@@ -1,7 +1,7 @@
-import { Router } from 'express';
+import { Router, Request, Response, NextFunction } from 'express';
 import multer from 'multer';
 
-import userController from '../../controllers/dashboard/user';
+import * as userController from '../../controllers/dashboard/user';
 import { profileValidation, changePasswordValidation } from '../../middleware/validations';
 import { imageDirectory } from '../../config';
 
@@ -9,9 +9,9 @@ const router = Router();
 
 const upload = multer({ dest: imageDirectory })
 
-router.get('/', (req, res, next) => {
+router.get('/', (req: Request, res: Response, next: NextFunction) => {
     try {
-        res.render('dashboard/settings';
+        res.render('dashboard/settings');
     } catch (e) {
         next(e);
     }
