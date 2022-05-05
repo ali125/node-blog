@@ -1,1 +1,0 @@
-exports.imageDirectory = './public/uploads/media';
