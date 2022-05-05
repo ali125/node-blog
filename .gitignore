@@ -1,10 +1,9 @@
 # Don't check auto-generated stuff into git
 coverage
 dist
+src1
 public/uploads/media
 node_modules
-stats.json
-/.next/
 
 # misc
 .DS_Store
