@@ -1,5 +1,4 @@
 import { RequestHandler } from "express";
-import { Op } from 'sequelize';
 import { validationResult } from 'express-validator';
 import Tag from '../../models/tag';
 import User from '../../models/user';
@@ -25,6 +24,7 @@ export const create: RequestHandler = async (req, res, next) => {
 
 export const save: RequestHandler = async (req, res, next) => {
     try {
+        if (!req.user) return res.status(401).send({ error: 'Please authenticate.'});
         const title = req.body.title;
         const slug = await getUniqueSlug(Tag, title, req.body.slug);
         const status = req.body.status;
@@ -47,8 +47,8 @@ export const save: RequestHandler = async (req, res, next) => {
             status,
             publishedAt
         });
-        req.flash('success','New tag created successfully!';
-        res.redirect('/dashboard/tags';
+        req.flash('success','New tag created successfully!');
+        res.redirect('/dashboard/tags');
     } catch (e) {
         // console.log(e);
         next(e);
@@ -104,8 +104,8 @@ export const update: RequestHandler = async (req, res, next) => {
                     id: tagId
                 }
             });
-            req.flash('success','Tag updated successfully!';
-            res.redirect('/dashboard/tags';
+            req.flash('success','Tag updated successfully!');
+            res.redirect('/dashboard/tags');
         } else {
             next(new Error('Tag not found!'));
         }
@@ -122,7 +122,7 @@ export const destroy: RequestHandler = async (req, res, next) => {
         // if (tag && tag.userId === req.user.id) {
         if (tag) {
             await Tag.destroy({ where: { id: tagId }, individualHooks: true });
-            req.flash('success','Tag deleted successfully!';
+            req.flash('success','Tag deleted successfully!');
             res.json({ message: 'Deleting tag succeed!', status: 204 });
         } else {
             res.status(404).json({ message: 'Tag not found!', status: 404 });

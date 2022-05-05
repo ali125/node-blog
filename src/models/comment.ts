@@ -1,7 +1,9 @@
-import { Model, DataTypes, CreationOptional } from 'sequelize';
-import { BeforeCreate, BeforeUpdate, Column, CreatedAt, Default, DeletedAt, Table, UpdatedAt } from 'sequelize-typescript';
+import { DataTypes, CreationOptional } from 'sequelize';
+import { Model, BeforeCreate, BeforeUpdate, Column, CreatedAt, Default, DeletedAt, Table, UpdatedAt, ForeignKey, BelongsTo, HasMany } from 'sequelize-typescript';
 import { timeSince } from '../utils/date';
 import { truncateText } from '../utils/string';
+import Post from './post';
+import User from './user';
 
 @Table({
     timestamps: true,
@@ -9,16 +11,45 @@ import { truncateText } from '../utils/string';
     paranoid: true
 })
 class Comment extends Model {
-    @Column
-    userId?: number;
-    
-    @Column
-    postId?: number;
+    id?: number
 
-    @Column
+    @ForeignKey(() => User)
+    @Column({
+        type: DataTypes.INTEGER,
+        allowNull: false
+    })
+    userId?: number;
+
+    @BelongsTo(() => User)
+    user?: User
+    
+    @ForeignKey(() => Post)
+    @Column({
+        type: DataTypes.INTEGER,
+        allowNull: false,
+    })
+    postId?: number;
+    
+    @BelongsTo(() => Post)
+    post?: Post
+
+    @ForeignKey(() => Comment)
+    @Column({
+        type: DataTypes.INTEGER,
+        allowNull: true,
+    })
     parentId?: number;
 
-    @Column
+    @HasMany(() => Comment, { as: 'replies' })
+    replies?: Comment[]
+
+    @BelongsTo(() => Comment, )
+    parent?: Comment
+
+    @Column({
+        type: DataTypes.TEXT,
+        allowNull: false,
+    })
     content?: string;
 
     @Column({
@@ -41,29 +72,34 @@ class Comment extends Model {
             throw new Error('Do not try to set the `dateSince` value!');
         }
     })
-    dateSince?: Storage;
+    dateSince?: string;
     
     @Default('active')
-    @Column
+    @Column({
+        type: DataTypes.STRING,
+        allowNull: false,
+        defaultValue: 'active',
+        validate: {
+            isIn: [['active', 'blocked', 'reported']],
+        },
+    })
     status?: 'active' | 'blocked' | 'reported';
     
     @Column({
         type: DataTypes.DATE,
+        allowNull: true,
     })
     blockedAt?: Date;
 
     // timestamps!
     // createdAt can be undefined during creation
     @CreatedAt
-    @Column
     createdAt?: CreationOptional<Date>;
     // updatedAt can be undefined during creation
     @UpdatedAt
-    @Column
     updatedAt?: CreationOptional<Date>;
     // deletedAt can be undefined during creation
     @DeletedAt
-    @Column
     deletedAt?: CreationOptional<Date>;
 
 

@@ -15,7 +15,10 @@ import sequelize from './config/db';
 import { dateTimeFormate, dateFormate } from './utils/date';
 import { isAuth } from './middleware/auth';
 import User from './models/user';
-import('./models/_sync');
+
+sequelize.sync({ force: true }).then(() => {
+  console.log('DB Synced');
+});
 
 dotenv.config();
 
@@ -25,14 +28,14 @@ const SequelizeStore = require("connect-session-sequelize")(session.Store);
 const store = new SequelizeStore({ db: sequelize });
 
 // view engine setup
-app.set('views', path.join(__dirname, 'views'));
+app.set('views', path.join(__dirname, '..', 'views'));
 app.set('view engine', 'pug');
 
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, '..', 'public')));
 app.use(session({
   secret: process.env.SESSION_SECRET as string,
   resave: false,
@@ -74,7 +77,7 @@ app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
   res.locals.error = req.app.get('env') === 'development' ? err : {};
   // render the error page
   res.status(err.status || 500);
-  res.render(req.originalUrl.indexOf('/dashboard/') === 0 ? 'dashboard/error' : 'web/error';
+  res.render(req.originalUrl.indexOf('/dashboard/') === 0 ? 'dashboard/error' : 'web/error');
 });
 
-export default app;
+module.exports = app;

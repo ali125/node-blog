@@ -1,7 +1,11 @@
-import { CreationOptional, DataTypes, Model } from 'sequelize';
-import { AllowNull, BeforeCreate, BeforeDestroy, BeforeUpdate, Column, CreatedAt, Default, DeletedAt, Table, UpdatedAt } from 'sequelize-typescript';
+import { BelongsToManyAddAssociationMixin, CreationOptional, DataTypes, HasManySetAssociationsMixin } from 'sequelize';
+import { Model, AllowNull, BeforeCreate, BeforeDestroy, BeforeUpdate, Column, CreatedAt, Default, DeletedAt, Table, UpdatedAt, ForeignKey, BelongsTo, BelongsToMany } from 'sequelize-typescript';
 
 import { truncateText } from '../utils/string';
+import Category from './category';
+import PostTag from './post_tag';
+import Tag from './tag';
+import User from './user';
 
 @Table({
     timestamps: true,
@@ -9,19 +13,34 @@ import { truncateText } from '../utils/string';
     paranoid: true
 })
 class Post extends Model {
-    @Column
+    id?: number
+
+    @Column({
+        type: DataTypes.STRING,
+        allowNull: false,
+        validate: {
+            notNull: true,
+            notEmpty: true,
+        }
+    })
     title?: string;
 
     @Column({
-        unique: 'compositeIndex'
+        type: DataTypes.STRING,
+        allowNull: false,
+        unique: 'compositeIndex',
     })
     slug?: string;
 
     @AllowNull
-    @Column
+    @Column({
+        type: DataTypes.TEXT,
+    })
     image?: string;
 
-    @Column
+    @Column({
+        type: DataTypes.STRING,
+    })
     content?: string;
 
     @Column({
@@ -35,29 +54,60 @@ class Post extends Model {
     })
     shortContent?: string;
 
-    // @ForeignKey(() => User)
-    @Column
+    @ForeignKey(() => User)
+    @Column({
+        type: DataTypes.INTEGER,
+        allowNull: false,
+    })
     userId?: number;
+
+    @BelongsTo(() => User)
+    user?: User
+
+    @ForeignKey(() => Category)
+    @Column({
+        type: DataTypes.INTEGER,
+    })
+    categoryId?: number;
+
+    @BelongsTo(() => Category)
+    category?: Category
     
+    @Default('open')
+    @Column({
+        type: DataTypes.STRING,
+        allowNull: false,
+        defaultValue: 'open',
+        validate: {
+            isIn: [['open', 'close']]
+        },
+    })
+    commentStatus?: 'open' | 'close';
+
+    @Default(0)
+    @Column({
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        defaultValue: 0
+    })
+    commentCount?: number;
+
     @Default('published')
-    @Column
+    @Column({
+        type: DataTypes.STRING,
+        allowNull: false,
+        defaultValue: 'published',
+        validate: {
+            isIn: [['draft', 'published']]
+        },
+    })
     status?: 'draft' | 'published';
     
     @Column({
         type: DataTypes.DATE,
+        allowNull: true
     })
     publishedAt?: Date;
-
-    @Column
-    categoryId?: number;
-
-    @Default('open')
-    @Column
-    commentStatus?: 'open' | 'close';
-
-    @Default(0)
-    @Column
-    commentCount?: number;
 
     @Column({
         type: DataTypes.VIRTUAL,
@@ -70,16 +120,16 @@ class Post extends Model {
     // timestamps!
     // createdAt can be undefined during creation
     @CreatedAt
-    @Column
     createdAt?: CreationOptional<Date>;
     // updatedAt can be undefined during creation
     @UpdatedAt
-    @Column
     updatedAt?: CreationOptional<Date>;
     // deletedAt can be undefined during creation
     @DeletedAt
-    @Column
     deletedAt?: CreationOptional<Date>;
+
+    @BelongsToMany(() => Tag, () => PostTag)
+    tags?: Tag[]
 
     @BeforeCreate
     @BeforeUpdate
@@ -96,6 +146,10 @@ class Post extends Model {
     static async controlDestroy(instance: Post) {
         await instance.update({ slug: instance.slug + '_del_' + new Date().getTime() })
     }
+
+    declare setTags: BelongsToManyAddAssociationMixin<Tag, 'tagId'>;
+    declare setCategory: HasManySetAssociationsMixin<Category, 'categoryId'>;
+    
 }
 
 export default Post;

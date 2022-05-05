@@ -1,0 +1,71 @@
+doctype html
+html
+  head
+    title= title
+    meta(charset="UTF-8")
+    meta(http-equiv="X-UA-Compatible", content="IE=edge")
+    meta(name="viewport", content="width=device-width, initial-scale=1.0")
+    link(rel='stylesheet', href='/dashboard/css/bootstrap.min.css')
+    link(rel='stylesheet', href='/dashboard/css/style.css')
+  body
+    div.grid__container
+        div.grid__sidebar.sidebar
+            a.sidebar__logo(href='/')
+                img.sidebar__logo-img(src='/dashboard/images/logo.png')
+            ul.sidebar__link-list
+                li
+                    a.sidebar__link(href="/dashboard/")
+                        i.fas.fa-tachometer-alt
+                        | Dashboard
+                li
+                    a.sidebar__link(href="/dashboard/posts")
+                        i.fas.fa-clipboard
+                        | Posts
+                li
+                    a.sidebar__link(href="/dashboard/categories")
+                        i.fas.fa-tags
+                        | Categories
+                li
+                    a.sidebar__link(href="/dashboard/tags")
+                        i.fas.fa-hashtag
+                        | Tags
+                li
+                    a.sidebar__link(href="/dashboard/users")
+                        i.fas.fa-users
+                        | Users
+
+                li
+                    a.sidebar__link(href="/dashboard/comments")
+                        i.fas.fa-comments
+                        | Comments
+                li
+                    a.sidebar__link(href="/dashboard/settings")
+                        i.fas.fa-cogs
+                        | Settings
+                
+        div.grid__content
+            div.header
+                div.c-dropdown.header-user__container
+                    div.header-user(data-type="dropdown", data-toggle="userMenu")
+                        img.header-user__avatar(src=currentUser.avatar || "/dashboard/images/man.png", alt="username")
+                        span.header-user__info
+                            span.header-user__name= currentUser.fullName
+                            span.header-user__role Admin
+                        i.fas.fa-angle-down
+
+                    ul.c-dropdown__menu(id="userMenu")
+                        li
+                            a.c-dropdown__item(href="#") Settings
+                        li
+                            a.c-dropdown__item(href="/auth/logout") Logout
+
+            div.grid__page
+                if errorMessages
+                    div.alert.alert-danger
+                        each err in errorMessages
+                            p.mb-0= err.msg || err
+                if successMessage
+                    div.alert.alert-success
+                        p.mb-0= successMessage
+                block content
+    include includes/scripts

@@ -9,15 +9,15 @@ import Comment from '../models/comment';
 export const index: RequestHandler = async (req, res, next) => {
     try {
         const posts = await Post.findAll({
-            include: [
-                { model: User, attributes: ['id', 'fullName', 'firstName', 'lastName']},
-                { model: Category, attributes: ['id', 'slug', 'title'] },
-                { model: Tag, attributes: ['id', 'slug', 'title'] },
-            ],
-            order: [
-                ['createdAt', 'DESC'],
-                [Category, 'createdAt', 'DESC']
-            ],
+            // include: [
+            //     { model: User, attributes: ['id', 'fullName', 'firstName', 'lastName']},
+            //     { model: Category, attributes: ['id', 'slug', 'title'] },
+            //     { model: Tag, attributes: ['id', 'slug', 'title'] },
+            // ],
+            // order: [
+            //     ['createdAt', 'DESC'],
+            //     [Category, 'createdAt', 'DESC']
+            // ],
         });
         res.render('web/index', { title: 'News and Stories', posts });
     } catch (e) {
@@ -63,7 +63,7 @@ export const get: RequestHandler = async (req, res, next) => {
                         {
                             model: Comment,
                             as: 'replies',
-                            include: { model: User, attributes: ['id', 'avatar', 'fullName', 'firstName', 'lastName'] },
+                            include: [{ model: User, attributes: ['id', 'avatar', 'fullName', 'firstName', 'lastName'] }],
                             attributes: ['id', 'content', 'dateSince', 'createdAt']
                         },
                         { model: User, attributes: ['id', 'avatar', 'fullName', 'firstName', 'lastName'] }

@@ -1,5 +1,7 @@
-import { Model, DataTypes, CreationOptional } from 'sequelize';
-import { BeforeCreate, BeforeDestroy, BeforeUpdate, Column, CreatedAt, Default, DeletedAt, Table, UpdatedAt } from 'sequelize-typescript';
+import { DataTypes, CreationOptional } from 'sequelize';
+import { Model, BeforeCreate, BeforeDestroy, BeforeUpdate, Column, CreatedAt, Default, DeletedAt, Table, UpdatedAt, ForeignKey, BelongsTo, HasMany } from 'sequelize-typescript';
+import Post from './post';
+import User from './user';
 
 @Table({
     timestamps: true,
@@ -7,42 +9,74 @@ import { BeforeCreate, BeforeDestroy, BeforeUpdate, Column, CreatedAt, Default, 
     paranoid: true
 })
 class Category extends Model {
-    @Column
+    id?: number
+
+    @Column({
+        type: DataTypes.STRING,
+        allowNull: false,
+        validate: {
+            notNull: true,
+            notEmpty: true,
+        }
+    })
     title?: string;
 
     @Column({
-        unique: 'compositeIndex'
+        type: DataTypes.STRING,
+        allowNull: false,
+        unique: 'compositeIndex',
     })
     slug?: string;
     
-    // @ForeignKey(() => User)
-    @Column
+    @ForeignKey(() => User)
+    @Column({
+        type: DataTypes.INTEGER,
+        allowNull: false,
+    })
     userId?: number;
+
+    @BelongsTo(() => User)
+    user?: User 
     
-    @Column
+    @ForeignKey(() => Category)
+    @Column({
+        type: DataTypes.INTEGER,
+        allowNull: true,
+    })
     parentId?: number;
 
+    @BelongsTo(() => Category, { as: 'parent' })
+    parent?: Category
+
     @Default('published')
-    @Column
+    @Column({
+        type: DataTypes.STRING,
+        allowNull: false,
+        defaultValue: 'published',
+        validate: {
+            isIn: [['draft', 'published']]
+        },
+    })
     status?: 'draft' | 'published';
     
     @Column({
         type: DataTypes.DATE,
+        allowNull: true
     })
     publishedAt?: Date;
+
+    @HasMany(() => Post)
+    posts?: Post[]
 
     // timestamps!
     // createdAt can be undefined during creation
     @CreatedAt
-    @Column
     createdAt?: CreationOptional<Date>;
     // updatedAt can be undefined during creation
     @UpdatedAt
-    @Column
     updatedAt?: CreationOptional<Date>;
     // deletedAt can be undefined during creation
     @DeletedAt
-    @Column
     deletedAt?: CreationOptional<Date>;
 
     @BeforeCreate

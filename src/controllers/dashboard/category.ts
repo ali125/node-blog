@@ -1,10 +1,11 @@
-const { Op } from 'sequelize';
-const { validationResult } from 'express-validator';
-const Category from '../../models/category';
-const User from '../../models/user';
-const { getUniqueSlug } from '../../utils/string';
+import { Op } from 'sequelize';
+import { validationResult } from 'express-validator';
+import Category from '../../models/category';
+import User from '../../models/user';
+import { getUniqueSlug } from '../../utils/string';
+import { RequestHandler } from 'express';
 
-export const all = async (req, res, next) => {
+export const all: RequestHandler = async (req, res, next) => {
     try {
         const categories = await Category.findAll({ include: [
             { model: User, attributes: ['id', 'fullName', 'firstName', 'lastName']},
@@ -16,7 +17,7 @@ export const all = async (req, res, next) => {
     }
 }
 
-export const create = async (req, res, next) => {
+export const create: RequestHandler = async (req, res, next) => {
     try {
         const categories = await Category.findAll();
         res.render('dashboard/categories/form', { title: 'News and Stories', categories });
@@ -26,8 +27,9 @@ export const create = async (req, res, next) => {
     
 };
 
-export const save = async (req, res, next) => {
+export const save: RequestHandler = async (req, res, next) => {
     try {
+        if (!req.user) return res.status(401).send({ error: 'Please authenticate.'});
         const title = req.body.title;
         const slug = await getUniqueSlug(Category, title, req.body.slug);
         const content = req.body.content;
@@ -59,14 +61,14 @@ export const save = async (req, res, next) => {
             status,
             publishedAt
         });
-        req.flash('success','New category created successfully!';
-        res.redirect('/dashboard/categories';
+        req.flash('success','New category created successfully!');
+        res.redirect('/dashboard/categories');
     } catch (e) {
         next(e);
     }
 };
 
-export const edit = async (req, res, next) => {
+export const edit: RequestHandler = async (req, res, next) => {
     try {
         const categoryId = req.params.categoryId;
         const category = await Category.findByPk(categoryId);
@@ -82,7 +84,7 @@ export const edit = async (req, res, next) => {
     }
 };
 
-export const update = async (req, res, next) => {
+export const update: RequestHandler = async (req, res, next) => {
     try {
         const categoryId = req.params.categoryId;
         const category = await Category.findByPk(categoryId);
@@ -125,8 +127,8 @@ export const update = async (req, res, next) => {
                     id: categoryId
                 }
             });
-            req.flash('success','Category updated successfully!';
-            res.redirect('/dashboard/categories';
+            req.flash('success','Category updated successfully!');
+            res.redirect('/dashboard/categories');
         } else {
             next(new Error('Category not found!'));
         }
@@ -135,7 +137,7 @@ export const update = async (req, res, next) => {
     }
 };
 
-export const destroy = async (req, res, next) => {
+export const destroy: RequestHandler = async (req, res, next) => {
     const categoryId = req.params.categoryId;
     try {
         const category = await Category.findByPk(categoryId);
@@ -143,7 +145,7 @@ export const destroy = async (req, res, next) => {
         // if (category && category.userId === req.user.id) {
         if (category) {
             await Category.destroy({ where: { id: categoryId }, individualHooks: true });
-            req.flash('success','Category deleted successfully!';
+            req.flash('success','Category deleted successfully!');
             res.json({ message: 'Deleting category succeed!', status: 204 });
         } else {
             res.status(404).json({ message: 'Category not found!', status: 404 });

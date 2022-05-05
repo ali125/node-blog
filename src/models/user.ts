@@ -1,23 +1,38 @@
 import bcrypt from 'bcryptjs';
-import { CreatedAt, DeletedAt, Table, UpdatedAt, PrimaryKey, Column, AllowNull, Default, AutoIncrement, HasMany, BeforeDestroy } from 'sequelize-typescript';
-import { Model, DataTypes, CreationOptional } from 'sequelize';
+import { Model, CreatedAt, DeletedAt, Table, UpdatedAt, Column, AllowNull, Default, BeforeDestroy, HasMany } from 'sequelize-typescript';
+import { DataTypes, CreationOptional, HasManyCreateAssociationMixin, InferAttributes, InferCreationAttributes, HasManyGetAssociationsMixin } from 'sequelize';
 import { truncateText } from '../utils/string';
+import Post from './post';
+import Comment from './comment';
+import Tag from './tag';
+import Category from './category';
 
 @Table({
     timestamps: true,
     modelName: 'user',
     paranoid: true
 })
-class User extends Model<User> {
-    @PrimaryKey
-    @AutoIncrement
-    @Column
+class User extends Model<InferAttributes<User>, InferCreationAttributes<User>> {
     id?: number;
 
-    @Column
+    @Column({
+        type: DataTypes.STRING,
+        allowNull: false,
+        validate: {
+            notEmpty: true,
+            notNull: true,
+        }
+    })
     firstName?: string;
 
-    @Column
+    @Column({
+        type: DataTypes.STRING,
+        allowNull: false,
+        validate: {
+            notEmpty: true,
+            notNull: true,
+        }
+    })
     lastName?: string;
 
     @Column({
@@ -32,14 +47,30 @@ class User extends Model<User> {
     })
     readonly fullName?: string;
 
-    @Column
+    @Column({
+        type: DataTypes.STRING,
+        allowNull: false,
+        unique: 'compositeIndex',
+        validate: {
+            isEmail: true,
+        },
+    })
     email?: string;
 
-    @Column
     @AllowNull
+    @Column({
+        type: DataTypes.STRING,
+        allowNull: true,
+    })
     phoneNumber?: string | null;
 
     @Column({
+        type: DataTypes.STRING,
+        allowNull: false,
+        validate: {
+            notEmpty: true,
+            notNull: true,
+        },
         get(this: User) {
             return;
         },
@@ -51,22 +82,37 @@ class User extends Model<User> {
     })
     password?: string;
 
-    @Column
     @AllowNull
+    @Column({
+        type: DataTypes.STRING,
+        allowNull: true,
+    })
     avatar?: string | null;
 
-    @Column
     @AllowNull
+    @Column({
+        type: DataTypes.DATE,
+    })
     birthDate?: Date | null;
 
-    @Column
     @AllowNull
+    @Column({
+        type: DataTypes.STRING,
+        defaultValue: null,
+        validate: {
+            isIn: [['male', 'female']],
+        }
+    })
     gender?: 'male' | 'female' | null;
 
-    @Column
     @AllowNull
+    @Column({
+        type: DataTypes.TEXT,
+    })
     about?: string | null;
     
+    
+    @AllowNull
     @Column({
         type: DataTypes.VIRTUAL,
         get(this: User) {
@@ -76,49 +122,84 @@ class User extends Model<User> {
             throw new Error('Do not try to set the `shortAbout` value!');
         }
     })
-    @AllowNull
     shortAbout?: string | null;
 
     @Default(0)
-    @Column
+    @Column({
+        type: DataTypes.SMALLINT,
+        defaultValue: 0,
+        allowNull: false
+    })
     verifiedEmail?: number;
 
     @Default(0)
-    @Column
+    @Column({
+        type: DataTypes.SMALLINT,
+        defaultValue: 0,
+        allowNull: false
+    })
     verifiedPhoneNumber?: number;
 
     @Default('active')
-    @Column
+    @Column({
+        type: DataTypes.STRING,
+        allowNull: false,
+        defaultValue: 'active',
+        validate: {
+            isIn: [['active', 'blocked']]
+        },
+    })
     status?: 'active' | 'blocked';
 
     @AllowNull
-    @Column
+    @Column({
+        type: DataTypes.DATE,
+        allowNull: true,
+        set(this: User, value: Date | null = null) {
+            this.setDataValue('blockedAt', value || (this.status === 'blocked' ? new Date() : null))
+        },
+    })
     blockedAt?: Date | null;
 
     @AllowNull
-    @Column
+    @Column({
+        type: DataTypes.STRING,
+        allowNull: true,
+    })
     resetToken?: string | null;
 
     @AllowNull
-    @Column
-    resetTokenExpiration?: string | null;
+    @Column({
+        type: DataTypes.DATE,
+        allowNull: true,
+        set(this: User, value: Date | null = null) {
+            this.setDataValue('resetTokenExpiration', value || (this.resetToken ? new Date(Date.now() + 3600000) : null))
+        },
+    })
+    resetTokenExpiration?: Date | null;
     
     // timestamps!
     // createdAt can be undefined during creation
     @CreatedAt
-    @Column
     createdAt?: CreationOptional<Date>;
     // updatedAt can be undefined during creation
     @UpdatedAt
-    @Column
     updatedAt?: CreationOptional<Date>;
     // deletedAt can be undefined during creation
     @DeletedAt
-    @Column
     deletedAt?: CreationOptional<Date>;
 
-    // @HasMany(() => Tag)
-    // tags?: Tag[]
+    @HasMany(() => Post)
+    posts?: Post[]
+
+    @HasMany(() => Category)
+    categories?: Category[]
+    
+    @HasMany(() => Tag)
+    tags?: Tag[]
+    
+    @HasMany(() => Comment)
+    comments?: Comment[]
    
     static async findByCredentials(email: string, password: string) {
         try {
@@ -162,6 +243,15 @@ class User extends Model<User> {
     static async controlDestroy(instance: User) {
         await instance.update({ email: new Date().getTime() + '_del_' + instance.email })
     }
+
+    declare createComment: HasManyCreateAssociationMixin<Comment, 'userId'>;
+
+    declare createPost: HasManyCreateAssociationMixin<Post, 'userId'>;
+    declare getPosts: HasManyGetAssociationsMixin<Post>;
+
+    declare createTag: HasManyCreateAssociationMixin<Tag, 'userId'>;
+
+    declare createCategory: HasManyCreateAssociationMixin<Category, 'userId'>;
 }
 
 export default User;

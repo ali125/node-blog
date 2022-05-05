@@ -43,8 +43,8 @@ export const save: RequestHandler = async (req, res, next) => {
             email,
             password
         });
-        req.flash('success','New user created successfully!';
-        res.redirect('/dashboard/users';
+        req.flash('success','New user created successfully!');
+        res.redirect('/dashboard/users');
     } catch (e) {
         // console.log(e);
         next(e);
@@ -70,9 +70,9 @@ export const update: RequestHandler = async (req, res, next) => {
         const userId = req.params.userId;
         const user = await User.findByPk(userId);
 
-        if (user) {
+        if (user && req.user) {
             if (+userId === req.user.id) {
-                throw new Error('You cannot edit yourself in here!';
+                throw new Error('You cannot edit yourself in here!');
             }
             const firstName = req.body.firstName;
             const lastName = req.body.lastName;
@@ -97,8 +97,8 @@ export const update: RequestHandler = async (req, res, next) => {
                     id: userId
                 }
             });
-            req.flash('success','User updated successfully!';
-            res.redirect('/dashboard/users';
+            req.flash('success','User updated successfully!');
+            res.redirect('/dashboard/users');
         } else {
             next(new Error('User not found!'));
         }
@@ -110,15 +110,15 @@ export const update: RequestHandler = async (req, res, next) => {
 export const destroy: RequestHandler = async (req, res, next) => {
     const userId = req.params.userId;
     try {
-        if (+userId === req.user.id) {
-            req.flash('error','You cannot delete yourself in here!';
+        if (req.user && +userId === req.user.id) {
+            req.flash('error','You cannot delete yourself in here!');
             return res.json({ message: 'You cannot delete yourself in here!', status: 403 });
         }
         
         const user = await User.findByPk(userId);
         if (user) {
             await User.destroy({ where: { id: userId }, individualHooks: true });
-            req.flash('success','User deleted successfully!';
+            req.flash('success','User deleted successfully!');
             res.json({ message: 'Deleting user succeed!', status: 204 });
         } else {
             res.status(404).json({ message: 'User not found!', status: 404 });
@@ -139,6 +139,7 @@ export const profileView: RequestHandler = async (req, res, next) => {
 
 export const profileSave: RequestHandler = async (req, res, next) => {
     try {
+        if (!req.user) return res.status(401).send({ error: 'Please authenticate.'});
         const firstName = req.body.firstName;
         const lastName = req.body.lastName;
         const email = req.body.email;
@@ -168,11 +169,12 @@ export const profileSave: RequestHandler = async (req, res, next) => {
                 id: req.user.id
             },
             returning: true,
-            plain: true
+            // plain: true
         });
-        req.session.user = user[1];
-        req.flash('success', 'User information successfully changed!')
-        res.redirect('/dashboard/settings/profile';
+        console.log('user', user);
+        // req.session.user = user[1];
+        req.flash('success', 'User information successfully changed!');
+        res.redirect('/dashboard/settings/profile');
     } catch (e) {
         next(e);
     }
@@ -188,6 +190,8 @@ export const changePasswordView: RequestHandler = async (req, res, next) => {
 }
 export const changePasswordSave: RequestHandler = async (req, res, next) => {
     try {
+        if (!req.user) return res.status(401).send({ error: 'Please authenticate.'});
+
         const currentPassword = req.body.currentPassword;
         const newPassword = req.body.newPassword;
         const errors = validationResult(req);
@@ -196,7 +200,7 @@ export const changePasswordSave: RequestHandler = async (req, res, next) => {
         }
 
         try {
-            const validPassword = await User.checkPassword(req.user.id, currentPassword);
+            const validPassword = await User.checkPassword(req.user.id as number, currentPassword);
             if (validPassword) {
                 await User.update({
                     password: newPassword
@@ -205,12 +209,12 @@ export const changePasswordSave: RequestHandler = async (req, res, next) => {
                         id: req.user.id
                     }
                 });
-                req.flash('success', 'Password successfully changed!';
-                res.redirect('/dashboard/settings/change-password';
+                req.flash('success', 'Password successfully changed!');
+                res.redirect('/dashboard/settings/change-password');
             }
-        } catch (er) {
+        } catch (er: any) {
             req.flash('error', er.toString());
-            res.redirect('/dashboard/settings/change-password';
+            res.redirect('/dashboard/settings/change-password');
         }
         
     } catch (e) {
@@ -221,8 +225,10 @@ export const changePasswordSave: RequestHandler = async (req, res, next) => {
 
 export const deleteAccount: RequestHandler = async (req, res, next) => {
     try {
+        if (!req.user) return res.status(401).send({ error: 'Please authenticate.'});
+
         await User.destroy({ where: { id: req.user.id }, individualHooks: true});
-        req.flash('success','User deleted successfully!';
+        req.flash('success','User deleted successfully!');
         req.session.isLoggedIn = false;
         req.session.user = null;
         req.user = null

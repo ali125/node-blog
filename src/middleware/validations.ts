@@ -1,5 +1,4 @@
 import { body } from 'express-validator';
-
 import User from '../models/user';
 
 export const registerValidation = [
@@ -52,7 +51,7 @@ export const resetPasswordValidation = [
         .trim()
         .custom((value, { req }) => {
             if (value !== req.body.newPassword) {
-                throw new Error('Password confirmation does not match new password';
+                throw new Error('Password confirmation does not match new password');
             }
             return true;
         })
@@ -163,7 +162,7 @@ export const changePasswordValidation = [
         .trim()
         .custom((value, { req }) => {
             if (value !== req.body.newPassword) {
-                throw new Error('Password confirmation does not match new password';
+                throw new Error('Password confirmation does not match new password');
             }
             return true;
         })

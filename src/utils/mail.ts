@@ -1,14 +1,18 @@
 import sgMail, { ClientResponse } from '@sendgrid/mail';
 
-const accountSid = process.env.TWILIO_ACCOUNT_SID; // Your Account SID from www.twilio.com/console
-const authToken = process.env.TWILIO_AUTH_TOKEN;   // Your Auth Token from www.twilio.com/console
-const TWILIO_PHONE_NUMBER = process.env.TWILIO_PHONE_NUMBER;
+import dotenv from 'dotenv';
+dotenv.config();
+
+const accountSid = process.env.TWILIO_ACCOUNT_SID as string; // Your Account SID from www.twilio.com/console
+const authToken = process.env.TWILIO_AUTH_TOKE as string;   // Your Auth Token from www.twilio.com/console
+const TWILIO_PHONE_NUMBER = process.env.TWILIO_PHONE_NUMBER as string;
 
 import twilio from 'twilio';
 
-const client = twilio(accountSid, authToken, {
-    lazyLoading: true,
-});
+// const client = twilio(accountSid, authToken, {
+//     lazyLoading: true,
+// });
+
 
 type MailOptions = {
     to: string;
@@ -58,6 +62,9 @@ type SmsOptions = {
 type SendSms = (data: SmsOptions) => Promise<any>;
 
 export const sendSms: SendSms = async (data) => {
+    const client = twilio(accountSid, authToken, {
+        lazyLoading: true,
+    });
     return await client.messages.create({
         to: data.to,
         from: TWILIO_PHONE_NUMBER,
@@ -74,6 +81,9 @@ type callOptions = {
 type SendCall = (data: callOptions) => Promise<any>;
 
 export const sendCall: SendCall = async (data) => {
+    const client = twilio(accountSid, authToken, {
+        lazyLoading: true,
+    });
     return await client.calls.create({
         to: data.to,
         from: (TWILIO_PHONE_NUMBER as string),

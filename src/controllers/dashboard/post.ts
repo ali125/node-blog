@@ -1,12 +1,14 @@
-const { validationResult } from 'express-validator';
-const Post from '../../models/post';
-const Category from '../../models/category';
-const Tag from '../../models/tag';
-const User from '../../models/user';
-const { getUniqueSlug } from '../../utils/string';
+import { validationResult } from 'express-validator';
+import Post from '../../models/post';
+import Category from '../../models/category';
+import Tag from '../../models/tag';
+import User from '../../models/user';
+import { getUniqueSlug } from '../../utils/string';
+import { RequestHandler } from 'express';
 
-export const all = async (req, res, next) => {
+export const all: RequestHandler = async (req, res, next) => {
     try {
+        if (!req.user) return res.status(401).send({ error: 'Please authenticate.'});
         const posts = await req.user.getPosts({
             include: [
                 { model: User, attributes: ['id', 'fullName', 'firstName', 'lastName']},
@@ -23,7 +25,7 @@ export const all = async (req, res, next) => {
     }
 }
 
-export const create = async (req, res, next) => {
+export const create: RequestHandler = async (req, res, next) => {
     try {
         const tags = await Tag.findAll({ attributes: ['id', 'title'] });
         const categories = await Category.findAll({ attributes: ['id', 'title']});
@@ -33,8 +35,9 @@ export const create = async (req, res, next) => {
     }
 };
 
-export const save = async (req, res, next) => {
+export const save: RequestHandler = async (req, res, next) => {
     try {
+        if (!req.user) return res.status(401).send({ error: 'Please authenticate.'});
         const title = req.body.title;
         const slug = await getUniqueSlug(Post, title, req.body.slug);
         const content = req.body.content;
@@ -67,20 +70,21 @@ export const save = async (req, res, next) => {
         });
         post.setTags(tagsId);
         post.setCategory(categoryId);
-        req.flash('success','New post created successfully!';
-        res.redirect('/dashboard/posts';
+        req.flash('success','New post created successfully!');
+        res.redirect('/dashboard/posts');
     } catch (e) {
         console.log(e);
     }
 };
 
-export const edit = async (req, res, next) => {
+export const edit: RequestHandler = async (req, res, next) => {
     try {
+        if (!req.user) return res.status(401).send({ error: 'Please authenticate.'});
         const postId = req.params.postId;
         const post = await Post.findByPk(postId, { plain: true, include: [{ model: Tag, attributes: ['id'], through: { attributes: [] } }]});
         if (post && post.userId === req.user.id) {
             const postJson = post.toJSON();
-            postJson.tags = postJson.tags.map((i) => i.id);
+            postJson.tags = postJson.tags.map((i: Tag) => i.id);
             const categories = await Category.findAll({ attributes: ['id', 'title']});
             const tags = await Tag.findAll({ attributes: ['id', 'title'] });
             res.render('dashboard/posts/form', { title: 'News and Stories', post: postJson, tags, categories });
@@ -92,15 +96,16 @@ export const edit = async (req, res, next) => {
     }
 };
 
-export const update = async (req, res, next) => {
+export const update: RequestHandler<{ postId: string }> = async (req, res, next) => {
     try {
+        if (!req.user) return res.status(401).send({ error: 'Please authenticate.'});
         const postId = req.params.postId;
         const post = await Post.findByPk(postId);
 
         if (post && post.userId === req.user.id) {
             const title = req.body.title;
             const updateSlug = req.body.slug;
-            const slug = updateSlug ? await getUniqueSlug(Post, title, updateSlug, postId) : updateSlug;
+            const slug = updateSlug ? await getUniqueSlug(Post, title, updateSlug, +postId) : updateSlug;
             const content = req.body.content;
             const categoryId = req.body.categoryId;
             const tagsId = req.body.tags;
@@ -109,8 +114,8 @@ export const update = async (req, res, next) => {
             const errors = validationResult(req);
             if (!errors.isEmpty()) {
                 const postData = await Post.findByPk(postId, { plain: true, include: [{ model: Tag, attributes: ['id'], through: { attributes: [] } }]});
-                const postJson = postData.toJSON();
-                postJson.tags = postJson.tags.map((i) => i.id);
+                const postJson = postData ? postData.toJSON() : {};
+                postJson.tags = (postJson?.tags || []).map((i: Tag) => i.id);
                 const tags = await Tag.findAll({ attributes: ['id', 'title'] });
                 const categories = await Category.findAll({ attributes: ['id', 'title']});
                 const inputValues = {
@@ -140,8 +145,8 @@ export const update = async (req, res, next) => {
             });
             post.setTags(tagsId);
             post.setCategory(categoryId || null);
-            req.flash('success','Post updated successfully!';
-            res.redirect('/dashboard/posts';
+            req.flash('success','Post updated successfully!');
+            res.redirect('/dashboard/posts');
         } else {
             next(new Error('Post not found!'));
         }
@@ -150,14 +155,15 @@ export const update = async (req, res, next) => {
     }
 };
 
-export const destroy = async (req, res, next) => {
+export const destroy: RequestHandler = async (req, res, next) => {
     const postId = req.params.postId;
     try {
+        if (!req.user) return res.status(401).send({ error: 'Please authenticate.'});
         const post = await Post.findByPk(postId);
 
         if (post && post.userId === req.user.id) {
             await Post.destroy({ where: { id: postId }, individualHooks: true});
-            req.flash('success','Post deleted successfully!';
+            req.flash('success','Post deleted successfully!');
             res.json({ message: 'Deleting post succeed!', status: 204 });
         } else {
             res.status(404).json({ message: 'Post not found!', status: 404 });

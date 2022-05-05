@@ -33,7 +33,7 @@ export const reset: RequestHandler = async (req, res, next) => {
                   return res.redirect('auth/reset');
                 }
                 const resetToken = buffer.toString('hex');
-                const resetTokenExpiration = Date.now() + 3600000;
+                const resetTokenExpiration = new Date(Date.now() + 3600000);
                 await User.update({ resetToken, resetTokenExpiration }, { where: { id: user.id } });
                 req.flash('success', 'Reset password email has sent. Check your inbox');
                 res.redirect('/');
