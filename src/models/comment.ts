@@ -43,7 +43,7 @@ class Comment extends Model {
     @HasMany(() => Comment, { as: 'replies' })
     replies?: Comment[]
 
-    @BelongsTo(() => Comment, )
+    @BelongsTo(() => Comment)
     parent?: Comment
 
     @Column({

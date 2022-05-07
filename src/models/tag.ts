@@ -56,6 +56,14 @@ class Tag extends Model {
     })
     publishedAt?: Date;
 
+    @Column({
+        type: DataTypes.VIRTUAL,
+        get(this: Post) {
+            return this.status === 'published' && this.publishedAt && new Date(this.publishedAt).getTime() < new Date().getTime();
+        }
+    })
+    isPublished?: string;
+
     // timestamps!
     // createdAt can be undefined during creation
     @CreatedAt

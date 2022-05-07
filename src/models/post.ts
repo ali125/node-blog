@@ -1,11 +1,12 @@
 import { BelongsToManyAddAssociationMixin, CreationOptional, DataTypes, HasManySetAssociationsMixin } from 'sequelize';
-import { Model, AllowNull, BeforeCreate, BeforeDestroy, BeforeUpdate, Column, CreatedAt, Default, DeletedAt, Table, UpdatedAt, ForeignKey, BelongsTo, BelongsToMany } from 'sequelize-typescript';
+import { Model, AllowNull, BeforeCreate, BeforeDestroy, BeforeUpdate, Column, CreatedAt, Default, DeletedAt, Table, UpdatedAt, ForeignKey, BelongsTo, BelongsToMany, HasMany } from 'sequelize-typescript';
 
 import { truncateText } from '../utils/string';
 import Category from './category';
 import PostTag from './post_tag';
 import Tag from './tag';
 import User from './user';
+import Comment from './comment';
 
 @Table({
     timestamps: true,
@@ -130,6 +131,10 @@ class Post extends Model {
 
     @BelongsToMany(() => Tag, () => PostTag)
     tags?: Tag[]
+
+
+    @HasMany(() => Comment)
+    comments?: Comment[]
 
     @BeforeCreate
     @BeforeUpdate

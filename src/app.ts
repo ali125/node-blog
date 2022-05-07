@@ -16,7 +16,7 @@ import { dateTimeFormate, dateFormate } from './utils/date';
 import { isAuth } from './middleware/auth';
 import User from './models/user';
 
-sequelize.sync({ force: true }).then(() => {
+sequelize.sync({ alter: true }).then(() => {
   console.log('DB Synced');
 });
 

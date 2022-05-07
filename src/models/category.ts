@@ -65,6 +65,14 @@ class Category extends Model {
     })
     publishedAt?: Date;
 
+    @Column({
+        type: DataTypes.VIRTUAL,
+        get(this: Post) {
+            return this.status === 'published' && this.publishedAt && new Date(this.publishedAt).getTime() < new Date().getTime();
+        }
+    })
+    isPublished?: string;
+
     @HasMany(() => Post)
     posts?: Post[]
 

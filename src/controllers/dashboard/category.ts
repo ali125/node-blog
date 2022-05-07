@@ -98,7 +98,6 @@ export const update: RequestHandler = async (req, res, next) => {
             const parentId = req.body.parent || null;
             const status = req.body.status;
             const publishedAt = req.body.publishedAt || null;
-            const image = req.file;
 
             const errors = validationResult(req);
             if (!errors.isEmpty()) {
@@ -113,7 +112,7 @@ export const update: RequestHandler = async (req, res, next) => {
                 }
                 return res.status(400).render('dashboard/categories/form', { title: 'News and Stories', categories, category, inputValues, errorMessages: errors.array() });
             }
-    
+            const image = req.file;
             await Category.update({
                 title,
                 slug,
