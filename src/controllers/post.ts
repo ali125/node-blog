@@ -55,6 +55,7 @@ export const search: RequestHandler = async (req, res, next) => {
             });
         }
         const posts = await Post.findAll({
+            subQuery: false,
             where: {
                 [Op.and]: conditions,
             },
@@ -84,7 +85,7 @@ export const get: RequestHandler = async (req, res, next) => {
                 slug
             },
             include: [
-                { model: User, attributes: ['id', 'fullName', 'firstName', 'lastName']},
+                { model: User, attributes: ['id', 'fullName', 'firstName', 'lastName', 'avatar', 'about']},
                 { model: Category, attributes: ['id', 'slug', 'title'] },
                 { model: Tag, attributes: ['id', 'slug', 'title'], through: { attributes: []}},
                 {

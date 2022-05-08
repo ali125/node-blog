@@ -15,6 +15,7 @@ const sequelize = new Sequelize({
     database: process.env.DB_DATABASE as string,
     username: process.env.DB_USER as string,
     password: process.env.DB_PASSWORD as string,
+    logging: false
 });
 
 sequelize.addModels([User, Category, Tag, Post, Comment, PostTag]);

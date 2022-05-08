@@ -15,14 +15,10 @@ html
         ul
           li
             a.sidebar__link(href="/") Home
-          li
-            a.sidebar__link(href="/") Feature
-          li
-            a.sidebar__link(href="/") LifeStyle
-          li
-            a.sidebar__link(href="/") Travel
-          li
-            a.sidebar__link(href="/") Music
+          if mainCategories
+            each category in mainCategories
+              li
+                a.sidebar__link(href=`/posts/?category=${category.slug}`)= category.title
           li
             a.sidebar__link(href="/") About
           li

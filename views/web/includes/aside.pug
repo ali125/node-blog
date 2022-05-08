@@ -14,13 +14,19 @@ aside.grid__sidebar.aside
                             i.fa-solid.fa-user-pen
                             | firstName lastName
                     i.search__autocomplete-more.fa-solid.fa-arrow-right-long
-    
-    section.aside__section
-        h3.aside__section-title
-            | ABOUT {AUTHOR NAME}
-        img.aside__author-img(src="/web/images/man.png", alt="Author Name")
-        p.aside__author-about
-            | Lorem ipsum, dolor sit amet consectetur adipisicing elit. Iusto architecto repellendus rem autem facilis repellat provident fuga dolores nulla magnam laudantium quod ut, ad incidunt corrupti quaerat reprehenderit reiciendis. Suscipit?
+    if post && post.user
+        section.aside__section
+            h3.aside__section-title
+                | ABOUT #{post.user.fullName}
+            img.aside__author-img(src=post.user.avatar || "/web/images/man.png", alt=post.user.fullName)
+            p.aside__author-about= post.user.about
+                
+    else if owner
+        section.aside__section
+            h3.aside__section-title
+                | ABOUT #{owner.fullName}
+            img.aside__author-img(src=owner.avatar || "/web/images/man.png", alt=owner.fullName)
+            p.aside__author-about= owner.about
 
     section.aside__section
         h3.aside__section-title
@@ -42,29 +48,14 @@ aside.grid__sidebar.aside
                 a.social-media__link(href="youtube.com")
                     i.fa-brands.fa-youtube
 
-    section.aside__section
-        h3.aside__section-title
-            | Categories
-        ul.aside__list
-            li
-                a.aside__list-item(href="/posts/?category=:cateSlug") Journey
-                    span.aside__list-badge (40)
-                
-            
-            li
-                a.aside__list-item(href="/posts/?category=:cateSlug") Journey
-                    span.aside__list-badge (40)
-                
-            
-            li
-                a.aside__list-item(href="/posts/?category=:cateSlug") Journey
-                    span.aside__list-badge (40)
-                
-            
-            li
-                a.aside__list-item(href="/posts/?category=:cateSlug") Journey
-                    span.aside__list-badge (40)
-                                    
+    if categories
+        section.aside__section
+            h3.aside__section-title Categories
+            ul.aside__list
+                each category in categories
+                    li
+                        a.aside__list-item(href=`/posts/?category=${category.slug}`)= category.title
+                            span.aside__list-badge (#{category.postCount})
                                 
                             
                         

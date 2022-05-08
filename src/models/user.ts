@@ -140,6 +140,17 @@ class User extends Model<InferAttributes<User>, InferCreationAttributes<User>> {
     })
     verifiedPhoneNumber?: number;
 
+    @Default('client')
+    @Column({
+        type: DataTypes.STRING,
+        allowNull: false,
+        defaultValue: 'client',
+        validate: {
+            isIn: [['client', 'owner', 'admin']]
+        },
+    })
+    role?: 'client' | 'owner' | 'admin';
+
     @Default('active')
     @Column({
         type: DataTypes.STRING,

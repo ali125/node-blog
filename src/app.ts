@@ -15,6 +15,9 @@ import sequelize from './config/db';
 import { dateTimeFormate, dateFormate } from './utils/date';
 import { isAuth } from './middleware/auth';
 import User from './models/user';
+import Category from './models/category';
+import Post from './models/post';
+import { Sequelize } from 'sequelize-typescript';
 
 sequelize.sync({ alter: true }).then(() => {
   console.log('DB Synced');
@@ -57,6 +60,42 @@ app.use(async (req: Request, res: Response, next: NextFunction) => {
   if (req.session.user) {
     const usr = await User.findByPk(req.session.user.id);
     req.user = usr;
+  }
+  next();
+});
+
+
+app.use(async (req: Request, res: Response, next: NextFunction) => {
+  if (!req.path.includes('dashboard') && !req.path.includes('auth') && req.method.toUpperCase() === 'GET') {
+    try {
+      const mainCategories = await Category.findAll({
+        attributes: ['slug', 'title'],
+        where: { parentId: null }
+      });
+      res.locals.mainCategories = mainCategories;
+
+      const categories = await Category.findAll({
+        attributes: { 
+          include: [[Sequelize.fn("COUNT", Sequelize.col("posts.id")), "postCount"]] 
+        },
+        include: [{
+          model: Post, attributes: []
+        }],
+        raw: true,
+        group: ['category.id']
+      });
+      // return res.json({ categories });
+      res.locals.categories = categories;
+    } catch(e) {
+      console.log('categories err: ', e);
+    }
+
+    try {
+      const owner = await User.findOne({ where: { role: 'owner' } });
+      res.locals.owner = owner;
+    } catch(e) {
+      console.log('owner err: ', e);
+    }
   }
   next();
 });
