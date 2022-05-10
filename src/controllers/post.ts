@@ -85,7 +85,8 @@ export const get: RequestHandler = async (req, res, next) => {
                 slug
             },
             include: [
-                { model: User, attributes: ['id', 'fullName', 'firstName', 'lastName', 'avatar', 'about']},
+                // { model: User, attributes: ['id', 'fullName', 'firstName', 'lastName', 'avatar', 'about']},
+                { model: User },
                 { model: Category, attributes: ['id', 'slug', 'title'] },
                 { model: Tag, attributes: ['id', 'slug', 'title'], through: { attributes: []}},
                 {

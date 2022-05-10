@@ -151,6 +151,36 @@ class User extends Model<InferAttributes<User>, InferCreationAttributes<User>> {
     })
     role?: 'client' | 'owner' | 'admin';
 
+    @Column({
+        type: DataTypes.STRING
+    })
+    facebookUrl?: string;
+
+    @Column({
+        type: DataTypes.STRING
+    })
+    instagramUrl?: string;
+
+    @Column({
+        type: DataTypes.STRING
+    })
+    twitterUrl?: string;
+
+    @Column({
+        type: DataTypes.STRING
+    })
+    linkedInUrl?: string;
+
+    @Column({
+        type: DataTypes.STRING
+    })
+    githubUrl?: string;
+
+    @Column({
+        type: DataTypes.STRING
+    })
+    youtubeUrl?: string;
+
     @Default('active')
     @Column({
         type: DataTypes.STRING,

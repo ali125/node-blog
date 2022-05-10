@@ -70,4 +70,67 @@ block content
                     label.form-label(for="about") About
                     textarea.form-control(id="about", name="about", rows="3")= user.about
 
+                hr
+
+                div.mb-3.row
+                    div.col-6
+                        label.form-label(for="facebookUrl") Facebook Url
+                        input.form-control(
+                            type="url",
+                            id="facebookUrl",
+                            name="facebookUrl",
+                            placeholder="Facebook Url",
+                            value=inputValues ? inputValues.facebookUrl : user.facebookUrl,
+                        )
+
+                    div.col-6
+                        label.form-label(for="instagramUrl") Instagram Url
+                        input.form-control(
+                            type="url",
+                            id="instagramUrl",
+                            name="instagramUrl",
+                            placeholder="Instagram Url",
+                            value=inputValues ? inputValues.instagramUrl : user.instagramUrl,
+                        )
+                div.mb-3.row
+                    div.col-6
+                        label.form-label(for="twitterUrl") Twitter Url
+                        input.form-control(
+                            type="url",
+                            id="twitterUrl",
+                            name="twitterUrl",
+                            placeholder="Twitter Url",
+                            value=inputValues ? inputValues.twitterUrl : user.twitterUrl,
+                        )
+
+                    div.col-6
+                        label.form-label(for="linkedInUrl") LinkedIn Url
+                        input.form-control(
+                            type="url",
+                            id="linkedInUrl",
+                            name="linkedInUrl",
+                            placeholder="LinkedIn Url",
+                            value=inputValues ? inputValues.linkedInUrl : user.linkedInUrl,
+                        )
+                div.mb-3.row
+                    div.col-6
+                        label.form-label(for="githubUrl") Github Url
+                        input.form-control(
+                            type="url",
+                            id="githubUrl",
+                            name="githubUrl",
+                            placeholder="Github Url",
+                            value=inputValues ? inputValues.githubUrl : user.githubUrl,
+                        )
+
+                    div.col-6
+                        label.form-label(for="youtubeUrl") Youtube Channel
+                        input.form-control(
+                            type="url",
+                            id="youtubeUrl",
+                            name="youtubeUrl",
+                            placeholder="Youtube Channel Url",
+                            value=inputValues ? inputValues.youtubeUrl : user.youtubeUrl,
+                        )
+
                 button.btn.btn-primary Update Info

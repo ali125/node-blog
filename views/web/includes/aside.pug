@@ -32,21 +32,57 @@ aside.grid__sidebar.aside
         h3.aside__section-title
             | SUBSCRIBE & FOLLOW
         ul.social-media__list
-            li.social-media__item
-                a.social-media__link(href="facebook.com")
-                    i.fa-brands.fa-facebook-f
-            li.social-media__item
-                a.social-media__link(href="twitter.com")
-                    i.fa-brands.fa-twitter
-            li.social-media__item
-                a.social-media__link(href="instagram.com")
-                    i.fa-brands.fa-instagram 
-            li.social-media__item
-                a.social-media__link(href="github.com")
-                    i.fa-brands.fa-github
-            li.social-media__item
-                a.social-media__link(href="youtube.com")
-                    i.fa-brands.fa-youtube
+            if owner
+                if owner.facebookUrl
+                    li.social-media__item
+                        a.social-media__link(href=owner.facebookUrl, target="_blank")
+                            i.fa-brands.fa-facebook-f
+
+                if owner.twitterUrl
+                    li.social-media__item
+                        a.social-media__link(href=owner.twitterUrl, target="_blank")
+                            i.fa-brands.fa-twitter
+                
+                if owner.instagramUrl
+                    li.social-media__item
+                        a.social-media__link(href=owner.instagramUrl, target="_blank")
+                            i.fa-brands.fa-instagram 
+                
+                if owner.githubUrl
+                    li.social-media__item
+                        a.social-media__link(href=owner.githubUrl, target="_blank")
+                            i.fa-brands.fa-github
+
+                if owner.youtubeUrl
+                    li.social-media__item
+                        a.social-media__link(href=owner.youtubeUrl, target="_blank")
+                            i.fa-brands.fa-youtube
+
+            else if post && post.user
+                if post.user.facebookUrl
+                    li.social-media__item
+                        a.social-media__link(href=post.user.facebookUrl, target="_blank")
+                            i.fa-brands.fa-facebook-f
+
+                if post.user.twitterUrl
+                    li.social-media__item
+                        a.social-media__link(href=post.user.twitterUrl, target="_blank")
+                            i.fa-brands.fa-twitter
+                
+                if post.user.instagramUrl
+                    li.social-media__item
+                        a.social-media__link(href=post.user.instagramUrl, target="_blank")
+                            i.fa-brands.fa-instagram 
+                
+                if post.user.githubUrl
+                    li.social-media__item
+                        a.social-media__link(href=post.user.githubUrl, target="_blank")
+                            i.fa-brands.fa-github
+
+                if post.user.youtubeUrl
+                    li.social-media__item
+                        a.social-media__link(href=post.user.youtubeUrl, target="_blank")
+                            i.fa-brands.fa-youtube
 
     if categories
         section.aside__section

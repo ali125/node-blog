@@ -145,6 +145,12 @@ export const profileSave: RequestHandler = async (req, res, next) => {
         const email = req.body.email;
         const phoneNumber = req.body.phoneNumber;
         const about = req.body.about;
+        const facebookUrl = req.body.facebookUrl || '';
+        const instagramUrl = req.body.instagramUrl || '';
+        const twitterUrl = req.body.twitterUrl || '';
+        const linkedInUrl = req.body.linkedInUrl || '';
+        const githubUrl = req.body.githubUrl || '';
+        const youtubeUrl = req.body.youtubeUrl || '';
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
             const inputValues = {
@@ -152,7 +158,13 @@ export const profileSave: RequestHandler = async (req, res, next) => {
                 lastName,
                 email,
                 phoneNumber,
-                about
+                about,
+                facebookUrl,
+                instagramUrl,
+                twitterUrl,
+                linkedInUrl,
+                githubUrl,
+                youtubeUrl,
             }
             return res.status(400).render('dashboard/settings/profile', { title: 'News and Stories', inputValues, errorMessages: errors.array() });
         }
@@ -163,6 +175,12 @@ export const profileSave: RequestHandler = async (req, res, next) => {
             email,
             phoneNumber,
             about,
+            facebookUrl,
+            instagramUrl,
+            twitterUrl,
+            linkedInUrl,
+            githubUrl,
+            youtubeUrl,
             avatar: image ? image.path.replace('public', '') : undefined,
         }, {
             where: {
