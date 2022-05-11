@@ -5,7 +5,6 @@ import Category from '../models/category';
 import Tag from '../models/tag';
 import User from '../models/user';
 import Comment from '../models/comment';
-import { Sequelize } from 'sequelize-typescript';
 
 export const index: RequestHandler = async (req, res, next) => {
     try {
