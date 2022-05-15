@@ -9,6 +9,14 @@ import Comment from '../models/comment';
 export const index: RequestHandler = async (req, res, next) => {
     try {
         const posts = await Post.findAll({
+            where: {
+                [Op.and]: {
+                    status: 'published',
+                    publishedAt: {
+                        [Op.lt]: new Date(),
+                    }
+                }
+            },
             include: [
                 { model: User, attributes: ['id', 'fullName', 'firstName', 'lastName']},
                 { model: Category, attributes: ['id', 'slug', 'title'] },
@@ -57,6 +65,12 @@ export const search: RequestHandler = async (req, res, next) => {
             subQuery: false,
             where: {
                 [Op.and]: conditions,
+                [Op.and]: {
+                    status: 'published',
+                    publishedAt: {
+                        [Op.lt]: new Date(),
+                    }
+                }
             },
             include: [
                 { model: User, attributes: ['id', 'fullName', 'firstName', 'lastName']},
@@ -81,7 +95,13 @@ export const get: RequestHandler = async (req, res, next) => {
     try {
         const post = await Post.findOne({
             where: {
-                slug
+                [Op.and]: {
+                    slug,
+                    status: 'published',
+                    publishedAt: {
+                        [Op.lt]: new Date(),
+                    }
+                }
             },
             include: [
                 // { model: User, attributes: ['id', 'fullName', 'firstName', 'lastName', 'avatar', 'about']},

@@ -1,5 +1,5 @@
 import { BelongsToManyAddAssociationMixin, CreationOptional, DataTypes, HasManySetAssociationsMixin } from 'sequelize';
-import { Model, AllowNull, BeforeCreate, BeforeDestroy, BeforeUpdate, Column, CreatedAt, Default, DeletedAt, Table, UpdatedAt, ForeignKey, BelongsTo, BelongsToMany, HasMany } from 'sequelize-typescript';
+import { Model, AllowNull, BeforeCreate, BeforeDestroy, BeforeUpdate, Column, CreatedAt, Default, DeletedAt, Table, UpdatedAt, ForeignKey, BelongsTo, BelongsToMany, HasMany, HasOne } from 'sequelize-typescript';
 
 import { truncateText } from '../utils/string';
 import Category from './category';

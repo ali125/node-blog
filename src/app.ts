@@ -18,6 +18,7 @@ import User from './models/user';
 import Category from './models/category';
 import Post from './models/post';
 import { Sequelize } from 'sequelize-typescript';
+import { Op } from 'sequelize';
 
 sequelize.sync({ alter: true }).then(() => {
   console.log('DB Synced');
@@ -70,11 +71,27 @@ app.use(async (req: Request, res: Response, next: NextFunction) => {
     try {
       const mainCategories = await Category.findAll({
         attributes: ['slug', 'title'],
-        where: { parentId: null }
+        where: { 
+          [Op.and]: {
+            parentId: null,
+            status: 'published',
+            publishedAt: {
+                [Op.lt]: new Date(),
+            }
+          },
+        }
       });
       res.locals.mainCategories = mainCategories;
 
       const categories = await Category.findAll({
+        where: {
+          [Op.and]: {
+            status: 'published',
+            publishedAt: {
+                [Op.lt]: new Date(),
+            }
+          },
+        },
         attributes: { 
           include: [[Sequelize.fn("COUNT", Sequelize.col("posts.id")), "postCount"]] 
         },
