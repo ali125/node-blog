@@ -8,9 +8,10 @@ block content
       span.article__meta
         i.fa-solid.fa-calendar-day
         | #{dateTimeFormate(post.createdAt, false)}
-      span.article__meta
-        i.fa-solid.fa-tags
-        a.article__meta-link(target="_blank", href=`/posts/?category=${post.category.slug}`)= post.category.title
+      if post.category
+          span.article__meta
+            i.fa-solid.fa-tags
+            a.article__meta-link(target="_blank", href=`/posts/?category=${post.category.slug}`)= post.category.title
         //- a.article__meta-link(href="/posts/?category=:cateSlug") Three,
         //- a.article__meta-link(href="/posts/?category=:cateSlug") Categories,
         //- a.article__meta-link(href="/posts/?category=:cateSlug") assigned
